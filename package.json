@@ -1,0 +1,26 @@
+{
+  "name": "deps-cop",
+  "version": "0.0.0",
+  "description": "Whitelist of your project's dependencies",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "whitelist",
+    "dependency",
+    "deps-cop"
+  ],
+  "author": "vol-n-a",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "semver": "^7.6.3"
+  }
+}
