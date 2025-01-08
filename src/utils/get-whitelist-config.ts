@@ -1,4 +1,4 @@
-import { readFile, readFileSync } from "fs";
+import { readFile } from "fs";
 import path from "path";
 import { promisify } from "util";
 

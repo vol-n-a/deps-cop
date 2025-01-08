@@ -2,10 +2,11 @@
   "name": "deps-cop",
   "version": "0.0.0",
   "description": "Whitelist of your project's dependencies",
-  "main": "index.js",
+  "main": "bin/index.js",
+  "type": "module",
   "scripts": {
-    "tsc": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "eslint": "eslint ."
   },
   "keywords": [
     "whitelist",
@@ -15,10 +16,16 @@
   "author": "vol-n-a",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@types/node": "^22.10.5",
-    "typescript": "^5.7.2"
+    "eslint": "^9.17.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.1"
   },
   "dependencies": {
+    "@types/react": "^19.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "semver": "^7.6.3"
