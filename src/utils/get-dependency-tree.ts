@@ -1,4 +1,5 @@
-import { exec, type ExecException } from "node:child_process";
+import type { ExecException } from "node:child_process";
+import { exec } from "node:child_process";
 
 export type Project = {
   version: string;

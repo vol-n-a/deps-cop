@@ -2,7 +2,7 @@ import { getDependencyMap } from "./utils/get-dependency-map";
 import { getDependencyTree } from "./utils/get-dependency-tree";
 import { getWhitelistConfig } from "./utils/get-whitelist-config";
 
-const dependencyMap = getDependencyTree()
+getDependencyTree()
   .then(getDependencyMap)
   //   .then((dependencyMap) => {
   // for (const [dependency, versionMap] of dependencyMap.entries()) {
