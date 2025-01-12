@@ -1,6 +1,6 @@
-import { readFile } from "fs";
-import path from "path";
-import { promisify } from "util";
+import { readFile } from "node:fs";
+import path from "node:path";
+import { promisify } from "node:util";
 
 type Version = string;
 type Reason = string;
