@@ -1,29 +1,49 @@
 import type { Dependency, Project } from "./get-dependency-tree";
 
-const dependencyMap = new Map<string, Record<string, Array<string>>>();
+const dependencyMap = new Map<
+  string,
+  {
+    rootVersion?: string;
+    versions: Record<string, Array<string>>;
+  }
+>();
+
+export type DependencyMap = typeof dependencyMap;
 
 export const getDependencyMap = (
-  dependencyTree: Project | Dependency,
+  tree: Project | Dependency,
   path: Array<string> = []
-): typeof dependencyMap => {
-  if (!dependencyTree.dependencies) {
+): DependencyMap => {
+  if (!tree.dependencies) {
     return dependencyMap;
   }
 
-  if ("name" in dependencyTree) {
-    dependencyMap.set(dependencyTree.name, { [dependencyTree.version]: [] });
-  }
-
-  for (const [dependencyName, dependencySubTree] of Object.entries(
-    dependencyTree.dependencies
+  for (const [dependencyName, dependencyTree] of Object.entries(
+    tree.dependencies
   )) {
-    const versionMap = dependencyMap.get(dependencyName) ?? {};
-    const subPath = [...path, dependencyName];
+    const rootVersion = path.length === 0 ? dependencyTree.version : void 0;
+    const dependencyPath = [...path, dependencyName];
 
-    versionMap[dependencySubTree.version] = subPath;
+    let dependencyValue = dependencyMap.get(dependencyName);
 
-    dependencyMap.set(dependencyName, versionMap);
-    getDependencyMap(dependencySubTree, subPath);
+    if (!dependencyValue) {
+      dependencyValue = {
+        rootVersion,
+        versions: {},
+      };
+      dependencyMap.set(dependencyName, dependencyValue);
+    }
+
+    // If root version of a current dependency is found, save it
+    if (!dependencyValue.rootVersion && rootVersion) {
+      dependencyValue.rootVersion = rootVersion;
+    }
+
+    // Save dependency version with its tree path
+    dependencyValue.versions[dependencyTree.version] = dependencyPath;
+
+    // Check dependencies of a currebt dependency
+    getDependencyMap(dependencyTree, dependencyPath);
   }
 
   return dependencyMap;
