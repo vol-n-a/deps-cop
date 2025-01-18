@@ -1,0 +1,4 @@
+{
+  "react": ["^18", "Only 18 version of react is available"],
+  "react-dom": ["^18", "Only 18 version of react is available"]
+}

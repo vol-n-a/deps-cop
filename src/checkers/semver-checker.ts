@@ -2,15 +2,13 @@ import chalk from "chalk";
 import { satisfies } from "semver";
 
 import type { DependencyMap } from "../utils/get-dependency-map";
-import type { WhitelistConfig } from "../utils/get-whitelist-config";
+import type { DepscopConfig } from "../utils/get-whitelist-config";
 
 export const semverChecker = (
   dependencyMap: DependencyMap,
-  whitelistConfig: WhitelistConfig
+  depscopConfig: DepscopConfig
 ): void => {
-  for (const [dependency, [version, reason]] of Object.entries(
-    whitelistConfig
-  )) {
+  for (const [dependency, [version, reason]] of Object.entries(depscopConfig)) {
     const dependencyValue = dependencyMap.get(dependency);
 
     if (!dependencyValue) {
