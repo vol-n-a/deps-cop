@@ -1,29 +1,62 @@
 import type { Dependency, Project } from "./get-dependency-tree";
 
-const dependencyMap = new Map<string, Record<string, Array<string>>>();
+const dependencyMap = new Map<
+  string,
+  {
+    rootVersion?: string;
+    versions: Record<string, Array<string>>;
+  }
+>();
 
+export type DependencyMap = typeof dependencyMap;
+
+/**
+ * Traverses the dependency tree and collects data about entries into a map
+ *
+ * Data collected:
+ * - Dependency name
+ * - Whether the dependency is root one or not (is it present in the project's package.json)
+ * - Dependency version
+ * - Paths to the specific dependency version through the nodes (if there are several version entries, function saves paths to all of them)
+ *
+ * @param tree Current node of the project's dependency tree
+ * @param path Path to the current node of the project's dependency tree
+ * @returns Dependency map
+ */
 export const getDependencyMap = (
-  dependencyTree: Project | Dependency,
+  tree: Project | Dependency,
   path: Array<string> = []
-): typeof dependencyMap => {
-  if (!dependencyTree.dependencies) {
+): DependencyMap => {
+  if (!tree.dependencies) {
     return dependencyMap;
   }
 
-  if ("name" in dependencyTree) {
-    dependencyMap.set(dependencyTree.name, { [dependencyTree.version]: [] });
-  }
-
-  for (const [dependencyName, dependencySubTree] of Object.entries(
-    dependencyTree.dependencies
+  for (const [dependencyName, dependencyTree] of Object.entries(
+    tree.dependencies
   )) {
-    const versionMap = dependencyMap.get(dependencyName) ?? {};
-    const subPath = [...path, dependencyName];
+    const rootVersion = path.length === 0 ? dependencyTree.version : void 0;
+    const dependencyPath = [...path, dependencyName];
 
-    versionMap[dependencySubTree.version] = subPath;
+    let dependencyValue = dependencyMap.get(dependencyName);
 
-    dependencyMap.set(dependencyName, versionMap);
-    getDependencyMap(dependencySubTree, subPath);
+    if (!dependencyValue) {
+      dependencyValue = {
+        rootVersion,
+        versions: {},
+      };
+      dependencyMap.set(dependencyName, dependencyValue);
+    }
+
+    // If root version of a current dependency is found, save it
+    if (!dependencyValue.rootVersion && rootVersion) {
+      dependencyValue.rootVersion = rootVersion;
+    }
+
+    // Save dependency version with its tree path
+    dependencyValue.versions[dependencyTree.version] = dependencyPath;
+
+    // Traverse dependencies of a current dependency
+    getDependencyMap(dependencyTree, dependencyPath);
   }
 
   return dependencyMap;
