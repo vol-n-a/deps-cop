@@ -14,6 +14,13 @@ export type Dependency = {
 
 export type Node = Project | Dependency;
 
+/**
+ * Reads project's dependency tree and parses it to the js object
+ *
+ * To get the dependency tree, depscop executes the following npm cli command: `npm ls -a --json`
+ *
+ * @returns Project's dependency tree
+ */
 export const getDependencyTree = async (): Promise<Project> => {
   const dependencyTree = await new Promise<string>((resolve, reject) =>
     exec("npm ls -a --json", (error: ExecException | null, stdout: string) => {

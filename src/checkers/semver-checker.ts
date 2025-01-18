@@ -4,6 +4,11 @@ import { satisfies } from "semver";
 import type { DependencyMap } from "../utils/get-dependency-map";
 import type { DepscopConfig } from "../utils/get-whitelist-config";
 
+/**
+ * Validates semver based depscop rules
+ * @param dependencyMap
+ * @param depscopConfig Depscop config
+ */
 export const semverChecker = (
   dependencyMap: DependencyMap,
   depscopConfig: DepscopConfig

@@ -9,6 +9,14 @@ export type DepscopConfig = Record<string, [Version, Reason]>;
 
 const depscopConfigPath = path.resolve(process.cwd(), "whitelist.json");
 
+/**
+ * Reads depscop config and parses it to the js object
+ *
+ * Config file is searched in the following paths:
+ * - \<root>/depscop.config.json
+ *
+ * @returns Depscop config
+ */
 export const getWhitelistConfig = async (): Promise<DepscopConfig> => {
   const readFilePromise = promisify(readFile);
 

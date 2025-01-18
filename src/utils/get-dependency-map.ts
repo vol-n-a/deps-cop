@@ -10,6 +10,19 @@ const dependencyMap = new Map<
 
 export type DependencyMap = typeof dependencyMap;
 
+/**
+ * Traverses the dependency tree and collects data about entries into a map
+ *
+ * Data collected:
+ * - Dependency name
+ * - Whether the dependency is root one or not (is it present in the project's package.json)
+ * - Dependency version
+ * - Paths to the specific dependency version through the nodes (if there are several version entries, function saves paths to all of them)
+ *
+ * @param tree Current node of the project's dependency tree
+ * @param path Path to the current node of the project's dependency tree
+ * @returns Dependency map
+ */
 export const getDependencyMap = (
   tree: Project | Dependency,
   path: Array<string> = []
@@ -42,7 +55,7 @@ export const getDependencyMap = (
     // Save dependency version with its tree path
     dependencyValue.versions[dependencyTree.version] = dependencyPath;
 
-    // Check dependencies of a currebt dependency
+    // Traverse dependencies of a current dependency
     getDependencyMap(dependencyTree, dependencyPath);
   }
 
