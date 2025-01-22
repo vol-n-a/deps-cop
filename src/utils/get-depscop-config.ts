@@ -2,10 +2,16 @@ import { readFile } from "node:fs";
 import path from "node:path";
 import { promisify } from "node:util";
 
-type Version = string;
-type Reason = string;
+export type Version = string;
+export type Reason = string;
 
-export type DepscopConfig = Record<string, [Version, Reason]>;
+export type SemverRules = Record<string, [Version, Reason]>;
+export type ForbiddenRules = Record<string, [Version, Reason]>;
+
+export type DepscopConfig = {
+  semver: SemverRules;
+  forbidden: ForbiddenRules;
+};
 
 const depscopConfigPath = path.resolve(process.cwd(), "depscop.config.json");
 
