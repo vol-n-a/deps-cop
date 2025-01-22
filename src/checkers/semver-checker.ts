@@ -2,11 +2,12 @@ import chalk from "chalk";
 import { satisfies } from "semver";
 
 import type { DependencyMap } from "../utils/get-dependency-map";
-import type { DepscopConfig } from "../utils/get-whitelist-config";
+import type { DepscopConfig } from "../utils/get-depscop-config";
 
 /**
  * Validates semver based depscop rules
- * @param dependencyMap
+ *
+ * @param dependencyMap Dependency map
  * @param depscopConfig Depscop config
  */
 export const semverChecker = (
@@ -24,7 +25,7 @@ export const semverChecker = (
       dependencyValue.rootVersion &&
       satisfies(dependencyValue.rootVersion, version)
     ) {
-      return;
+      continue;
     }
 
     console.log(

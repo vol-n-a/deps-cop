@@ -7,7 +7,7 @@ type Reason = string;
 
 export type DepscopConfig = Record<string, [Version, Reason]>;
 
-const depscopConfigPath = path.resolve(process.cwd(), "whitelist.json");
+const depscopConfigPath = path.resolve(process.cwd(), "depscop.config.json");
 
 /**
  * Reads depscop config and parses it to the js object
@@ -17,7 +17,7 @@ const depscopConfigPath = path.resolve(process.cwd(), "whitelist.json");
  *
  * @returns Depscop config
  */
-export const getWhitelistConfig = async (): Promise<DepscopConfig> => {
+export const getDepscopConfig = async (): Promise<DepscopConfig> => {
   const readFilePromise = promisify(readFile);
 
   const file = await readFilePromise(depscopConfigPath, "utf-8");
