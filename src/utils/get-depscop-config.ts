@@ -5,12 +5,19 @@ import { promisify } from "node:util";
 export type Version = string;
 export type Reason = string;
 
-export type SemverRules = Record<string, [Version, Reason]>;
-export type ForbiddenRules = Record<string, [Version, Reason]>;
+declare const __brand: unique symbol;
+type RulesRecord<brand extends string> = Record<string, [Version, Reason]> & {
+  [__brand]: brand;
+};
+export type ForbiddenRules = RulesRecord<"forbidden">;
+// TODO: Сделать возможность передачи массива массивов для правил вида `react: [["18.0.0", "Reason 1"], ["18.2.0", "Reason 2"]]`
+export type RecentRules = RulesRecord<"recent">;
+export type SemverRules = RulesRecord<"semver">;
 
 export type DepscopConfig = {
-  semver: SemverRules;
   forbidden: ForbiddenRules;
+  recent: RecentRules;
+  semver: SemverRules;
 };
 
 const depscopConfigPath = path.resolve(process.cwd(), "depscop.config.json");
