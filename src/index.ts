@@ -1,4 +1,5 @@
 import { forbiddenChecker } from "./checkers/forbidden-checker";
+import { recentChecker } from "./checkers/recent-checker";
 import { semverChecker } from "./checkers/semver-checker";
 import { getDependencyMap } from "./utils/get-dependency-map";
 import { getDependencyTree } from "./utils/get-dependency-tree";
@@ -14,13 +15,13 @@ getDependencyTree()
   // }
   //   })
   // .then(getWhitelistConfig)
-  .then((res) => {
-    console.log(res.get("react"));
-
-    return new Map(res.entries().filter(([_dep, entry]) => entry.rootVersion));
-  })
+  .then(
+    (res) =>
+      new Map([...res.entries()].filter(([_dep, entry]) => entry.rootVersion))
+  )
   .then((res) => Promise.all([res, getDepscopConfig()]))
-  .then(([dependencyMap, { semver, forbidden }]) => {
-    semverChecker(dependencyMap, semver);
+  .then(([dependencyMap, { forbidden, recent, semver }]) => {
     forbiddenChecker(dependencyMap, forbidden);
+    recentChecker(dependencyMap, recent);
+    semverChecker(dependencyMap, semver);
   });
