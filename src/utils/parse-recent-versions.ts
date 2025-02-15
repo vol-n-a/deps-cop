@@ -11,14 +11,14 @@ const parseInt = (value: string): number | undefined => {
   return res;
 };
 
-export type RecentVersions = {
+export type RecentVersionSegments = {
   recentMajors: number;
   recentMinors?: number;
   recentPatches?: number;
 };
 
 /**
- * Parses a "recent version pattern" string into a set of numbers, representing major, minor, and patch versions
+ * Parses a "recent version pattern" string into an object with numbers representing major, minor, and patch versions
  *
  * This function takes a version string in the format `(major)(.minor)?(.patch)?(-prerelease)?`, where each segment represents
  * a version number (e.g., `1.2.3`). It splits the string by periods (`.`) and converts each segment
@@ -43,7 +43,9 @@ export type RecentVersions = {
  * @param value The "recent version pattern" string in the format `(major)(.minor)?(.patch)?(-prerelease)?`
  * @returns An object containing the `recentMajors`, `recentMinors` and `recentPatches` version numbers, or null if `value` does not match the expected "recent version pattern"
  */
-export const parseRecentVersions = (value: string): RecentVersions | null => {
+export const parseRecentVersions = (
+  value: string
+): RecentVersionSegments | null => {
   const res = value.match(recentRegex);
 
   if (!res) {

@@ -19,20 +19,22 @@ const checkRecentRulesEntry = async (
     return;
   }
 
-  const recentVersions = parseRecentVersions(version);
+  const recentVersionSegments = parseRecentVersions(version);
 
   // If the dependency version does not satisfy the recent version pattern, skip it
-  if (!recentVersions) {
+  if (!recentVersionSegments) {
     return;
   }
 
   const versions = (await getDependencyVersions(dependency))
     .map((ver) => parse(ver))
+    // TODO: Make an option for prerelease versions handling
     .filter((semver) => semver && !semver.prerelease.length) as Array<SemVer>;
 
-  const versionsAllowed = getRecentVersions(versions, recentVersions).map(
-    (semver) => semver.raw
-  );
+  const versionsAllowed = getRecentVersions(
+    versions,
+    recentVersionSegments
+  ).map((semver) => semver.raw);
 
   // If there are no versions satisfying the recent version pattern, report the error
   if (!versionsAllowed.length) {
@@ -44,11 +46,28 @@ const checkRecentRulesEntry = async (
     return;
   }
 
-  // If the dependency from config satisfies the rule, skip
-  if (
-    dependencyValue.rootVersion &&
-    versionsAllowed.includes(dependencyValue.rootVersion)
-  ) {
+  const indexOfRootVersion = dependencyValue.rootVersion
+    ? versionsAllowed.indexOf(dependencyValue.rootVersion)
+    : -1;
+  const isVersionAllowed = indexOfRootVersion !== -1;
+  const isVersionLatest = indexOfRootVersion === versionsAllowed.length - 1;
+
+  // If the installed dependency satisfies the rule and the latest allowed version is installed, skip it
+  if (isVersionLatest) {
+    return;
+  }
+
+  // If the installed dependency satisfies the rule, but not the latest allowed version is installed, report the warning
+  if (isVersionAllowed && !isVersionLatest) {
+    console.log(
+      chalk.yellow(
+        `recent: ${dependency}@${
+          dependencyValue.rootVersion
+        } may be outdated soon\n\tCurrently allowed versions: ${versionsAllowed.join(
+          ", "
+        )}`
+      )
+    );
     return;
   }
 
