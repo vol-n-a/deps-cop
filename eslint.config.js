@@ -24,7 +24,7 @@ const jsConfig = tsEslint.config({
   },
   rules: {
     "import/no-duplicates": "error",
-    "no-magic-numbers": ["error", { ignore: [0, 1] }],
+    "no-magic-numbers": ["error", { ignore: [-1, 0, 1] }],
     "no-shadow": "error",
     "object-shorthand": ["error", "always"],
     "simple-import-sort/exports": "error",

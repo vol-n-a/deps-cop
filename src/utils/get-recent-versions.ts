@@ -1,7 +1,7 @@
 import _ from "lodash";
 import type { SemVer } from "semver";
 
-import type { RecentVersions } from "./parse-recent-versions";
+import type { RecentVersionSegments } from "./parse-recent-versions";
 
 type SemVerIteratee = (
   value: SemVer
@@ -77,7 +77,7 @@ const groupVersions = (
  */
 export const getRecentVersions = (
   versions: Array<SemVer>,
-  { recentMajors, recentMinors, recentPatches }: RecentVersions
+  { recentMajors, recentMinors, recentPatches }: RecentVersionSegments
 ): Array<SemVer> => {
   const recentMajorVersions = groupVersions(
     versions,
