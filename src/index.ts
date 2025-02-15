@@ -7,14 +7,6 @@ import { getDepscopConfig } from "./utils/get-depscop-config";
 
 getDependencyTree()
   .then(getDependencyMap)
-  //   .then((dependencyMap) => {
-  // for (const [dependency, versionMap] of dependencyMap.entries()) {
-  //   if (Object.keys(versionMap).length > 1) {
-  //     console.log(dependency);
-  //   }
-  // }
-  //   })
-  // .then(getWhitelistConfig)
   .then(
     (res) =>
       new Map([...res.entries()].filter(([_dep, entry]) => entry.rootVersion))

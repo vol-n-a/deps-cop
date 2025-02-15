@@ -1,4 +1,4 @@
-// TODO: Добавить возможность написать * вместо числа (?)
+// TODO: Support * along with numbers (?)
 const recentRegex = /^(-?\d+)(?:\.(-?\d+))?(?:\.(-?\d+))?$/;
 
 const parseInt = (value: string): number | undefined => {

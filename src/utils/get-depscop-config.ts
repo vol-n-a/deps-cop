@@ -10,7 +10,7 @@ type RulesRecord<brand extends string> = Record<string, [Version, Reason]> & {
   [__brand]: brand;
 };
 export type ForbiddenRules = RulesRecord<"forbidden">;
-// TODO: Сделать возможность передачи массива массивов для правил вида `react: [["18.0.0", "Reason 1"], ["18.2.0", "Reason 2"]]`
+// TODO: Make it possible to provide array of rules: `react: [["18.0.0", "Reason 1"], ["18.2.0", "Reason 2"]]`
 export type RecentRules = RulesRecord<"recent">;
 export type SemverRules = RulesRecord<"semver">;
 
