@@ -1,7 +1,7 @@
-import chalk from "chalk";
 import type { SemVer } from "semver";
 import { parse } from "semver";
 
+import { RecentRuleViolation, RuleViolationLevel, stats } from "../stats";
 import type { DependencyMap } from "../utils/get-dependency-map";
 import { getDependencyVersions } from "../utils/get-dependency-versions";
 import type { RecentRules } from "../utils/get-depscop-config";
@@ -38,9 +38,9 @@ const checkRecentRulesEntry = async (
 
   // If there are no versions satisfying the recent version pattern, report the error
   if (!versionsAllowed.length) {
-    console.log(
-      chalk.red(
-        `recent: ${dependency}@${dependencyValue.rootVersion} there are no versions satisfying the rule ${version}`
+    stats.addRuleViolation(
+      new RecentRuleViolation(
+        `${dependency}@${dependencyValue.rootVersion} there are no versions satisfying the rule ${version}`
       )
     );
     return;
@@ -59,26 +59,30 @@ const checkRecentRulesEntry = async (
 
   // If the installed dependency satisfies the rule, but not the latest allowed version is installed, report the warning
   if (isVersionAllowed && !isVersionLatest) {
-    console.log(
-      chalk.yellow(
-        `recent: ${dependency}@${
-          dependencyValue.rootVersion
-        } may be outdated soon\n\tCurrently allowed versions: ${versionsAllowed.join(
-          ", "
-        )}`
+    stats.addRuleViolation(
+      new RecentRuleViolation(
+        `${dependency}@${dependencyValue.rootVersion} may be outdated soon`,
+        {
+          description: `Currently allowed versions: ${versionsAllowed.join(
+            ", "
+          )}`,
+          level: RuleViolationLevel.WARNING,
+        }
       )
     );
     return;
   }
 
   // Report the error
-  console.log(
-    chalk.red(
-      `recent: ${dependency}@${
-        dependencyValue.rootVersion
-      } does not satisfy the rule ${version}\n\tCurrently allowed versions: ${versionsAllowed.join(
-        ", "
-      )}\n\tReason: ${chalk.italic(reason)}`
+  stats.addRuleViolation(
+    new RecentRuleViolation(
+      `${dependency}@${dependencyValue.rootVersion} does not satisfy the rule ${version}`,
+      {
+        description: `Currently allowed versions: ${versionsAllowed.join(
+          ", "
+        )}`,
+        reason,
+      }
     )
   );
 };

@@ -1,6 +1,6 @@
-import chalk from "chalk";
 import { satisfies } from "semver";
 
+import { ForbiddenRuleViolation, stats } from "../stats";
 import type { DependencyMap } from "../utils/get-dependency-map";
 import type { ForbiddenRules } from "../utils/get-depscop-config";
 
@@ -17,12 +17,8 @@ const checkForbiddenRulesEntry = (
 
   // If any version of the dependency from config is forbidded, report the error
   if (version === "any") {
-    console.log(
-      chalk.red(
-        `forbidden: ${dependency} is not allowed\n\tReason: ${chalk.italic(
-          reason
-        )}`
-      )
+    stats.addRuleViolation(
+      new ForbiddenRuleViolation(`${dependency} is not allowed`, { reason })
     );
 
     return;
@@ -37,11 +33,10 @@ const checkForbiddenRulesEntry = (
   }
 
   // Report the error
-  console.log(
-    chalk.red(
-      `forbidden: ${dependency}@${
-        dependencyValue.rootVersion
-      } is not allowed\n\tReason: ${chalk.italic(reason)}`
+  stats.addRuleViolation(
+    new ForbiddenRuleViolation(
+      `${dependency}@${dependencyValue.rootVersion} is not allowed`,
+      { reason }
     )
   );
 };
