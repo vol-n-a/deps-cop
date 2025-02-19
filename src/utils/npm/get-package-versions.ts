@@ -7,7 +7,7 @@ import { exec } from "node:child_process";
  * @param packageName package name
  * @returns array of all versions existing in npm registry
  */
-export const getDependencyVersions = async (
+export const getPackageVersions = async (
   packageName: string
 ): Promise<Array<string>> => {
   const versions = await new Promise<string>((resolve, reject) =>
