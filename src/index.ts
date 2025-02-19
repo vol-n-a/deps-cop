@@ -3,8 +3,8 @@ import { recentChecker } from "./checkers/recent-checker";
 import { semverChecker } from "./checkers/semver-checker";
 import { stats } from "./stats/stats";
 import { getDependencyMap } from "./utils/get-dependency-map";
-import { getDependencyTree } from "./utils/get-dependency-tree";
 import { getDepscopConfig } from "./utils/get-depscop-config";
+import { getDependencyTree } from "./utils/npm/get-dependency-tree";
 
 getDependencyTree()
   .then(getDependencyMap)

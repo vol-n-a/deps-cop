@@ -3,9 +3,9 @@ import { parse } from "semver";
 
 import { RecentRuleViolation, RuleViolationLevel, stats } from "../stats";
 import type { DependencyMap } from "../utils/get-dependency-map";
-import { getDependencyVersions } from "../utils/get-dependency-versions";
 import type { RecentRules } from "../utils/get-depscop-config";
 import { getRecentVersions } from "../utils/get-recent-versions";
+import { getPackageVersions } from "../utils/npm/get-package-versions";
 import { parseRecentVersions } from "../utils/parse-recent-versions";
 
 const checkRecentRulesEntry = async (
@@ -26,7 +26,7 @@ const checkRecentRulesEntry = async (
     return;
   }
 
-  const versions = (await getDependencyVersions(dependency))
+  const versions = (await getPackageVersions(dependency))
     .map((ver) => parse(ver))
     // TODO: Make an option for prerelease versions handling
     .filter((semver) => semver && !semver.prerelease.length) as Array<SemVer>;
