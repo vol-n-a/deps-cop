@@ -1,6 +1,6 @@
-import chalk from "chalk";
 import { satisfies } from "semver";
 
+import { SemverRuleViolation, stats } from "../stats";
 import type { DependencyMap } from "../utils/get-dependency-map";
 import type { SemverRules } from "../utils/get-depscop-config";
 
@@ -15,7 +15,7 @@ const checkSemverRulesEntry = (
     return;
   }
 
-  // If the dependency from config satisfies the rule, skip
+  // If the installed dependency satisfies the rule, skip
   if (
     dependencyValue.rootVersion &&
     satisfies(dependencyValue.rootVersion, version)
@@ -24,13 +24,10 @@ const checkSemverRulesEntry = (
   }
 
   // Report the error
-  console.log(
-    chalk.red(
-      `semver: ${dependency}@${
-        dependencyValue.rootVersion
-      } does not satisfy ${dependency}@${version}\n\tReason: ${chalk.italic(
-        reason
-      )}`
+  stats.addRuleViolation(
+    new SemverRuleViolation(
+      `${dependency}@${dependencyValue.rootVersion} does not satisfy ${dependency}@${version}`,
+      { reason }
     )
   );
 };
