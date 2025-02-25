@@ -28,7 +28,10 @@ export class RuleViolation {
     this.color = mapLevelToColor[this.level];
 
     if (options) {
-      const { reason = chalk.italic(options.reason), ...restOptions } = options;
+      const {
+        reason = options.reason ? chalk.italic(options.reason) : undefined,
+        ...restOptions
+      } = options;
 
       this.options = {
         reason,
