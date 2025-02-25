@@ -16,20 +16,25 @@ getDependencyTree()
   )
   .then((res) => Promise.all([res, getDepscopConfig()]))
   .then(([dependencyMap, { forbidden, recent, semver }]) => {
-    const listr = new Listr([
+    const listr = new Listr(
+      [
+        {
+          title: "Forbidden rules check",
+          task: () => forbiddenChecker(dependencyMap, forbidden),
+        },
+        {
+          title: "Recent rules check",
+          task: async () => recentChecker(dependencyMap, recent),
+        },
+        {
+          title: "Semver rules check",
+          task: () => semverChecker(dependencyMap, semver),
+        },
+      ],
       {
-        title: "Forbidden rules check",
-        task: () => forbiddenChecker(dependencyMap, forbidden),
-      },
-      {
-        title: "Recent rules check",
-        task: async () => recentChecker(dependencyMap, recent),
-      },
-      {
-        title: "Semver rules check",
-        task: () => semverChecker(dependencyMap, semver),
-      },
-    ]);
+        concurrent: true,
+      }
+    );
 
     return listr.run().catch(console.error);
   })
