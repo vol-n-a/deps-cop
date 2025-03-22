@@ -20,34 +20,35 @@ class Stats {
   };
 
   /**
-   * Generates info about all of the rule violations recorded:
+   * Prints info about all of the rule violations recorded to the `stdout` and `stderr` streams:
    * - If there are rule violations recorded, returns sorted errors/warnings messages and their amount
    * - If no rule violations recorded, ruturns success message
    *
    * @returns Rules violation info
    */
-  public getInfo = () => {
+  public print = () => {
     if (!this.errors.length && !this.warnings.length) {
-      return chalk.green("✅ All dependencies are valid");
+      console.log(chalk.green("✅ All dependencies are valid"));
+      return;
     }
 
-    const stringBuilder = [];
-
     if (this.errors.length) {
-      stringBuilder.push(this.errors.join("\n"));
+      this.errors.forEach((error) => {
+        console.error(String(error));
+      });
     }
 
     if (this.warnings.length) {
-      stringBuilder.push(this.warnings.join("\n"));
+      this.warnings.forEach((warning) => {
+        console.warn(String(warning));
+      });
     }
 
-    stringBuilder.push(
-      `${chalk.red(`${this.errors.length} errors`)}, ${chalk.yellow(
+    console.error(
+      `\n${chalk.red(`${this.errors.length} errors`)}, ${chalk.yellow(
         `${this.warnings.length} warnings`
       )}`
     );
-
-    return stringBuilder.join("\n\n");
   };
 }
 
