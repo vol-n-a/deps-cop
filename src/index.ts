@@ -39,5 +39,5 @@ getDependencyTree()
     return listr.run().catch(console.error);
   })
   .then(() => {
-    console.log(stats.getInfo());
+    stats.print();
   });
