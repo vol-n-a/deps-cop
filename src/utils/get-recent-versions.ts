@@ -1,7 +1,7 @@
 import _ from "lodash";
 import type { SemVer } from "semver";
 
-import type { RecentVersionSegments } from "./parse-recent-versions";
+import type { RecentVersionSegments } from "./parse-recent-versions.js";
 
 type SemVerIteratee = (
   value: SemVer

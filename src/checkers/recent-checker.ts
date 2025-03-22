@@ -1,12 +1,16 @@
 import type { SemVer } from "semver";
 import { parse } from "semver";
 
-import { RecentRuleViolation, RuleViolationLevel, stats } from "../stats";
-import type { DependencyMap } from "../utils/get-dependency-map";
-import type { RecentRules } from "../utils/get-depscop-config";
-import { getRecentVersions } from "../utils/get-recent-versions";
-import { getPackageVersions } from "../utils/npm/get-package-versions";
-import { parseRecentVersions } from "../utils/parse-recent-versions";
+import {
+  RecentRuleViolation,
+  RuleViolationLevel,
+  stats,
+} from "../stats/index.js";
+import type { DependencyMap } from "../utils/get-dependency-map.js";
+import type { RecentRules } from "../utils/get-depscop-config.js";
+import { getRecentVersions } from "../utils/get-recent-versions.js";
+import { getPackageVersions } from "../utils/npm/get-package-versions.js";
+import { parseRecentVersions } from "../utils/parse-recent-versions.js";
 
 const checkRecentRulesEntry = async (
   dependencyMap: DependencyMap,

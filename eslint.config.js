@@ -1,16 +1,10 @@
-const eslint = require("@eslint/js");
-const pluginImport = require("eslint-plugin-import");
-const pluginSimpleImportSort = require("eslint-plugin-simple-import-sort");
-const tsEslint = require("typescript-eslint");
-const globals = require("globals");
+import eslint from "@eslint/js";
+import pluginImport from "eslint-plugin-import";
+import pluginSimpleImportSort from "eslint-plugin-simple-import-sort";
+import globals from "globals";
+import tsEslint from "typescript-eslint";
 
-const NODE_FILES = [
-  // Config files
-  "**/eslint.config.js",
-];
-
-const nodeEnvironmentConfig = tsEslint.config({
-  files: NODE_FILES,
+const baseConfig = tsEslint.config({
   languageOptions: { globals: globals.node },
 });
 
@@ -53,7 +47,7 @@ const tsConfig = tsEslint.config({
   languageOptions: {
     parserOptions: {
       projectService: true,
-      tsconfigRootDir: __dirname,
+      tsconfigRootDir: import.meta.url,
     },
   },
   rules: {
@@ -66,8 +60,4 @@ const tsConfig = tsEslint.config({
   },
 });
 
-module.exports = tsEslint.config(
-  ...nodeEnvironmentConfig,
-  ...jsConfig,
-  ...tsConfig
-);
+export default tsEslint.config(...baseConfig, ...jsConfig, ...tsConfig);
