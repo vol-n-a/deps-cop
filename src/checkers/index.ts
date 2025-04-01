@@ -1,12 +1,12 @@
 import { Listr } from "listr2";
 
-import { stats } from "../stats/stats";
-import { getDependencyMap } from "../utils/get-dependency-map";
-import { getDepscopConfig } from "../utils/get-depscop-config";
-import { getDependencyTree } from "../utils/npm/get-dependency-tree";
-import { forbiddenChecker } from "./forbidden-checker";
-import { recentChecker } from "./recent-checker";
-import { semverChecker } from "./semver-checker";
+import { stats } from "../stats/stats.js";
+import { getDependencyMap } from "../utils/get-dependency-map.js";
+import { getDepscopConfig } from "../utils/get-depscop-config.js";
+import { getDependencyTree } from "../utils/npm/get-dependency-tree.js";
+import { forbiddenChecker } from "./forbidden-checker.js";
+import { recentChecker } from "./recent-checker.js";
+import { semverChecker } from "./semver-checker.js";
 
 export const runCheckers = async (): Promise<void> => {
   const { forbidden, recent, semver } = await getDepscopConfig();

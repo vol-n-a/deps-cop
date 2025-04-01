@@ -1,8 +1,8 @@
 import { satisfies } from "semver";
 
-import { SemverRuleViolation, stats } from "../stats";
-import type { DependencyMap } from "../utils/get-dependency-map";
-import type { SemverRules } from "../utils/get-depscop-config";
+import { SemverRuleViolation, stats } from "../stats/index.js";
+import type { DependencyMap } from "../utils/get-dependency-map.js";
+import type { SemverRules } from "../utils/get-depscop-config.js";
 
 const checkSemverRulesEntry = (
   dependencyMap: DependencyMap,

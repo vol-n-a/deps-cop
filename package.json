@@ -2,7 +2,11 @@
   "name": "deps-cop",
   "version": "0.0.0",
   "description": "Whitelist for package.json dependencies",
-  "main": "build/index.js",
+  "main": "build/src/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsc",
     "eslint": "eslint ."

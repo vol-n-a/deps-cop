@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
-import type { RuleViolation } from "./rule-violations/rule-violation";
-import { RuleViolationLevel } from "./rule-violations/rule-violation";
+import type { RuleViolation } from "./rule-violations/rule-violation.js";
+import { RuleViolationLevel } from "./rule-violations/rule-violation.js";
 
 class Stats {
   private errors: Array<RuleViolation> = [];
