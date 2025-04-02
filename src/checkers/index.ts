@@ -1,5 +1,6 @@
 import { Listr } from "listr2";
 
+import type { Options } from "../index.js";
 import { stats } from "../stats/stats.js";
 import { getDependencyMap } from "../utils/get-dependency-map.js";
 import { getDepscopConfig } from "../utils/get-depscop-config.js";
@@ -8,7 +9,7 @@ import { forbiddenChecker } from "./forbidden-checker.js";
 import { recentChecker } from "./recent-checker.js";
 import { semverChecker } from "./semver-checker.js";
 
-export const runCheckers = async (): Promise<void> => {
+export const runCheckers = async (options: Options): Promise<void> => {
   const { forbidden, recent, semver } = await getDepscopConfig();
 
   const dependencyTree = await getDependencyTree();
@@ -26,7 +27,7 @@ export const runCheckers = async (): Promise<void> => {
       },
       {
         title: "Recent rules check",
-        task: async () => recentChecker(rootDependenciesMap, recent),
+        task: async () => recentChecker(rootDependenciesMap, recent, options),
       },
       {
         title: "Semver rules check",
