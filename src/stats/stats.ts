@@ -49,9 +49,9 @@ class Stats {
    * - If there are rule violations recorded, returns sorted errors/warnings messages and their amount
    * - If no rule violations recorded, ruturns success message
    *
-   * @returns Rules violation info
+   * @returns boolean representing whether there are any errors/warnigns (false) or not (true)
    */
-  public print = (): void => {
+  public printProblems = (): boolean => {
     this.assertIsOptionsInitialized(this.options);
 
     const shouldShowErrors = Boolean(this.errors.length);
@@ -60,8 +60,8 @@ class Stats {
     const totalProblems = this.errors.length + this.warnings.length;
 
     if (!shouldShowErrors && !shouldShowWarnings) {
-      console.log(`\n${chalk.green("✅ All dependencies are valid")}`);
-      return;
+      console.log(`\n${chalk.green("✅ All dependencies are valid")}\n`);
+      return false;
     }
 
     if (shouldShowErrors) {
@@ -79,8 +79,10 @@ class Stats {
     console.error(
       `\n👮 ${chalk[shouldShowErrors ? "red" : "yellow"](
         `${totalProblems} problems (${this.errors.length} errors, ${this.warnings.length} warnings)`
-      )}`
+      )}\n`
     );
+
+    return true;
   };
 }
 
