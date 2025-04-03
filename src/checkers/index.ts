@@ -12,7 +12,7 @@ import { semverChecker } from "./semver-checker.js";
 export const runCheckers = async (options: Options): Promise<void> => {
   const { forbidden, recent, semver } = await getDepscopConfig();
 
-  const dependencyTree = await getDependencyTree();
+  const dependencyTree = await getDependencyTree(options);
   const dependencyMap = getDependencyMap(dependencyTree);
 
   const rootDependenciesMap = new Map(
