@@ -1,6 +1,7 @@
 import type { SemVer } from "semver";
 import { parse } from "semver";
 
+import type { Options } from "../index.js";
 import {
   RecentRuleViolation,
   RuleViolationLevel,
@@ -14,7 +15,8 @@ import { parseRecentVersions } from "../utils/parse-recent-versions.js";
 
 const checkRecentRulesEntry = async (
   dependencyMap: DependencyMap,
-  [dependency, [version, reason]]: [string, [string, string]]
+  [dependency, [version, reason]]: [string, [string, string]],
+  options: Options
 ): Promise<void> => {
   const dependencyValue = dependencyMap.get(dependency);
 
@@ -63,17 +65,20 @@ const checkRecentRulesEntry = async (
 
   // If the installed dependency satisfies the rule, but not the latest allowed version is installed, report the warning
   if (isVersionAllowed && !isVersionLatest) {
-    stats.addRuleViolation(
-      new RecentRuleViolation(
-        `${dependency}@${dependencyValue.rootVersion} may be outdated soon`,
-        {
-          description: `Currently allowed versions: ${versionsAllowed.join(
-            ", "
-          )}`,
-          level: RuleViolationLevel.WARNING,
-        }
-      )
-    );
+    if (!options.quiet) {
+      stats.addRuleViolation(
+        new RecentRuleViolation(
+          `${dependency}@${dependencyValue.rootVersion} may be outdated soon`,
+          {
+            description: `Currently allowed versions: ${versionsAllowed.join(
+              ", "
+            )}`,
+            level: RuleViolationLevel.WARNING,
+          }
+        )
+      );
+    }
+
     return;
   }
 
@@ -93,11 +98,12 @@ const checkRecentRulesEntry = async (
 
 export const recentChecker = async (
   dependencyMap: DependencyMap,
-  recentRules: RecentRules
+  recentRules: RecentRules,
+  options: Options
 ): Promise<void> => {
   await Promise.all(
     Object.entries(recentRules).map((recentRulesEntry) =>
-      checkRecentRulesEntry(dependencyMap, recentRulesEntry)
+      checkRecentRulesEntry(dependencyMap, recentRulesEntry, options)
     )
   );
 };
