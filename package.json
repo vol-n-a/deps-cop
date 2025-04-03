@@ -9,7 +9,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "eslint": "eslint ."
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [
     "whitelist",
