@@ -1,6 +1,8 @@
 import type { ExecException } from "node:child_process";
 import { exec } from "node:child_process";
 
+import type { Options } from "../../index.js";
+
 export type Project = {
   version: string;
   name: string;
@@ -21,15 +23,24 @@ export type Node = Project | Dependency;
  *
  * @returns Project's dependency tree
  */
-export const getDependencyTree = async (): Promise<Project> => {
-  const dependencyTree = await new Promise<string>((resolve, reject) =>
-    exec("npm ls -a --json", (error: ExecException | null, stdout: string) => {
-      if (error && !error.stdout?.includes("ELSPROBLEMS")) {
-        // reject(error);
-      }
+export const getDependencyTree = async (options: Options): Promise<Project> => {
+  const lsOptions = ["-a", "--json"];
 
-      resolve(stdout);
-    })
+  if (options.prod) {
+    lsOptions.push("--prod");
+  }
+
+  const dependencyTree = await new Promise<string>((resolve, reject) =>
+    exec(
+      `npm ls ${lsOptions.join(" ")}`,
+      (error: ExecException | null, stdout: string) => {
+        if (error && !error.stdout?.includes("ELSPROBLEMS")) {
+          // reject(error);
+        }
+
+        resolve(stdout);
+      }
+    )
   );
 
   return JSON.parse(dependencyTree) as Project;
