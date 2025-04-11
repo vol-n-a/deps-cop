@@ -1,13 +1,13 @@
 import { program } from "commander";
 
-import packageJSON from "../package.json" with {type: "json"};
+import packageJSON from "../package.json" with { type: "json" };
 import { runCheckers } from "./checkers/index.js";
 import { stats } from "./stats/stats.js";
 
 export type Options = {
   prod: boolean;
   quiet: boolean;
-}
+};
 
 program
   .name("deps-cop")

@@ -1,5 +1,6 @@
 import eslint from "@eslint/js";
 import pluginImport from "eslint-plugin-import";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import pluginSimpleImportSort from "eslint-plugin-simple-import-sort";
 import globals from "globals";
 import tsEslint from "typescript-eslint";
@@ -60,4 +61,9 @@ const tsConfig = tsEslint.config({
   },
 });
 
-export default tsEslint.config(...baseConfig, ...jsConfig, ...tsConfig);
+export default tsEslint.config(
+  eslintPluginPrettierRecommended,
+  ...baseConfig,
+  ...jsConfig,
+  ...tsConfig
+);
