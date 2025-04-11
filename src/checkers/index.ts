@@ -20,6 +20,7 @@ export const runCheckers = async (options: Options): Promise<void> => {
   );
 
   const listr = new Listr(
+    // TODO: Make checkers pluggable
     [
       {
         title: "Forbidden rules check",

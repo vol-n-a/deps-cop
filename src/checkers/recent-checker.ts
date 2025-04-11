@@ -35,7 +35,10 @@ const checkRecentRulesEntry = async (
   const versions = (await getPackageVersions(dependency))
     .map((ver) => parse(ver))
     // TODO: Make an option for prerelease versions handling
-    .filter((semver) => semver && !semver.prerelease.length) as Array<SemVer>;
+    .filter(
+      (semver) =>
+        semver && (options.allowPrerelease || !semver.prerelease.length)
+    ) as Array<SemVer>;
 
   const versionsAllowed = getRecentVersions(
     versions,
