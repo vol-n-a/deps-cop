@@ -23,7 +23,10 @@ export class RuleViolation {
   private color: typeof ForegroundColor;
   private options?: RuleViolationOptions;
 
-  constructor(private message: string, options?: RuleViolationOptions) {
+  constructor(
+    private message: string,
+    options?: RuleViolationOptions
+  ) {
     this.level = options?.level ?? RuleViolationLevel.ERROR;
     this.color = mapLevelToColor[this.level];
 
