@@ -2,10 +2,9 @@
   "name": "deps-cop",
   "version": "0.0.0",
   "description": "Whitelist of your project's dependencies",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "tsc": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/index.ts"
   },
   "keywords": [
     "whitelist",
@@ -13,14 +12,13 @@
     "deps-cop"
   ],
   "author": "vol-n-a",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/node": "^22.10.5",
-    "typescript": "^5.7.2"
-  },
+  "license": "MIT",
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "semver": "^7.6.3"
+  },
+  "peerDependencies": {
+    "@types/node": "^22.10.5",
+    "ts-node": "^10.9.2",
+    "typescript": ">=5"
   }
 }
