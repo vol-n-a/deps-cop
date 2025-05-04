@@ -2,13 +2,17 @@ import { readFile } from "node:fs";
 import path from "node:path";
 import { promisify } from "node:util";
 
+export type Dependency = string;
 export type Version = string;
 export type Reason = string;
 
+export type Rule = [Version, Reason];
+
 declare const __brand: unique symbol;
-type RulesRecord<brand extends string> = Record<string, [Version, Reason]> & {
+type RulesRecord<brand extends string> = Record<Dependency, Rule> & {
   [__brand]: brand;
 };
+
 // TODO: Make it possible to provide array of rules: `react: [["18.0.0", "Reason 1"], ["18.2.0", "Reason 2"]]`
 // TODO: Add rule level: 'warning' | 'error" (?)
 export type ForbiddenRules = RulesRecord<"forbidden">;
@@ -21,6 +25,7 @@ export type DepscopConfig = {
   semver: SemverRules;
 };
 
+// TODO: make it possible to read from .js files
 const depscopConfigPath = path.resolve(process.cwd(), "depscop.config.json");
 
 /**

@@ -1,14 +1,19 @@
 import { satisfies } from "semver";
 
 import { ForbiddenRuleViolation, stats } from "../stats/index.js";
-import type { DependencyMap } from "../utils/get-dependency-map.js";
-import type { ForbiddenRules } from "../utils/get-depscop-config.js";
+import type { DependenciesInstalled } from "../utils/get-dependency-map.js";
+import type {
+  Dependency,
+  ForbiddenRules,
+  Rule,
+} from "../utils/get-depscop-config.js";
 
-const checkForbiddenRulesEntry = (
-  dependencyMap: DependencyMap,
-  [dependency, [version, reason]]: [string, [string, string]]
+const checkForbiddenRule = (
+  dependenciesInstalled: DependenciesInstalled,
+  dependency: Dependency,
+  [version, reason]: Rule
 ): void => {
-  const dependencyValue = dependencyMap.get(dependency);
+  const dependencyValue = dependenciesInstalled.get(dependency);
 
   // If the dependency from config is not installed, skip it
   if (!dependencyValue) {
@@ -42,10 +47,10 @@ const checkForbiddenRulesEntry = (
 };
 
 export const forbiddenChecker = (
-  dependencyMap: DependencyMap,
+  dependenciesInstalled: DependenciesInstalled,
   forbiddenRules: ForbiddenRules
 ): void => {
-  Object.entries(forbiddenRules).map((forbiddenRulesEntry) =>
-    checkForbiddenRulesEntry(dependencyMap, forbiddenRulesEntry)
+  Object.entries(forbiddenRules).map(([dependency, rule]) =>
+    checkForbiddenRule(dependenciesInstalled, dependency, rule)
   );
 };

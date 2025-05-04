@@ -6,15 +6,15 @@ import type { Options } from "../../index.js";
 export type Project = {
   version: string;
   name: string;
-  dependencies: Record<string, Dependency>;
+  dependencies: Record<string, DependencyNode>;
 };
 
-export type Dependency = {
+export type DependencyNode = {
   version: string;
-  dependencies?: Record<string, Dependency>;
+  dependencies?: Record<string, DependencyNode>;
 };
 
-export type Node = Project | Dependency;
+export type Node = Project | DependencyNode;
 
 /**
  * Reads project's dependency tree and parses it to the js object
@@ -24,15 +24,15 @@ export type Node = Project | Dependency;
  * @returns Project's dependency tree
  */
 export const getDependencyTree = async (options: Options): Promise<Project> => {
-  const lsOptions = ["-a", "--json"];
+  const commandOptions = ["-a", "--json"];
 
   if (options.prod) {
-    lsOptions.push("--prod");
+    commandOptions.push("--prod");
   }
 
   const dependencyTree = await new Promise<string>((resolve, reject) =>
     exec(
-      `npm ls ${lsOptions.join(" ")}`,
+      `npm ls ${commandOptions.join(" ")}`,
       (error: ExecException | null, stdout: string) => {
         if (error && !error.stdout?.includes("ELSPROBLEMS")) {
           // reject(error);

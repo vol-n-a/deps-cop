@@ -1,14 +1,19 @@
 import { satisfies } from "semver";
 
 import { SemverRuleViolation, stats } from "../stats/index.js";
-import type { DependencyMap } from "../utils/get-dependency-map.js";
-import type { SemverRules } from "../utils/get-depscop-config.js";
+import type { DependenciesInstalled } from "../utils/get-dependency-map.js";
+import type {
+  Dependency,
+  Rule,
+  SemverRules,
+} from "../utils/get-depscop-config.js";
 
-const checkSemverRulesEntry = (
-  dependencyMap: DependencyMap,
-  [dependency, [version, reason]]: [string, [string, string]]
+const checkSemverRule = (
+  dependenciesInstalled: DependenciesInstalled,
+  dependency: Dependency,
+  [version, reason]: Rule
 ): void => {
-  const dependencyValue = dependencyMap.get(dependency);
+  const dependencyValue = dependenciesInstalled.get(dependency);
 
   // If the dependency from config is not installed, skip it
   if (!dependencyValue) {
@@ -35,14 +40,14 @@ const checkSemverRulesEntry = (
 /**
  * Validates semver based depscop rules
  *
- * @param dependencyMap Dependency map
+ * @param dependenciesInstalled Dependency map
  * @param semverRules Depscop config
  */
 export const semverChecker = (
-  dependencyMap: DependencyMap,
+  dependenciesInstalled: DependenciesInstalled,
   semverRules: SemverRules
 ): void => {
-  Object.entries(semverRules).map((semverRulesEntry) =>
-    checkSemverRulesEntry(dependencyMap, semverRulesEntry)
+  Object.entries(semverRules).map(([dependency, rule]) =>
+    checkSemverRule(dependenciesInstalled, dependency, rule)
   );
 };
