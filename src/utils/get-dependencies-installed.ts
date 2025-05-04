@@ -21,7 +21,7 @@ export type DependenciesInstalled = typeof dependenciesInstalled;
  *
  * @param tree Current node of the project's dependency tree
  * @param path Path to the current node of the project's dependency tree
- * @returns Dependency map
+ * @returns Map of installed dependencies
  */
 export const getDependeniesInstalled = (
   tree: Project | DependencyNode,

@@ -7,7 +7,7 @@ import {
   RuleViolationLevel,
   stats,
 } from "../stats/index.js";
-import type { DependenciesInstalled } from "../utils/get-dependency-map.js";
+import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import type {
   Dependency,
   RecentRules,

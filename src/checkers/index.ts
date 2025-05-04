@@ -2,7 +2,7 @@ import { Listr } from "listr2";
 
 import type { Options } from "../index.js";
 import { stats } from "../stats/stats.js";
-import { getDependeniesInstalled } from "../utils/get-dependency-map.js";
+import { getDependeniesInstalled } from "../utils/get-dependencies-installed.js";
 import { getDepscopConfig } from "../utils/get-depscop-config.js";
 import { getDependencyTree } from "../utils/npm/get-dependency-tree.js";
 import { forbiddenChecker } from "./forbidden-checker.js";
