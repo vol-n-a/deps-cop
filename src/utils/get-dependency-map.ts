@@ -1,6 +1,6 @@
-import type { Dependency, Project } from "./npm/get-dependency-tree.js";
+import type { DependencyNode, Project } from "./npm/get-dependency-tree.js";
 
-const dependencyMap = new Map<
+const dependenciesInstalled = new Map<
   string,
   {
     rootVersion?: string;
@@ -8,7 +8,7 @@ const dependencyMap = new Map<
   }
 >();
 
-export type DependencyMap = typeof dependencyMap;
+export type DependenciesInstalled = typeof dependenciesInstalled;
 
 /**
  * Traverses the dependency tree and collects data about entries into a map
@@ -23,12 +23,12 @@ export type DependencyMap = typeof dependencyMap;
  * @param path Path to the current node of the project's dependency tree
  * @returns Dependency map
  */
-export const getDependencyMap = (
-  tree: Project | Dependency,
+export const getDependeniesInstalled = (
+  tree: Project | DependencyNode,
   path: Array<string> = []
-): DependencyMap => {
+): DependenciesInstalled => {
   if (!tree.dependencies) {
-    return dependencyMap;
+    return dependenciesInstalled;
   }
 
   for (const [dependencyName, dependencyTree] of Object.entries(
@@ -37,14 +37,14 @@ export const getDependencyMap = (
     const rootVersion = path.length === 0 ? dependencyTree.version : void 0;
     const dependencyPath = [...path, dependencyName];
 
-    let dependencyValue = dependencyMap.get(dependencyName);
+    let dependencyValue = dependenciesInstalled.get(dependencyName);
 
     if (!dependencyValue) {
       dependencyValue = {
         rootVersion,
         versions: {},
       };
-      dependencyMap.set(dependencyName, dependencyValue);
+      dependenciesInstalled.set(dependencyName, dependencyValue);
     }
 
     // If root version of a current dependency is found, save it
@@ -56,8 +56,8 @@ export const getDependencyMap = (
     dependencyValue.versions[dependencyTree.version] = dependencyPath;
 
     // Traverse dependencies of a current dependency
-    getDependencyMap(dependencyTree, dependencyPath);
+    getDependeniesInstalled(dependencyTree, dependencyPath);
   }
 
-  return dependencyMap;
+  return dependenciesInstalled;
 };

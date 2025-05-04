@@ -7,18 +7,23 @@ import {
   RuleViolationLevel,
   stats,
 } from "../stats/index.js";
-import type { DependencyMap } from "../utils/get-dependency-map.js";
-import type { RecentRules } from "../utils/get-depscop-config.js";
+import type { DependenciesInstalled } from "../utils/get-dependency-map.js";
+import type {
+  Dependency,
+  RecentRules,
+  Rule,
+} from "../utils/get-depscop-config.js";
 import { getRecentVersions } from "../utils/get-recent-versions.js";
 import { getPackageVersions } from "../utils/npm/get-package-versions.js";
 import { parseRecentVersions } from "../utils/parse-recent-versions.js";
 
-const checkRecentRulesEntry = async (
-  dependencyMap: DependencyMap,
-  [dependency, [version, reason]]: [string, [string, string]],
+const checkRecentRule = async (
+  dependenciesInstalled: DependenciesInstalled,
+  dependency: Dependency,
+  [version, reason]: Rule,
   options: Options
 ): Promise<void> => {
-  const dependencyValue = dependencyMap.get(dependency);
+  const dependencyValue = dependenciesInstalled.get(dependency);
 
   // If the dependency from config is not installed, skip it
   if (!dependencyValue) {
@@ -34,7 +39,6 @@ const checkRecentRulesEntry = async (
 
   const versions = (await getPackageVersions(dependency))
     .map((ver) => parse(ver))
-    // TODO: Make an option for prerelease versions handling
     .filter(
       (semver) =>
         semver && (options.allowPrerelease || !semver.prerelease.length)
@@ -100,13 +104,13 @@ const checkRecentRulesEntry = async (
 };
 
 export const recentChecker = async (
-  dependencyMap: DependencyMap,
+  dependenciesInstalled: DependenciesInstalled,
   recentRules: RecentRules,
   options: Options
 ): Promise<void> => {
   await Promise.all(
-    Object.entries(recentRules).map((recentRulesEntry) =>
-      checkRecentRulesEntry(dependencyMap, recentRulesEntry, options)
+    Object.entries(recentRules).map(([dependency, rule]) =>
+      checkRecentRule(dependenciesInstalled, dependency, rule, options)
     )
   );
 };

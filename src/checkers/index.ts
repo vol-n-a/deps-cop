@@ -2,7 +2,7 @@ import { Listr } from "listr2";
 
 import type { Options } from "../index.js";
 import { stats } from "../stats/stats.js";
-import { getDependencyMap } from "../utils/get-dependency-map.js";
+import { getDependeniesInstalled } from "../utils/get-dependency-map.js";
 import { getDepscopConfig } from "../utils/get-depscop-config.js";
 import { getDependencyTree } from "../utils/npm/get-dependency-tree.js";
 import { forbiddenChecker } from "./forbidden-checker.js";
@@ -13,10 +13,12 @@ export const runCheckers = async (options: Options): Promise<void> => {
   const { forbidden, recent, semver } = await getDepscopConfig();
 
   const dependencyTree = await getDependencyTree(options);
-  const dependencyMap = getDependencyMap(dependencyTree);
+  const dependenciesInstalled = getDependeniesInstalled(dependencyTree);
 
-  const rootDependenciesMap = new Map(
-    Array.from(dependencyMap.entries()).filter(([, entry]) => entry.rootVersion)
+  const rootDependenciesInstalled = new Map(
+    Array.from(dependenciesInstalled.entries()).filter(
+      ([, entry]) => entry.rootVersion
+    )
   );
 
   const listr = new Listr(
@@ -24,15 +26,16 @@ export const runCheckers = async (options: Options): Promise<void> => {
     [
       {
         title: "Forbidden rules check",
-        task: () => forbiddenChecker(rootDependenciesMap, forbidden),
+        task: () => forbiddenChecker(rootDependenciesInstalled, forbidden),
       },
       {
         title: "Recent rules check",
-        task: async () => recentChecker(rootDependenciesMap, recent, options),
+        task: async () =>
+          recentChecker(rootDependenciesInstalled, recent, options),
       },
       {
         title: "Semver rules check",
-        task: () => semverChecker(rootDependenciesMap, semver),
+        task: () => semverChecker(rootDependenciesInstalled, semver),
       },
     ],
     {
