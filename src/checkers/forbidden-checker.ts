@@ -3,14 +3,15 @@ import { satisfies } from "semver";
 import { ForbiddenRuleViolation, stats } from "../stats/index.js";
 import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import type {
-  Dependency,
+  DependencyName,
   ForbiddenRules,
   Rule,
 } from "../utils/get-depscop-config.js";
+import { isArrayOfArrays } from "../utils/is-array-of-arrays.js";
 
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,
-  dependency: Dependency,
+  dependency: DependencyName,
   [version, reason]: Rule
 ): void => {
   const dependencyValue = dependenciesInstalled.get(dependency);
@@ -50,7 +51,17 @@ export const forbiddenChecker = (
   dependenciesInstalled: DependenciesInstalled,
   forbiddenRules: ForbiddenRules
 ): void => {
-  Object.entries(forbiddenRules).map(([dependency, rule]) =>
-    checkForbiddenRule(dependenciesInstalled, dependency, rule)
-  );
+  Object.entries(forbiddenRules).forEach((forbiddenRulesEntry) => {
+    const [dependency, ruleSet] = forbiddenRulesEntry;
+
+    if (isArrayOfArrays(ruleSet)) {
+      ruleSet.forEach((rule) => {
+        checkForbiddenRule(dependenciesInstalled, dependency, rule);
+      });
+
+      return;
+    }
+
+    checkForbiddenRule(dependenciesInstalled, dependency, ruleSet);
+  });
 };

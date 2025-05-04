@@ -9,17 +9,18 @@ import {
 } from "../stats/index.js";
 import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import type {
-  Dependency,
+  DependencyName,
   RecentRules,
   Rule,
 } from "../utils/get-depscop-config.js";
 import { getRecentVersions } from "../utils/get-recent-versions.js";
+import { isArrayOfArrays } from "../utils/is-array-of-arrays.js";
 import { getPackageVersions } from "../utils/npm/get-package-versions.js";
 import { parseRecentVersions } from "../utils/parse-recent-versions.js";
 
 const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,
-  dependency: Dependency,
+  dependency: DependencyName,
   [version, reason]: Rule,
   options: Options
 ): Promise<void> => {
@@ -109,8 +110,21 @@ export const recentChecker = async (
   options: Options
 ): Promise<void> => {
   await Promise.all(
-    Object.entries(recentRules).map(([dependency, rule]) =>
-      checkRecentRule(dependenciesInstalled, dependency, rule, options)
-    )
+    Object.entries(recentRules).flatMap((recentRulesEntry) => {
+      const [dependency, ruleSet] = recentRulesEntry;
+
+      if (isArrayOfArrays(ruleSet)) {
+        return ruleSet.map((rule) =>
+          checkRecentRule(dependenciesInstalled, dependency, rule, options)
+        );
+      }
+
+      return checkRecentRule(
+        dependenciesInstalled,
+        dependency,
+        ruleSet,
+        options
+      );
+    })
   );
 };
