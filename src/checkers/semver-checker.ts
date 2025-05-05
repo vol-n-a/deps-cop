@@ -3,14 +3,15 @@ import { satisfies } from "semver";
 import { SemverRuleViolation, stats } from "../stats/index.js";
 import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import type {
-  Dependency,
+  DependencyName,
   Rule,
   SemverRules,
 } from "../utils/get-depscop-config.js";
+import { isArrayOfArrays } from "../utils/is-array-of-arrays.js";
 
 const checkSemverRule = (
   dependenciesInstalled: DependenciesInstalled,
-  dependency: Dependency,
+  dependency: DependencyName,
   [version, reason]: Rule
 ): void => {
   const dependencyValue = dependenciesInstalled.get(dependency);
@@ -47,7 +48,15 @@ export const semverChecker = (
   dependenciesInstalled: DependenciesInstalled,
   semverRules: SemverRules
 ): void => {
-  Object.entries(semverRules).map(([dependency, rule]) =>
-    checkSemverRule(dependenciesInstalled, dependency, rule)
-  );
+  Object.entries(semverRules).forEach(([dependency, ruleSet]) => {
+    if (isArrayOfArrays(ruleSet)) {
+      ruleSet.forEach((rule) => {
+        checkSemverRule(dependenciesInstalled, dependency, rule);
+      });
+
+      return;
+    }
+
+    checkSemverRule(dependenciesInstalled, dependency, ruleSet);
+  });
 };
