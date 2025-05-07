@@ -1,4 +1,4 @@
-import _ from "lodash";
+import groupBy from "lodash/groupBy.js";
 import type { SemVer } from "semver";
 
 import type { RecentVersionSegments } from "./parse-recent-versions.js";
@@ -31,7 +31,7 @@ const groupVersions = (
   recentValue: number,
   iteratee: SemVerIteratee
 ): Record<string, Array<SemVer>> => {
-  const versionsGrouped = _.groupBy(versions, iteratee);
+  const versionsGrouped = groupBy(versions, iteratee);
 
   if (recentValue < 0) {
     return Object.fromEntries(
