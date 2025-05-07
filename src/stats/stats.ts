@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import type { Options } from "../index.js";
+import type { Options } from "../command.js";
 import type { RuleViolation } from "./rule-violations/rule-violation.js";
 import { RuleViolationLevel } from "./rule-violations/rule-violation.js";
 

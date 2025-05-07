@@ -1,7 +1,7 @@
 import type { SemVer } from "semver";
 import { parse } from "semver";
 
-import type { Options } from "../index.js";
+import type { Options } from "../command.js";
 import {
   RecentRuleViolation,
   RuleViolationLevel,

@@ -1,6 +1,6 @@
 import { Listr } from "listr2";
 
-import type { Options } from "../index.js";
+import type { Options } from "../command.js";
 import { stats } from "../stats/stats.js";
 import { getDependeniesInstalled } from "../utils/get-dependencies-installed.js";
 import { getDepscopConfig } from "../utils/get-depscop-config.js";

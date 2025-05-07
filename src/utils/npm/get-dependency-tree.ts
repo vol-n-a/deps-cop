@@ -1,7 +1,7 @@
 import type { ExecException } from "node:child_process";
 import { exec } from "node:child_process";
 
-import type { Options } from "../../index.js";
+import type { Options } from "../../command.js";
 
 export type Project = {
   version: string;
