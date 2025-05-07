@@ -10,7 +10,7 @@ type RuleSet = Rule | Rules;
 
 declare const __brand: unique symbol;
 type RulesRecord<brand extends string> = Record<DependencyName, RuleSet> & {
-  [__brand]: brand;
+  [__brand]?: brand;
 };
 
 // TODO: Add rule level: 'warning' | 'error" (?)

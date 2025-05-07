@@ -2,7 +2,7 @@
   "name": "deps-cop",
   "version": "0.0.0",
   "description": "Whitelist for package.json dependencies",
-  "main": "build/src/index.js",
+  "main": "build/src/command.js",
   "type": "module",
   "engines": {
     "node": ">=18"
@@ -12,6 +12,7 @@
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix"
   },
+  "exports": "./build/src/index.js",
   "keywords": [
     "whitelist",
     "dependency",
