@@ -210,6 +210,11 @@ npx depscop --quiet
 }
 ```
 
+## Requirements
+
+- Node.js >= 18
+- npm >= 9
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
