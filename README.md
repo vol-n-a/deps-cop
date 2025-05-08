@@ -2,6 +2,8 @@
 
 DepsCop is a dependency management tool that helps enforce rules and restrictions on your project's dependencies. It acts as a whitelist system for your `package.json` dependencies, controlling which packages can be used and ensuring that your project maintains consistent and secure dependency versions.
 
+![DepsCop Demo](docs/demo.gif)
+
 Features:
 
 - **Package Blocking**: Block specific versions or all versions of packages ([`forbidden` ruleset](#forbidden))
