@@ -1,5 +1,12 @@
-# node
-node_modules
+# Dependencies
+node_modules/
 
-# build
-build
+# Build output
+build/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
