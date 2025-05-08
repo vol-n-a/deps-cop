@@ -2,21 +2,25 @@
 
 DepsCop is a dependency management tool that helps enforce rules and restrictions on your project's dependencies. It acts as a whitelist system for your `package.json` dependencies, controlling which packages can be used and ensuring that your project maintains consistent and secure dependency versions.
 
-Features:
-
-- **Package Blocking**: Block specific versions or all versions of packages ([`forbidden` ruleset](#forbidden))
-- **Version Recency**: Enforce using recent versions of packages ([`recent` ruleset](#recent))
-- **Version Range**: Enforce specific semver patterns ([`semver` ruleset](#semver))
+![DepsCop Demo](docs/demo.gif)
 
 ## Table of Contents
 
+- [Features](#features)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Command Line Interface](#command-line-interface)
 - [Exit Codes](#exit-codes)
 - [Example Configuration](#example-configuration)
+- [Requirements](#requirements)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Features
+
+- **Package Blocking**: Block specific versions or all versions of packages ([`forbidden` ruleset](#forbidden))
+- **Version Recency**: Enforce using recent versions of packages ([`recent` ruleset](#recent))
+- **Version Range**: Enforce specific semver patterns ([`semver` ruleset](#semver))
 
 ## Installation
 
