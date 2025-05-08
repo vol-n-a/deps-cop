@@ -38,6 +38,19 @@ The configuration file should be placed in your project root. The following file
 - `depscop.config.mjs`
 - `depscop.config.cjs`
 
+> [!NOTE]
+> When using TypeScript or JavaScript configuration files (`.ts`, `.mts`, `.cts`, `.js`, `.mjs`, `.cjs`), the configuration must be exported as the default export. For example:
+>
+> ```typescript
+> // depscop.config.ts
+>
+> export default {
+>   forbidden: {
+>     lodash: ["any", "Use lodash-es instead"],
+>   },
+> };
+> ```
+
 ### Rulesets
 
 #### Forbidden

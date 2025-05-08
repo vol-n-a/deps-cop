@@ -1,4 +1,9 @@
-import { getDepscopConfigUrl } from "./get-depscop-config-url.js";
+import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+import { pathToFileURL } from "node:url";
+import { ModuleKind, ScriptTarget, transpileModule } from "typescript";
+
+import { getDepscopConfigPath } from "./get-depscop-config-path.js";
 
 export type Version = string;
 export type Reason = string;
@@ -30,11 +35,49 @@ export type DepscopConfig = {
  * @returns Depscop config
  */
 export const getDepscopConfig = async (): Promise<DepscopConfig> => {
-  const url = await getDepscopConfigUrl();
+  const path = await getDepscopConfigPath();
+  let defaultExport: unknown;
 
-  if (url.endsWith(".json")) {
-    return (await import(url, { assert: { type: "json" } })).default;
+  if (path.endsWith(".json")) {
+    // For JSON files, import them directly
+
+    const url = pathToFileURL(path).href;
+    defaultExport = (await import(url, { assert: { type: "json" } })).default;
+  } else if (
+    path.endsWith(".ts") ||
+    path.endsWith(".mts") ||
+    path.endsWith(".cts")
+  ) {
+    // For TypeScript files, transpile them to JavaScript and evaluate
+
+    // Read the TypeScript file
+    const tsContent = await readFile(path, "utf8");
+
+    // Transpile to JavaScript
+    const jsContent = transpileModule(tsContent, {
+      compilerOptions: {
+        module: ModuleKind.NodeNext,
+        target: ScriptTarget.ES2015,
+      },
+    }).outputText;
+
+    // Create a temporary module and evaluate it
+    const tmpModule = new Function("exports", "require", jsContent);
+    const exports: { default?: unknown } = {};
+    const require = createRequire(import.meta.url);
+    tmpModule(exports, require);
+
+    defaultExport = exports.default;
+  } else {
+    // For other file types, import them directly
+
+    const url = pathToFileURL(path).href;
+    defaultExport = (await import(url)).default as DepscopConfig;
   }
 
-  return (await import(url)).default;
+  if (!defaultExport) {
+    throw new Error("No default export found in the config file");
+  }
+
+  return defaultExport as DepscopConfig;
 };
