@@ -54,7 +54,7 @@ const checkRecentRule = async (
   if (!versionsAllowed.length) {
     stats.addRuleViolation(
       new RecentRuleViolation(
-        `${dependency}@${dependencyValue.rootVersion} does not satisfy the recency version rule "${version}"`
+        `No versions of ${dependency} satisfy the recency version rule "${version}"`
       )
     );
     return;
