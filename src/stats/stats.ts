@@ -49,9 +49,9 @@ class Stats {
    * - If there are rule violations recorded, returns sorted errors/warnings messages and their amount
    * - If no rule violations recorded, ruturns success message
    *
-   * @returns boolean representing whether there are any errors/warnigns (false) or not (true)
+   * @returns object with `hasProblems` property representing whether there are any errors/warnigns (true) or not (false)
    */
-  public printProblems = (): boolean => {
+  public printProblems = (): { hasProblems: boolean } => {
     this.assertIsOptionsInitialized(this.options);
 
     const shouldShowErrors = Boolean(this.errors.length);
@@ -61,7 +61,7 @@ class Stats {
 
     if (!shouldShowErrors && !shouldShowWarnings) {
       console.log(`\n${chalk.green("✅ All dependencies are valid")}\n`);
-      return false;
+      return { hasProblems: false };
     }
 
     if (shouldShowErrors) {
@@ -82,7 +82,7 @@ class Stats {
       )}\n`
     );
 
-    return true;
+    return { hasProblems: true };
   };
 }
 

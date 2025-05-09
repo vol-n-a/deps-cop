@@ -54,9 +54,9 @@ export const runCheckers = async (options: Options): Promise<void> => {
     console.log(error);
   }
 
-  const hasProblems = stats.printProblems();
+  const { hasProblems } = stats.printProblems();
 
-  if (!hasProblems) {
+  if (hasProblems) {
     process.exit(1);
   }
 };
