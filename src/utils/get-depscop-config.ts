@@ -19,14 +19,15 @@ type RulesRecord<brand extends string> = Record<DependencyName, RuleSet> & {
 };
 
 // TODO: Add rule level: 'warning' | 'error" (?)
+// TODO: Add prerelease flag
 export type ForbiddenRules = RulesRecord<"forbidden">;
 export type RecentRules = RulesRecord<"recent">;
 export type SemverRules = RulesRecord<"semver">;
 
 export type DepscopConfig = {
-  forbidden: ForbiddenRules;
-  recent: RecentRules;
-  semver: SemverRules;
+  forbidden?: ForbiddenRules;
+  recent?: RecentRules;
+  semver?: SemverRules;
 };
 
 /**
