@@ -1,6 +1,6 @@
-import groupBy from "lodash/groupBy.js";
 import type { SemVer } from "semver";
 
+import { groupBy } from "./group-by.js";
 import type { RecentVersionSegments } from "./parse-recent-versions.js";
 
 type SemVerIteratee = (
