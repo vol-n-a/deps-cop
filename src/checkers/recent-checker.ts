@@ -95,7 +95,7 @@ const checkRecentRule = async (
     new RecentRuleViolation(
       `${dependency}@${dependencyValue.rootVersion} does not satisfy the rule ${version}`,
       {
-        description: `Currently allowed versions: ${versionsAllowed.join(
+        description: `Available allowed versions: ${versionsAllowed.join(
           ", "
         )}`,
         reason,
