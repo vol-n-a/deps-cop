@@ -44,7 +44,7 @@ export const getDepscopConfigPath = async (): Promise<string> => {
   const firstPath = paths.find(Boolean);
   if (!firstPath) {
     throw new Error(
-      `No config file found or none of them is not accessible. Accepted config files: ${EXTENSIONS_PRIORITY.map((ext) => `${CONFIG_BASENAME}${ext}`).join(", ")}`
+      `No configuration file found. Please create one of the following files in your project root: ${EXTENSIONS_PRIORITY.map((ext) => `${CONFIG_BASENAME}${ext}`).join(", ")}. Make sure the file is readable and accessible.`
     );
   }
 
