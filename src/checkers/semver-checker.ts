@@ -7,7 +7,7 @@ import type {
   Rule,
   SemverRules,
 } from "../utils/get-depscop-config.js";
-import { isArrayOfArrays } from "../utils/is-array-of-arrays.js";
+import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 
 const checkSemverRule = (
   dependenciesInstalled: DependenciesInstalled,

@@ -14,9 +14,9 @@ import type {
   Rule,
 } from "../utils/get-depscop-config.js";
 import { getRecentVersions } from "../utils/get-recent-versions.js";
-import { isArrayOfArrays } from "../utils/is-array-of-arrays.js";
 import { getPackageVersions } from "../utils/npm/get-package-versions.js";
 import { parseRecentVersions } from "../utils/parse-recent-versions.js";
+import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 
 const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,

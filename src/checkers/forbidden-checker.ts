@@ -7,7 +7,7 @@ import type {
   ForbiddenRules,
   Rule,
 } from "../utils/get-depscop-config.js";
-import { isArrayOfArrays } from "../utils/is-array-of-arrays.js";
+import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,

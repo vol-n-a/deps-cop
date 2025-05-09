@@ -5,6 +5,7 @@ import { stats } from "../stats/stats.js";
 import { getDependeniesInstalled } from "../utils/get-dependencies-installed.js";
 import { getDepscopConfig } from "../utils/get-depscop-config.js";
 import { getDependencyTree } from "../utils/npm/get-dependency-tree.js";
+import { isNonNullable } from "../utils/type-guards/is-non-nullable.js";
 import { forbiddenChecker } from "./forbidden-checker.js";
 import { recentChecker } from "./recent-checker.js";
 import { semverChecker } from "./semver-checker.js";
@@ -21,23 +22,27 @@ export const runCheckers = async (options: Options): Promise<void> => {
     )
   );
 
+  if (!forbidden && !recent && !semver) {
+    throw new Error("No rules found in depscop config");
+  }
+
   const listr = new Listr(
     // TODO: Make checkers pluggable
     [
-      {
+      forbidden && {
         title: "Forbidden rules check",
         task: () => forbiddenChecker(rootDependenciesInstalled, forbidden),
       },
-      {
+      recent && {
         title: "Recent rules check",
         task: async () =>
           recentChecker(rootDependenciesInstalled, recent, options),
       },
-      {
+      semver && {
         title: "Semver rules check",
         task: () => semverChecker(rootDependenciesInstalled, semver),
       },
-    ],
+    ].filter(isNonNullable),
     {
       concurrent: true,
     }
