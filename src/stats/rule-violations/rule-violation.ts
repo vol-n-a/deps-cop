@@ -8,8 +8,8 @@ export enum RuleViolationLevel {
 
 export type RuleViolationOptions = {
   description?: string;
-  reason?: string;
   level?: RuleViolationLevel;
+  reason?: string;
 };
 
 const mapLevelToColor: Record<RuleViolationLevel, typeof ForegroundColor> = {
@@ -18,15 +18,17 @@ const mapLevelToColor: Record<RuleViolationLevel, typeof ForegroundColor> = {
 };
 
 export class RuleViolation {
-  protected checkName = "recent";
   public level: RuleViolationLevel;
+  private checkName: string;
   private color: typeof ForegroundColor;
   private options?: RuleViolationOptions;
 
   constructor(
+    checkName: string,
     private message: string,
     options?: RuleViolationOptions
   ) {
+    this.checkName = checkName;
     this.level = options?.level ?? RuleViolationLevel.ERROR;
     this.color = mapLevelToColor[this.level];
 
