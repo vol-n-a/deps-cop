@@ -78,9 +78,7 @@ const checkRecentRule = async (
         new RecentRuleViolation(
           `${dependency}@${dependencyValue.rootVersion} may be outdated soon`,
           {
-            description: `Available allowed versions: ${versionsAllowed.join(
-              ", "
-            )}`,
+            description: `Available allowed versions: ${versionsAllowed.join(", ")}`,
             level: RuleViolationLevel.WARNING,
           }
         )
@@ -93,11 +91,9 @@ const checkRecentRule = async (
   // Report the error
   stats.addRuleViolation(
     new RecentRuleViolation(
-      `${dependency}@${dependencyValue.rootVersion} does not satisfy the rule ${version}`,
+      `${dependency}@${dependencyValue.rootVersion} does not satisfy the recency version rule "${version}"`,
       {
-        description: `Available allowed versions: ${versionsAllowed.join(
-          ", "
-        )}`,
+        description: `Available allowed versions: ${versionsAllowed.join(", ")}`,
         reason,
       }
     )
