@@ -14,7 +14,7 @@ export const getPackageVersions = async (
     exec(
       `npm view ${packageName} versions --json`,
       (error: ExecException | null, stdout: string) => {
-        if (error && !error.stdout?.includes("ELSPROBLEMS")) {
+        if (error) {
           reject(error);
         }
 
