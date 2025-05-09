@@ -1,6 +1,6 @@
 {
   "name": "deps-cop",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A dependency management tool that helps enforce rules and restrictions on your project's dependencies",
   "author": "vol-n-a",
   "license": "MIT",
