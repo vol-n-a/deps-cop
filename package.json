@@ -1,26 +1,76 @@
 {
   "name": "deps-cop",
-  "version": "0.0.0",
-  "description": "Whitelist of your project's dependencies",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "A dependency management tool that helps enforce rules and restrictions on your project's dependencies",
+  "author": "vol-n-a",
+  "license": "MIT",
+  "homepage": "https://github.com/vol-n-a/deps-cop#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vol-n-a/deps-cop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vol-n-a/deps-cop/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  },
+  "files": [
+    "build"
+  ],
+  "bin": {
+    "depscop": "./build/src/command.js"
+  },
+  "main": "build/src/command.js",
+  "exports": "./build/src/index.js",
+  "types": "build/src/index.d.ts",
   "scripts": {
-    "tsc": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "whitelist",
+    "cli",
+    "dependencies",
     "dependency",
-    "deps-cop"
+    "management",
+    "package",
+    "semver",
+    "tool",
+    "version",
+    "whitelist"
   ],
-  "author": "vol-n-a",
-  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^13.1.0",
+    "listr2": "^8.2.5",
+    "lodash": "^4.17.21",
+    "semver": "^7.6.3"
+  },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/lodash": "^4.17.14",
     "@types/node": "^22.10.5",
+    "@types/semver": "^7.5.8",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^15.14.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.1"
+  },
+  "peerDependencies": {
     "typescript": "^5.7.2"
   },
-  "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "semver": "^7.6.3"
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   }
 }
