@@ -21,7 +21,7 @@ const checkForbiddenRule = (
     return;
   }
 
-  // If any version of the dependency from config is forbidded, report the error
+  // If any version of the dependency from config is forbidden, report the error
   if (version === "any") {
     stats.addRuleViolation(
       new ForbiddenRuleViolation(`${dependency} is not allowed`, { reason })
