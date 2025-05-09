@@ -34,8 +34,8 @@ export const getDependencyTree = async (options: Options): Promise<Project> => {
     exec(
       `npm ls ${commandOptions.join(" ")}`,
       (error: ExecException | null, stdout: string) => {
-        if (error && !error.stdout?.includes("ELSPROBLEMS")) {
-          // reject(error);
+        if (error) {
+          reject(error);
         }
 
         resolve(stdout);

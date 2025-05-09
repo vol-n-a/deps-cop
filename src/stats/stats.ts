@@ -25,7 +25,7 @@ class Stats {
   ) => asserts options is Options = (options) => {
     if (options === null) {
       throw new Error(
-        "Stats instanse is not itinialized. Call stats.init(options) before using this object"
+        "Stats instance is not initialized. Call stats.init(options) before using this object"
       );
     }
   };
@@ -47,9 +47,9 @@ class Stats {
   /**
    * Prints info about all of the rule violations recorded to the `stdout` and `stderr` streams:
    * - If there are rule violations recorded, returns sorted errors/warnings messages and their amount
-   * - If no rule violations recorded, ruturns success message
+   * - If no rule violations recorded, returns success message
    *
-   * @returns object with `hasProblems` property representing whether there are any errors/warnigns (true) or not (false)
+   * @returns object with `hasProblems` property representing whether there are any errors/warnings (true) or not (false)
    */
   public printProblems = (): { hasProblems: boolean } => {
     this.assertIsOptionsInitialized(this.options);

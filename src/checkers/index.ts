@@ -47,12 +47,7 @@ export const runCheckers = async (options: Options): Promise<void> => {
       concurrent: true,
     }
   );
-
-  try {
-    await listr.run();
-  } catch (error) {
-    console.log(error);
-  }
+  await listr.run();
 
   const { hasProblems } = stats.printProblems();
 
