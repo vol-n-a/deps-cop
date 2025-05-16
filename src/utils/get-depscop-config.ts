@@ -1,7 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
-import { ModuleKind, ScriptTarget, transpileModule } from "typescript";
 
 import { getDepscopConfigPath } from "./get-depscop-config-path.js";
 
@@ -50,6 +49,16 @@ export const getDepscopConfig = async (): Promise<DepscopConfig> => {
     path.endsWith(".cts")
   ) {
     // For TypeScript files, transpile them to JavaScript and evaluate
+    let typescript;
+    try {
+      typescript = await import("typescript");
+    } catch {
+      throw new Error(
+        "TypeScript is required to process .ts configuration files. Please install it as a dependency."
+      );
+    }
+
+    const { ModuleKind, ScriptTarget, transpileModule } = typescript;
 
     // Read the TypeScript file
     const tsContent = await readFile(path, "utf8");

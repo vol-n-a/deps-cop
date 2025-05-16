@@ -1,6 +1,6 @@
 {
   "name": "deps-cop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A dependency management tool that helps enforce rules and restrictions on your project's dependencies",
   "author": "vol-n-a",
   "license": "MIT",
@@ -47,12 +47,10 @@
     "chalk": "^4.1.2",
     "commander": "^13.1.0",
     "listr2": "^8.2.5",
-    "lodash": "^4.17.21",
     "semver": "^7.6.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
-    "@types/lodash": "^4.17.14",
     "@types/node": "^22.10.5",
     "@types/semver": "^7.5.8",
     "eslint": "^9.17.0",
