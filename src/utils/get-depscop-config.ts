@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
 
 import { getDepscopConfigPath } from "./get-depscop-config-path.js";
+import { isPromiseLike } from "./type-guards/is-promise-like.js";
 
 export type Version = string;
 export type Reason = string;
@@ -82,11 +83,25 @@ export const getDepscopConfig = async (): Promise<DepscopConfig> => {
     // For other file types, import them directly
 
     const url = pathToFileURL(path).href;
-    defaultExport = (await import(url)).default as DepscopConfig;
+    defaultExport = (await import(url)).default;
   }
 
   if (!defaultExport) {
     throw new Error("No default export found in the config file");
+  }
+
+  if (typeof defaultExport === "function") {
+    const result = defaultExport();
+
+    if (isPromiseLike(result)) {
+      return (await result) as DepscopConfig;
+    }
+
+    return result as DepscopConfig;
+  }
+
+  if (isPromiseLike(defaultExport)) {
+    return (await defaultExport) as DepscopConfig;
   }
 
   return defaultExport as DepscopConfig;
