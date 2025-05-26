@@ -8,6 +8,7 @@ DepsCop is a dependency management tool that helps enforce rules and restriction
 
 - [Features](#features)
 - [Installation](#installation)
+- [Rulesets](#rulesets)
 - [Configuration](#configuration)
 - [Command Line Interface](#command-line-interface)
 - [Exit Codes](#exit-codes)
@@ -28,36 +29,13 @@ DepsCop is a dependency management tool that helps enforce rules and restriction
 npm install deps-cop --save-dev
 ```
 
-## Configuration
+## Rulesets
 
-DepsCop uses a user-defined configuration file that specifies your dependency rules and restrictions.
+DepsCop provides three types of rulesets that help you control and manage your project's dependencies. A dependency can be specified in one or multiple rulesets.
 
-The configuration file should be placed in your project root. The following file formats are supported (in order of priority):
+A dependency can be specified in multiple rulesets and can have multiple rules within each ruleset. Each rule must include a custom message that explains why the rule exists, helping your team understand the reasoning behind dependency restrictions.
 
-- `depscop.config.json`
-- `depscop.config.ts`
-- `depscop.config.mts`
-- `depscop.config.cts`
-- `depscop.config.js`
-- `depscop.config.mjs`
-- `depscop.config.cjs`
-
-> [!NOTE]
-> When using TypeScript or JavaScript configuration files (`.ts`, `.mts`, `.cts`, `.js`, `.mjs`, `.cjs`), the configuration must be exported as the default export. For example:
->
-> ```typescript
-> // depscop.config.ts
->
-> export default {
->   forbidden: {
->     lodash: ["any", "Use lodash-es instead"],
->   },
-> };
-> ```
-
-### Rulesets
-
-#### Forbidden
+### Forbidden
 
 Rules that prevent the use of specific package versions or entire packages. Package versions that satisfy the specified semver patterns are considered **invalid**.
 
@@ -82,7 +60,7 @@ Rules that prevent the use of specific package versions or entire packages. Pack
 - Multiple rules per package are supported
 - Rules are evaluated in order
 
-#### Recent
+### Recent
 
 Rules that enforce using recent versions of packages using a custom version syntax.
 
@@ -119,7 +97,7 @@ Version syntax:
 - Multiple rules per package are supported
 - Rules are evaluated in order
 
-#### Semver
+### Semver
 
 Rules that enforce specific version ranges using standard semver syntax. Package versions that satisfy the specified semver patterns are considered **valid**.
 
@@ -141,6 +119,94 @@ Rules that enforce specific version ranges using standard semver syntax. Package
 - Uses standard semver syntax (e.g., `^`, `~`, `>`, `<`, `>=`, `<=`)
 - Multiple rules per package are supported
 - Rules are evaluated in order
+
+## Configuration
+
+DepsCop uses a user-defined configuration file that specifies your dependency rules and restrictions.
+
+The configuration file should be placed in your project root. The following file formats are supported (in order of priority):
+
+- `depscop.config.json`
+- `depscop.config.ts`
+- `depscop.config.mts`
+- `depscop.config.cts`
+- `depscop.config.js`
+- `depscop.config.mjs`
+- `depscop.config.cjs`
+
+### JSON Export
+
+This is the most straightforward way to configure DepsCop. Simply provide a static configuration object in your JSON file:
+
+```json
+{
+  "forbidden": {
+    "lodash": ["any", "Use lodash-es instead"],
+    "some-package": [
+      ["<4.5.0", "Versions below 4.5.0 have critical bugs"],
+      [">=5.0.0", "Versions >=5 require migration of our codebase"]
+    ]
+  },
+  "recent": {
+    "eslint": ["9.-3", "Keep ESLint within last 3 minor versions"]
+  },
+  "semver": {
+    "react": ["^18", "Our codebase infrastructure is built for react@18"]
+  }
+}
+```
+
+### Static Object Export
+
+You can export a configuration object from JavaScript or TypeScript config files. This approach is similar to JSON export but lets you use language-specific features:
+
+```typescript
+// depscop.config.ts
+export default {
+  forbidden: {
+    lodash: ["any", "Use lodash-es instead"],
+  },
+};
+```
+
+### Function Export
+
+You can export a function that returns your configuration. This is useful when you need to compute some values or perform synchronous operations to determine your rules:
+
+```typescript
+// depscop.config.ts
+export default function () {
+  const currentYear = new Date().getFullYear();
+
+  return {
+    forbidden: {
+      "legacy-package": ["any", `Deprecated in ${currentYear}`],
+    },
+  };
+}
+```
+
+### Async Function Export
+
+For more complex scenarios, you can export an async function. This is particularly useful when you need to fetch the latest configuration from a server, ensuring your dependency rules are always up-to-date:
+
+```typescript
+// depscop.config.ts
+async function fetchRemoteConfig() {
+  // Fetches the latest dependency rules from your organization's server
+  // This ensures your local checks always use the most recent security rules
+  // and version requirements
+}
+
+export default async function () {
+  // Each time DepsCop runs, it will fetch fresh configuration
+  // This is crucial for security-sensitive projects where dependency
+  // rules need to be updated frequently
+  const remoteConfig = await fetchRemoteConfig();
+
+  return remoteConfig;
+}
+```
 
 ## Command Line Interface
 

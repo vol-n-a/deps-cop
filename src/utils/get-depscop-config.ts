@@ -3,11 +3,15 @@ import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
 
 import { getDepscopConfigPath } from "./get-depscop-config-path.js";
+import { isPromiseLike } from "./type-guards/is-promise-like.js";
+import { isRecord } from "./type-guards/is-record.js";
 
 export type Version = string;
 export type Reason = string;
 export type DependencyName = string;
 
+// TODO: Add rule level: 'warning' | 'error" (?)
+// TODO: Add prerelease flag
 export type Rule = [Version, Reason];
 type Rules = Array<Rule>;
 type RuleSet = Rule | Rules;
@@ -17,8 +21,6 @@ type RulesRecord<brand extends string> = Record<DependencyName, RuleSet> & {
   [__brand]?: brand;
 };
 
-// TODO: Add rule level: 'warning' | 'error" (?)
-// TODO: Add prerelease flag
 export type ForbiddenRules = RulesRecord<"forbidden">;
 export type RecentRules = RulesRecord<"recent">;
 export type SemverRules = RulesRecord<"semver">;
@@ -40,7 +42,6 @@ export const getDepscopConfig = async (): Promise<DepscopConfig> => {
 
   if (path.endsWith(".json")) {
     // For JSON files, import them directly
-
     const url = pathToFileURL(path).href;
     defaultExport = (await import(url, { assert: { type: "json" } })).default;
   } else if (
@@ -49,6 +50,7 @@ export const getDepscopConfig = async (): Promise<DepscopConfig> => {
     path.endsWith(".cts")
   ) {
     // For TypeScript files, transpile them to JavaScript and evaluate
+
     let typescript;
     try {
       typescript = await import("typescript");
@@ -80,14 +82,30 @@ export const getDepscopConfig = async (): Promise<DepscopConfig> => {
     defaultExport = exports.default;
   } else {
     // For other file types, import them directly
-
     const url = pathToFileURL(path).href;
-    defaultExport = (await import(url)).default as DepscopConfig;
+    defaultExport = (await import(url)).default;
   }
 
   if (!defaultExport) {
-    throw new Error("No default export found in the config file");
+    throw new Error("No default export found in the configuration file");
   }
 
-  return defaultExport as DepscopConfig;
+  return (await resolveConfig(defaultExport)) as DepscopConfig;
+};
+
+const resolveConfig = async (defaultExport: unknown): Promise<unknown> => {
+  let config: unknown;
+
+  if (typeof defaultExport === "function") {
+    const result = defaultExport();
+    config = isPromiseLike(result) ? await result : result;
+  } else {
+    config = defaultExport;
+  }
+
+  if (!isRecord(config)) {
+    throw new Error("Configuration must be a JavaScript object");
+  }
+
+  return config;
 };

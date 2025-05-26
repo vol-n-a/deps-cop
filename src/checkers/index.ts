@@ -23,7 +23,7 @@ export const runCheckers = async (options: Options): Promise<void> => {
   );
 
   if (!forbidden && !recent && !semver) {
-    throw new Error("No rules found in depscop config");
+    throw new Error("No rulesets found in DepsCop configuration");
   }
 
   const listr = new Listr(
