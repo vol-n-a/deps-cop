@@ -7,12 +7,12 @@ import {
   RuleViolationLevel,
   stats,
 } from "../stats/index.js";
-import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import type {
   DependencyName,
   RecentRules,
   Rule,
-} from "../utils/get-depscop-config.js";
+} from "../utils/config/types.js";
+import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import { getRecentVersions } from "../utils/get-recent-versions.js";
 import { getPackageVersions } from "../utils/npm/get-package-versions.js";
 import { parseRecentVersions } from "../utils/parse-recent-versions.js";
