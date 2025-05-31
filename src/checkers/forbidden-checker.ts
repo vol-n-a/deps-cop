@@ -1,12 +1,12 @@
 import { satisfies } from "semver";
 
 import { ForbiddenRuleViolation, stats } from "../stats/index.js";
-import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import type {
   DependencyName,
   ForbiddenRules,
   Rule,
-} from "../utils/get-depscop-config.js";
+} from "../utils/config/types.js";
+import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 
 const checkForbiddenRule = (
