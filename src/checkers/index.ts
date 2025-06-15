@@ -22,16 +22,13 @@ export const runCheckers = async (options: Options): Promise<void> => {
     )
   );
 
-  if (!forbidden && !recent && !semver) {
-    throw new Error("No rulesets found in DepsCop configuration");
-  }
-
   const listr = new Listr(
     // TODO: Make checkers pluggable
     [
       forbidden && {
         title: "Forbidden rules check",
-        task: () => forbiddenChecker(rootDependenciesInstalled, forbidden),
+        task: () =>
+          forbiddenChecker(rootDependenciesInstalled, forbidden, options),
       },
       recent && {
         title: "Recent rules check",
@@ -40,7 +37,7 @@ export const runCheckers = async (options: Options): Promise<void> => {
       },
       semver && {
         title: "Semver rules check",
-        task: () => semverChecker(rootDependenciesInstalled, semver),
+        task: () => semverChecker(rootDependenciesInstalled, semver, options),
       },
     ].filter(isNonNullable),
     {

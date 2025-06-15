@@ -1,24 +1,21 @@
 import type { ForegroundColor } from "chalk";
 import chalk from "chalk";
 
-export enum RuleViolationLevel {
-  "ERROR" = "error",
-  "WARNING" = "warning",
-}
+import { Severity } from "../../utils/config/types.js";
 
 export type RuleViolationOptions = {
   description?: string;
-  level?: RuleViolationLevel;
+  severity?: Severity;
   reason?: string;
 };
 
-const mapLevelToColor: Record<RuleViolationLevel, typeof ForegroundColor> = {
-  [RuleViolationLevel.ERROR]: "red",
-  [RuleViolationLevel.WARNING]: "yellow",
+const mapLevelToColor: Record<Severity, typeof ForegroundColor> = {
+  [Severity.ERROR]: "red",
+  [Severity.WARNING]: "yellow",
 };
 
 export class RuleViolation {
-  public level: RuleViolationLevel;
+  public severity: Severity;
   private checkName: string;
   private color: typeof ForegroundColor;
   private options?: RuleViolationOptions;
@@ -29,8 +26,8 @@ export class RuleViolation {
     options?: RuleViolationOptions
   ) {
     this.checkName = checkName;
-    this.level = options?.level ?? RuleViolationLevel.ERROR;
-    this.color = mapLevelToColor[this.level];
+    this.severity = options?.severity ?? Severity.ERROR;
+    this.color = mapLevelToColor[this.severity];
 
     if (options) {
       const {
