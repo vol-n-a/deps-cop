@@ -6,6 +6,7 @@ import packageJSON from "../package.json" with { type: "json" };
 import { runCheckers } from "./checkers/index.js";
 import { stats } from "./stats/stats.js";
 
+// TODO: Rename to CliOptions
 export type Options = {
   allowPrerelease: boolean;
   prod: boolean;

@@ -1,8 +1,8 @@
 import chalk from "chalk";
 
 import type { Options } from "../command.js";
+import { Severity } from "../utils/config/types.js";
 import type { RuleViolation } from "./rule-violations/rule-violation.js";
-import { RuleViolationLevel } from "./rule-violations/rule-violation.js";
 
 class Stats {
   private errors: Array<RuleViolation> = [];
@@ -36,7 +36,7 @@ class Stats {
   public addRuleViolation = (ruleViolation: RuleViolation): void => {
     this.assertIsOptionsInitialized(this.options);
 
-    if (ruleViolation.level === RuleViolationLevel.WARNING) {
+    if (ruleViolation.severity === Severity.WARNING) {
       this.warnings.push(ruleViolation);
       return;
     }
