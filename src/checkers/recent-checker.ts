@@ -2,16 +2,13 @@ import type { SemVer } from "semver";
 import { parse } from "semver";
 
 import type { Options } from "../command.js";
-import {
-  RecentRuleViolation,
-  RuleViolationLevel,
-  stats,
-} from "../stats/index.js";
+import { RecentRuleViolation, stats } from "../stats/index.js";
 import type {
   DependencyName,
   RecentRules,
   Rule,
 } from "../utils/config/types.js";
+import { Severity } from "../utils/config/types.js";
 import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import { getRecentVersions } from "../utils/get-recent-versions.js";
 import { getPackageVersions } from "../utils/npm/get-package-versions.js";
@@ -21,10 +18,16 @@ import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,
   dependency: DependencyName,
-  [version, reason]: Rule,
-  options: Options
+  [version, reason, ruleOptions]: Rule,
+  cliOptions: Options
 ): Promise<void> => {
+  const severity = ruleOptions?.severity ?? Severity.ERROR;
   const dependencyValue = dependenciesInstalled.get(dependency);
+
+  // Skip rule check if severity is WARNING and quiet mode is enabled
+  if (severity === Severity.WARNING && cliOptions.quiet) {
+    return;
+  }
 
   // If the dependency from config is not installed, skip it
   if (!dependencyValue) {
@@ -42,7 +45,7 @@ const checkRecentRule = async (
     .map((ver) => parse(ver))
     .filter(
       (semver) =>
-        semver && (options.allowPrerelease || !semver.prerelease.length)
+        semver && (cliOptions.allowPrerelease || !semver.prerelease.length)
     ) as Array<SemVer>;
 
   const versionsAllowed = getRecentVersions(
@@ -54,7 +57,10 @@ const checkRecentRule = async (
   if (!versionsAllowed.length) {
     stats.addRuleViolation(
       new RecentRuleViolation(
-        `No versions of ${dependency} satisfy the recency version rule "${version}"`
+        `No versions of ${dependency} satisfy the recency version rule "${version}"`,
+        {
+          severity,
+        }
       )
     );
     return;
@@ -72,18 +78,18 @@ const checkRecentRule = async (
   }
 
   // If the installed dependency satisfies the rule, but not the latest allowed version is installed, report the warning
-  if (isVersionAllowed && !isVersionLatest) {
-    if (!options.quiet) {
-      stats.addRuleViolation(
-        new RecentRuleViolation(
-          `${dependency}@${dependencyValue.rootVersion} may be outdated soon`,
-          {
-            description: `Available allowed versions: ${versionsAllowed.join(", ")}`,
-            level: RuleViolationLevel.WARNING,
-          }
-        )
-      );
-    }
+  // This is always a warning because the rules are still satisfied, but a newer allowed version is available
+  // This warning cannot be overridden by rule option "severity"
+  if (!cliOptions.quiet && isVersionAllowed && !isVersionLatest) {
+    stats.addRuleViolation(
+      new RecentRuleViolation(
+        `${dependency}@${dependencyValue.rootVersion} may be outdated soon`,
+        {
+          description: `Available allowed versions: ${versionsAllowed.join(", ")}`,
+          severity: Severity.WARNING,
+        }
+      )
+    );
 
     return;
   }
@@ -95,6 +101,7 @@ const checkRecentRule = async (
       {
         description: `Available allowed versions: ${versionsAllowed.join(", ")}`,
         reason,
+        severity,
       }
     )
   );
@@ -103,7 +110,7 @@ const checkRecentRule = async (
 export const recentChecker = async (
   dependenciesInstalled: DependenciesInstalled,
   recentRules: RecentRules,
-  options: Options
+  cliOptions: Options
 ): Promise<void> => {
   await Promise.all(
     Object.entries(recentRules).flatMap((recentRulesEntry) => {
@@ -111,7 +118,7 @@ export const recentChecker = async (
 
       if (isArrayOfArrays(ruleSet)) {
         return ruleSet.map((rule) =>
-          checkRecentRule(dependenciesInstalled, dependency, rule, options)
+          checkRecentRule(dependenciesInstalled, dependency, rule, cliOptions)
         );
       }
 
@@ -119,7 +126,7 @@ export const recentChecker = async (
         dependenciesInstalled,
         dependency,
         ruleSet,
-        options
+        cliOptions
       );
     })
   );
