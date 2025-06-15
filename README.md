@@ -8,6 +8,7 @@ DepsCop is a dependency management tool that helps enforce rules and restriction
 
 - [Features](#features)
 - [Installation](#installation)
+- [Usage](#usage)
 - [Rulesets](#rulesets)
 - [Configuration](#configuration)
 - [Command Line Interface](#command-line-interface)
@@ -27,6 +28,12 @@ DepsCop is a dependency management tool that helps enforce rules and restriction
 
 ```bash
 npm install deps-cop --save-dev
+```
+
+## Usage
+
+```bash
+npx depscop
 ```
 
 ## Rulesets
