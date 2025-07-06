@@ -1,7 +1,7 @@
 import type { ExecException } from "node:child_process";
 import { exec } from "node:child_process";
 
-import type { Options } from "../../command.js";
+import type { CliOptions } from "../../command.js";
 
 export type Project = {
   version: string;
@@ -23,10 +23,12 @@ export type Node = Project | DependencyNode;
  *
  * @returns Project's dependency tree
  */
-export const getDependencyTree = async (options: Options): Promise<Project> => {
+export const getDependencyTree = async (
+  cliOptions: CliOptions
+): Promise<Project> => {
   const commandOptions = ["-a", "--json"];
 
-  if (options.prod) {
+  if (cliOptions.prod) {
     commandOptions.push("--prod");
   }
 

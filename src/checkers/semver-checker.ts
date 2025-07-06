@@ -1,6 +1,6 @@
 import { satisfies } from "semver";
 
-import type { Options } from "../command.js";
+import type { CliOptions } from "../command.js";
 import { SemverRuleViolation, stats } from "../stats/index.js";
 import type {
   DependencyName,
@@ -15,7 +15,7 @@ const checkSemverRule = (
   dependenciesInstalled: DependenciesInstalled,
   dependency: DependencyName,
   [version, reason, ruleOptions]: Rule,
-  cliOptions: Options
+  cliOptions: CliOptions
 ): void => {
   const dependencyValue = dependenciesInstalled.get(dependency);
 
@@ -52,7 +52,7 @@ const checkSemverRule = (
 export const semverChecker = (
   dependenciesInstalled: DependenciesInstalled,
   semverRules: SemverRules,
-  cliOptions: Options
+  cliOptions: CliOptions
 ): void => {
   Object.entries(semverRules).forEach(([dependency, ruleSet]) => {
     if (isArrayOfArrays(ruleSet)) {
