@@ -10,6 +10,7 @@ DepsCop is a dependency management tool that helps enforce rules and restriction
 - [Installation](#installation)
 - [Usage](#usage)
 - [Rulesets](#rulesets)
+- [Rule Options](#rule-options)
 - [Configuration](#configuration)
 - [Command Line Interface](#command-line-interface)
 - [Exit Codes](#exit-codes)
@@ -126,6 +127,28 @@ Rules that enforce specific version ranges using standard semver syntax. Package
 - Uses standard semver syntax (e.g., `^`, `~`, `>`, `<`, `>=`, `<=`)
 - Multiple rules per package are supported
 - Rules are evaluated in order
+
+## Rule Options
+
+Each rule within any ruleset may include optional configurations to control how rule checks are performed.
+
+```json
+{
+  "rulesetName": {
+    "packageName": [
+      "versionPattern",
+      "reason",
+      {
+        "severity": "error"
+      }
+    ]
+  }
+}
+```
+
+| Option     | Type                   | Description                                                                                                                                                                        | Default Value |
+| ---------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `severity` | `"error" \| "warning"` | Controls how rule violations are handled. `"error"` violations cause the `depscop` command to exit with code 1, while `"warning"` violations are reported but don't cause failure. | `"error"`     |
 
 ## Configuration
 

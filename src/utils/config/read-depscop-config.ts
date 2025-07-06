@@ -29,7 +29,7 @@ const possibleConfigPaths = EXTENSIONS_PRIORITY.map((extension) => ({
  * `.json`, `.ts`, `.mts`, `.cts`, `.js`, `.mjs`, `.cjs`
  *
  * @returns Depscop config
- * @throws {Error} If the configuration file does not exist, cannot be read or is invalid
+ * @throws {Error} If the configuration file does not exist, can not be read or is invalid
  */
 export const readDepscopConfig = async (): Promise<DepscopConfig> => {
   // Try each file according to extension priority until a valid config file is found

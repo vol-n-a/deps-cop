@@ -22,6 +22,7 @@ export const runCheckers = async (options: Options): Promise<void> => {
     )
   );
 
+  // TODO: Remove this once depscop config resolver is implemented
   if (!forbidden && !recent && !semver) {
     throw new Error("No rulesets found in DepsCop configuration");
   }
@@ -31,7 +32,8 @@ export const runCheckers = async (options: Options): Promise<void> => {
     [
       forbidden && {
         title: "Forbidden rules check",
-        task: () => forbiddenChecker(rootDependenciesInstalled, forbidden),
+        task: () =>
+          forbiddenChecker(rootDependenciesInstalled, forbidden, options),
       },
       recent && {
         title: "Recent rules check",
@@ -40,7 +42,7 @@ export const runCheckers = async (options: Options): Promise<void> => {
       },
       semver && {
         title: "Semver rules check",
-        task: () => semverChecker(rootDependenciesInstalled, semver),
+        task: () => semverChecker(rootDependenciesInstalled, semver, options),
       },
     ].filter(isNonNullable),
     {
