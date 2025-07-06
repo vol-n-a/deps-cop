@@ -15,19 +15,21 @@ const mapLevelToColor: Record<Severity, typeof ForegroundColor> = {
 };
 
 export class RuleViolation {
-  public severity: Severity;
-  private checkName: string;
-  private color: typeof ForegroundColor;
-  private options?: RuleViolationOptions;
+  severity: Severity;
+  #message: string;
+  #checkName: string;
+  #color: typeof ForegroundColor;
+  #options?: RuleViolationOptions;
 
   constructor(
     checkName: string,
-    private message: string,
+    message: string,
     options?: RuleViolationOptions
   ) {
-    this.checkName = checkName;
+    this.#checkName = checkName;
+    this.#message = message;
     this.severity = options?.severity ?? Severity.ERROR;
-    this.color = mapLevelToColor[this.severity];
+    this.#color = mapLevelToColor[this.severity];
 
     if (options) {
       const {
@@ -35,7 +37,7 @@ export class RuleViolation {
         ...restOptions
       } = options;
 
-      this.options = {
+      this.#options = {
         reason,
         ...restOptions,
       };
@@ -43,16 +45,16 @@ export class RuleViolation {
   }
 
   toString = (): string => {
-    const stringBuilder = [`${this.checkName}: ${this.message}`];
+    const stringBuilder = [`${this.#checkName}: ${this.#message}`];
 
-    if (this.options?.description) {
-      stringBuilder.push(this.options.description);
+    if (this.#options?.description) {
+      stringBuilder.push(this.#options.description);
     }
 
-    if (this.options?.reason) {
-      stringBuilder.push(`Reason: ${this.options.reason}`);
+    if (this.#options?.reason) {
+      stringBuilder.push(`Reason: ${this.#options.reason}`);
     }
 
-    return chalk[this.color](stringBuilder.join("\n\t"));
+    return chalk[this.#color](stringBuilder.join("\n\t"));
   };
 }
