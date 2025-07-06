@@ -7,7 +7,7 @@ import { runCheckers } from "./checkers/index.js";
 import { stats } from "./stats/stats.js";
 
 // TODO: Rename to CliOptions
-export type Options = {
+export type CliOptions = {
   allowPrerelease: boolean;
   prod: boolean;
   quiet: boolean;
@@ -23,8 +23,8 @@ program
 
 program.parse();
 
-const options = program.opts<Options>();
+const cliOptions = program.opts<CliOptions>();
 
-stats.init(options);
+stats.init(cliOptions);
 
-void runCheckers(options);
+void runCheckers(cliOptions);

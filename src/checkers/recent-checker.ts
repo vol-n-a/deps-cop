@@ -1,7 +1,7 @@
 import type { SemVer } from "semver";
 import { parse } from "semver";
 
-import type { Options } from "../command.js";
+import type { CliOptions } from "../command.js";
 import { RecentRuleViolation, stats } from "../stats/index.js";
 import type {
   DependencyName,
@@ -19,7 +19,7 @@ const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,
   dependency: DependencyName,
   [version, reason, ruleOptions]: Rule,
-  cliOptions: Options
+  cliOptions: CliOptions
 ): Promise<void> => {
   const dependencyValue = dependenciesInstalled.get(dependency);
 
@@ -109,7 +109,7 @@ const checkRecentRule = async (
 export const recentChecker = async (
   dependenciesInstalled: DependenciesInstalled,
   recentRules: RecentRules,
-  cliOptions: Options
+  cliOptions: CliOptions
 ): Promise<void> => {
   await Promise.all(
     Object.entries(recentRules).flatMap((recentRulesEntry) => {

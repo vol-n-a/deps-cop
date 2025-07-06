@@ -1,31 +1,31 @@
 import chalk from "chalk";
 
-import type { Options } from "../command.js";
+import type { CliOptions } from "../command.js";
 import { Severity } from "../utils/config/types.js";
 import type { RuleViolation } from "./rule-violations/rule-violation.js";
 
 class Stats {
   private errors: Array<RuleViolation> = [];
   private warnings: Array<RuleViolation> = [];
-  private options: Options | null = null;
+  private cliOptions: CliOptions | null = null;
 
-  public init(options: Options) {
-    this.options = options;
+  public init(cliOptions: CliOptions) {
+    this.cliOptions = cliOptions;
   }
 
   /**
-   * Asserts whether `options` is initialized or not
+   * Asserts whether `cliOptions` is initialized or not
    *
-   * @param options
+   * @param cliOptions
    *
-   * @throws if `options === null`
+   * @throws if `cliOptions === null`
    */
   private assertIsOptionsInitialized: (
-    options: Options | null
-  ) => asserts options is Options = (options) => {
-    if (options === null) {
+    cliOptions: CliOptions | null
+  ) => asserts cliOptions is CliOptions = (cliOptions) => {
+    if (cliOptions === null) {
       throw new Error(
-        "Stats instance is not initialized. Call stats.init(options) before using this object"
+        "Stats instance is not initialized. Call stats.init(cliOptions) before using this object"
       );
     }
   };
@@ -34,7 +34,7 @@ class Stats {
    * Records rule violation to stats' storage
    */
   public addRuleViolation = (ruleViolation: RuleViolation): void => {
-    this.assertIsOptionsInitialized(this.options);
+    this.assertIsOptionsInitialized(this.cliOptions);
 
     if (ruleViolation.severity === Severity.WARNING) {
       this.warnings.push(ruleViolation);
@@ -52,11 +52,11 @@ class Stats {
    * @returns object with `hasProblems` property representing whether there are any errors/warnings (true) or not (false)
    */
   public printProblems = (): { hasProblems: boolean } => {
-    this.assertIsOptionsInitialized(this.options);
+    this.assertIsOptionsInitialized(this.cliOptions);
 
     const shouldShowErrors = Boolean(this.errors.length);
     const shouldShowWarnings =
-      !this.options.quiet && Boolean(this.warnings.length);
+      !this.cliOptions.quiet && Boolean(this.warnings.length);
     const totalProblems = this.errors.length + this.warnings.length;
 
     if (!shouldShowErrors && !shouldShowWarnings) {

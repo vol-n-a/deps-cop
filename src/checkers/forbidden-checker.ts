@@ -1,6 +1,6 @@
 import { satisfies } from "semver";
 
-import type { Options } from "../command.js";
+import type { CliOptions } from "../command.js";
 import { ForbiddenRuleViolation, stats } from "../stats/index.js";
 import {
   type DependencyName,
@@ -15,7 +15,7 @@ const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,
   dependency: DependencyName,
   [version, reason, ruleOptions]: Rule,
-  cliOptions: Options
+  cliOptions: CliOptions
 ): void => {
   const dependencyValue = dependenciesInstalled.get(dependency);
 
@@ -64,7 +64,7 @@ const checkForbiddenRule = (
 export const forbiddenChecker = (
   dependenciesInstalled: DependenciesInstalled,
   forbiddenRules: ForbiddenRules,
-  cliOptions: Options
+  cliOptions: CliOptions
 ): void => {
   Object.entries(forbiddenRules).forEach((forbiddenRulesEntry) => {
     const [dependency, ruleSet] = forbiddenRulesEntry;

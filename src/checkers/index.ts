@@ -1,6 +1,6 @@
 import { Listr } from "listr2";
 
-import type { Options } from "../command.js";
+import type { CliOptions } from "../command.js";
 import { stats } from "../stats/stats.js";
 import { readDepscopConfig } from "../utils/config/read-depscop-config.js";
 import { getDependeniesInstalled } from "../utils/get-dependencies-installed.js";
@@ -10,10 +10,10 @@ import { forbiddenChecker } from "./forbidden-checker.js";
 import { recentChecker } from "./recent-checker.js";
 import { semverChecker } from "./semver-checker.js";
 
-export const runCheckers = async (options: Options): Promise<void> => {
+export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
   const { forbidden, recent, semver } = await readDepscopConfig();
 
-  const dependencyTree = await getDependencyTree(options);
+  const dependencyTree = await getDependencyTree(cliOptions);
   const dependenciesInstalled = getDependeniesInstalled(dependencyTree);
 
   const rootDependenciesInstalled = new Map(
@@ -33,16 +33,17 @@ export const runCheckers = async (options: Options): Promise<void> => {
       forbidden && {
         title: "Forbidden rules check",
         task: () =>
-          forbiddenChecker(rootDependenciesInstalled, forbidden, options),
+          forbiddenChecker(rootDependenciesInstalled, forbidden, cliOptions),
       },
       recent && {
         title: "Recent rules check",
         task: async () =>
-          recentChecker(rootDependenciesInstalled, recent, options),
+          recentChecker(rootDependenciesInstalled, recent, cliOptions),
       },
       semver && {
         title: "Semver rules check",
-        task: () => semverChecker(rootDependenciesInstalled, semver, options),
+        task: () =>
+          semverChecker(rootDependenciesInstalled, semver, cliOptions),
       },
     ].filter(isNonNullable),
     {
