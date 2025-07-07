@@ -5,12 +5,12 @@ import { Severity } from "../utils/config/types.js";
 import type { RuleViolation } from "./rule-violations/rule-violation.js";
 
 class Stats {
-  private errors: Array<RuleViolation> = [];
-  private warnings: Array<RuleViolation> = [];
-  private cliOptions: CliOptions | null = null;
+  #cliOptions: CliOptions | null = null;
+  #errors: Array<RuleViolation> = [];
+  #warnings: Array<RuleViolation> = [];
 
-  public init(cliOptions: CliOptions) {
-    this.cliOptions = cliOptions;
+  init(cliOptions: CliOptions) {
+    this.#cliOptions = cliOptions;
   }
 
   /**
@@ -20,7 +20,7 @@ class Stats {
    *
    * @throws if `cliOptions === null`
    */
-  private assertIsOptionsInitialized: (
+  #assertIsOptionsInitialized: (
     cliOptions: CliOptions | null
   ) => asserts cliOptions is CliOptions = (cliOptions) => {
     if (cliOptions === null) {
@@ -33,15 +33,15 @@ class Stats {
   /**
    * Records rule violation to stats' storage
    */
-  public addRuleViolation = (ruleViolation: RuleViolation): void => {
-    this.assertIsOptionsInitialized(this.cliOptions);
+  addRuleViolation = (ruleViolation: RuleViolation): void => {
+    this.#assertIsOptionsInitialized(this.#cliOptions);
 
     if (ruleViolation.severity === Severity.WARNING) {
-      this.warnings.push(ruleViolation);
+      this.#warnings.push(ruleViolation);
       return;
     }
 
-    this.errors.push(ruleViolation);
+    this.#errors.push(ruleViolation);
   };
 
   /**
@@ -51,13 +51,13 @@ class Stats {
    *
    * @returns object with `hasProblems` property representing whether there are any errors/warnings (true) or not (false)
    */
-  public printProblems = (): { hasProblems: boolean } => {
-    this.assertIsOptionsInitialized(this.cliOptions);
+  printProblems = (): { hasProblems: boolean } => {
+    this.#assertIsOptionsInitialized(this.#cliOptions);
 
-    const shouldShowErrors = Boolean(this.errors.length);
+    const shouldShowErrors = Boolean(this.#errors.length);
     const shouldShowWarnings =
-      !this.cliOptions.quiet && Boolean(this.warnings.length);
-    const totalProblems = this.errors.length + this.warnings.length;
+      !this.#cliOptions.quiet && Boolean(this.#warnings.length);
+    const totalProblems = this.#errors.length + this.#warnings.length;
 
     if (!shouldShowErrors && !shouldShowWarnings) {
       console.log(`\n${chalk.green("✅ All dependencies are valid")}\n`);
@@ -65,20 +65,20 @@ class Stats {
     }
 
     if (shouldShowErrors) {
-      this.errors.forEach((error) => {
+      this.#errors.forEach((error) => {
         console.error(String(error));
       });
     }
 
     if (shouldShowWarnings) {
-      this.warnings.forEach((warning) => {
+      this.#warnings.forEach((warning) => {
         console.warn(String(warning));
       });
     }
 
     console.error(
       `\n👮 ${chalk[shouldShowErrors ? "red" : "yellow"](
-        `${totalProblems} problems (${this.errors.length} errors, ${this.warnings.length} warnings)`
+        `${totalProblems} problems (${this.#errors.length} errors, ${this.#warnings.length} warnings)`
       )}\n`
     );
 
