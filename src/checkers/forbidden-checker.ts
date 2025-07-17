@@ -2,19 +2,19 @@ import { satisfies } from "semver";
 
 import type { CliOptions } from "../command.js";
 import { ForbiddenRuleViolation, stats } from "../stats/index.js";
-import {
-  type DependencyName,
-  type ForbiddenRules,
-  type Rule,
-  Severity,
-} from "../utils/config/types.js";
+import type {
+  DependencyName,
+  ForbiddenRule,
+  ForbiddenRuleset,
+} from "../utils/config/index.js";
+import { Severity } from "../utils/config/index.js";
 import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,
   dependency: DependencyName,
-  [version, reason, ruleOptions]: Rule,
+  [version, reason, ruleOptions]: ForbiddenRule,
   cliOptions: CliOptions
 ): void => {
   const dependencyValue = dependenciesInstalled.get(dependency);
@@ -63,10 +63,10 @@ const checkForbiddenRule = (
 
 export const forbiddenChecker = (
   dependenciesInstalled: DependenciesInstalled,
-  forbiddenRules: ForbiddenRules,
+  forbiddenRuleset: ForbiddenRuleset,
   cliOptions: CliOptions
 ): void => {
-  Object.entries(forbiddenRules).forEach((forbiddenRulesEntry) => {
+  Object.entries(forbiddenRuleset).forEach((forbiddenRulesEntry) => {
     const [dependency, ruleSet] = forbiddenRulesEntry;
 
     if (isArrayOfArrays(ruleSet)) {

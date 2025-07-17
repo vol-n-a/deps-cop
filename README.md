@@ -130,7 +130,7 @@ Rules that enforce specific version ranges using standard semver syntax. Package
 
 ## Rule Options
 
-Each rule within any ruleset may include optional configurations to control how rule checks are performed.
+Each rule within any ruleset may include optional configurations to control how rule checks are performed, which can be passed as the third element of a rule array (after the version pattern and reason).
 
 ```json
 {
@@ -139,16 +139,17 @@ Each rule within any ruleset may include optional configurations to control how 
       "versionPattern",
       "reason",
       {
-        "severity": "error"
+        // ...pass options here
       }
     ]
   }
 }
 ```
 
-| Option     | Type                   | Description                                                                                                                                                                        | Default Value |
-| ---------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `severity` | `"error" \| "warning"` | Controls how rule violations are handled. `"error"` violations cause the `depscop` command to exit with code 1, while `"warning"` violations are reported but don't cause failure. | `"error"`     |
+| Option       | Type                   | Description                                                                                                                                                                                                                                                                                                                        | Default Value | Ruleset(s)                |
+| ------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------------------- |
+| `severity`   | `"error" \| "warning"` | Controls how rule violations are handled. `"error"` violations cause the `depscop` command to exit with code 1, while `"warning"` violations are reported but don't cause failure.                                                                                                                                                 | `"error"`     | forbidden, recent, semver |
+| `prerelease` | `boolean`              | Controls whether prerelease versions (e.g., alpha, beta, rc) are included when determining recent versions. If `true`, prerelease versions are considered when evaluating the most recent versions for the rule. If `false`, prerelease versions are excluded from the calculation. This option only affects the `recent` ruleset. | `false`       | recent                    |
 
 ## Configuration
 
