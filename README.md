@@ -160,10 +160,34 @@ The configuration file should be placed in your project root. The following file
 - `depscop.config.json`
 - `depscop.config.ts`
 - `depscop.config.mts`
-- `depscop.config.cts`
 - `depscop.config.js`
 - `depscop.config.mjs`
-- `depscop.config.cjs`
+
+> [!IMPORTANT]
+> DepsCop configuration files (`.ts`, `.mts`, `.js`, `.mjs`) must use ESM (ECMAScript Module) syntax.
+> CJS (CommonJS) syntax is not supported.
+>
+> For example, use:
+>
+> ```js
+> // Correct (ESM)
+>
+> import { ... } from "deps-cop";
+>
+> export default { /* ... */ };
+> ```
+>
+> Not:
+>
+> ```js
+> // Incorrect (CJS)
+>
+> const { ... } = require("deps-cop");
+>
+> module.exports = {
+>   /* ... */
+> };
+> ```
 
 ### JSON Export
 
