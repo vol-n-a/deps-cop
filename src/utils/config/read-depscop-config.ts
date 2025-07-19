@@ -1,11 +1,11 @@
 import path from "node:path";
 
 import { isModuleNotFoundError } from "../type-guards/is-module-not-found-error.js";
+import type { DepscopConfig } from "./model/index.js";
 import { readJavaScriptConfig } from "./readers/javascript.js";
 import { readJsonConfig } from "./readers/json.js";
 import { readTypeScriptConfig } from "./readers/typescript.js";
 import { resolveDepscopConfig } from "./resolve-depscop-config.js";
-import type { DepscopConfig } from "./types.js";
 
 const CONFIG_BASENAME = "depscop.config";
 const EXTENSIONS_PRIORITY = [

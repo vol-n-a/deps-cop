@@ -4,17 +4,17 @@ import type { CliOptions } from "../command.js";
 import { SemverRuleViolation, stats } from "../stats/index.js";
 import type {
   DependencyName,
-  Rule,
-  SemverRules,
-} from "../utils/config/types.js";
-import { Severity } from "../utils/config/types.js";
+  SemverRule,
+  SemverRuleset,
+} from "../utils/config/index.js";
+import { Severity } from "../utils/config/index.js";
 import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 
 const checkSemverRule = (
   dependenciesInstalled: DependenciesInstalled,
   dependency: DependencyName,
-  [version, reason, ruleOptions]: Rule,
+  [version, reason, ruleOptions]: SemverRule,
   cliOptions: CliOptions
 ): void => {
   const dependencyValue = dependenciesInstalled.get(dependency);
@@ -51,10 +51,10 @@ const checkSemverRule = (
 
 export const semverChecker = (
   dependenciesInstalled: DependenciesInstalled,
-  semverRules: SemverRules,
+  semverRuleset: SemverRuleset,
   cliOptions: CliOptions
 ): void => {
-  Object.entries(semverRules).forEach(([dependency, ruleSet]) => {
+  Object.entries(semverRuleset).forEach(([dependency, ruleSet]) => {
     if (isArrayOfArrays(ruleSet)) {
       ruleSet.forEach((rule) => {
         checkSemverRule(dependenciesInstalled, dependency, rule, cliOptions);

@@ -5,10 +5,10 @@ import type { CliOptions } from "../command.js";
 import { RecentRuleViolation, stats } from "../stats/index.js";
 import type {
   DependencyName,
-  RecentRules,
-  Rule,
-} from "../utils/config/types.js";
-import { Severity } from "../utils/config/types.js";
+  RecentRule,
+  RecentRuleset,
+} from "../utils/config/index.js";
+import { Severity } from "../utils/config/index.js";
 import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import { getRecentVersions } from "../utils/get-recent-versions.js";
 import { getPackageVersions } from "../utils/npm/get-package-versions.js";
@@ -18,7 +18,7 @@ import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,
   dependency: DependencyName,
-  [version, reason, ruleOptions]: Rule,
+  [version, reason, ruleOptions]: RecentRule,
   cliOptions: CliOptions
 ): Promise<void> => {
   const dependencyValue = dependenciesInstalled.get(dependency);
@@ -40,11 +40,13 @@ const checkRecentRule = async (
     return;
   }
 
+  const shouldIncludePrerelease =
+    ruleOptions?.prerelease || cliOptions.allowPrerelease;
   const versions = (await getPackageVersions(dependency))
     .map((ver) => parse(ver))
     .filter(
       (semver) =>
-        semver && (cliOptions.allowPrerelease || !semver.prerelease.length)
+        semver && (shouldIncludePrerelease || !semver.prerelease.length)
     ) as Array<SemVer>;
 
   const versionsAllowed = getRecentVersions(
@@ -108,11 +110,11 @@ const checkRecentRule = async (
 
 export const recentChecker = async (
   dependenciesInstalled: DependenciesInstalled,
-  recentRules: RecentRules,
+  recentRuleset: RecentRuleset,
   cliOptions: CliOptions
 ): Promise<void> => {
   await Promise.all(
-    Object.entries(recentRules).flatMap((recentRulesEntry) => {
+    Object.entries(recentRuleset).flatMap((recentRulesEntry) => {
       const [dependency, ruleSet] = recentRulesEntry;
 
       if (isArrayOfArrays(ruleSet)) {

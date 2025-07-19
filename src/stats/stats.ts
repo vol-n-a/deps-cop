@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 import type { CliOptions } from "../command.js";
-import { Severity } from "../utils/config/types.js";
+import { Severity } from "../utils/config/index.js";
 import type { RuleViolation } from "./rule-violations/rule-violation.js";
 
 class Stats {
