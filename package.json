@@ -21,11 +21,11 @@
     "build"
   ],
   "bin": {
-    "depscop": "./build/src/command.js"
+    "depscop": "./build/command.js"
   },
-  "main": "build/src/command.js",
-  "exports": "./build/src/index.js",
-  "types": "build/src/index.d.ts",
+  "main": "./build/command.js",
+  "exports": "./build/index.js",
+  "types": "./build/index.d.ts",
   "scripts": {
     "build": "tsc",
     "lint:check": "eslint .",

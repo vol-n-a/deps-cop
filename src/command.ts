@@ -2,7 +2,6 @@
 
 import { program } from "commander";
 
-import packageJSON from "../package.json" with { type: "json" };
 import { runCheckers } from "./checkers/index.js";
 import { stats } from "./stats/stats.js";
 
@@ -14,7 +13,6 @@ export type CliOptions = {
 
 program
   .name("deps-cop")
-  .version(packageJSON.version)
   .description("DepsCop - whitelist for package.json dependencies")
   .option("--allow-prerelease", "enables including", false)
   .option("--prod", "disables dev dependencies checking", false)
