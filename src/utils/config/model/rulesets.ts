@@ -41,7 +41,7 @@ type RecentRuleOptions = RuleOptions & {
    *
    * This option only affects the `recent` ruleset.
    */
-  prerelease: boolean;
+  prerelease?: boolean;
 };
 
 type RecentRule = [Version, Reason, RecentRuleOptions?];
