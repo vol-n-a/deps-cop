@@ -8,15 +8,7 @@ import { readTypeScriptConfig } from "./readers/typescript.js";
 import { resolveDepscopConfig } from "./resolve-depscop-config.js";
 
 const CONFIG_BASENAME = "depscop.config";
-const EXTENSIONS_PRIORITY = [
-  ".json",
-  ".ts",
-  ".mts",
-  ".cts",
-  ".js",
-  ".mjs",
-  ".cjs",
-] as const;
+const EXTENSIONS_PRIORITY = [".json", ".ts", ".mts", ".js", ".mjs"] as const;
 const possibleConfigPaths = EXTENSIONS_PRIORITY.map((extension) => ({
   path: path.resolve(process.cwd(), `${CONFIG_BASENAME}${extension}`),
   extension,
@@ -26,7 +18,7 @@ const possibleConfigPaths = EXTENSIONS_PRIORITY.map((extension) => ({
  * Loads and returns the contents of the depscop configuration file
  *
  * The function looks for depscop.config files with the following extensions (in order):
- * `.json`, `.ts`, `.mts`, `.cts`, `.js`, `.mjs`, `.cjs`
+ * `.json`, `.ts`, `.mts`, `.js`, `.mjs`
  *
  * @returns Depscop config
  * @throws {Error} If the configuration file does not exist, can not be read or is invalid
@@ -39,11 +31,7 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
     try {
       if (extension === ".json") {
         defaultExport = await readJsonConfig(possibleConfigPath);
-      } else if (
-        extension === ".ts" ||
-        extension === ".mts" ||
-        extension === ".cts"
-      ) {
+      } else if (extension === ".ts" || extension === ".mts") {
         defaultExport = await readTypeScriptConfig(possibleConfigPath);
       } else {
         defaultExport = await readJavaScriptConfig(possibleConfigPath);
