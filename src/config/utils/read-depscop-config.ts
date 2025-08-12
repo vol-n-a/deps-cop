@@ -1,10 +1,10 @@
 import path from "node:path";
 
-import { isModuleNotFoundError } from "../type-guards/is-module-not-found-error.js";
-import type { DepscopConfig } from "./model/index.js";
-import { readJavaScriptConfig } from "./readers/javascript.js";
-import { readJsonConfig } from "./readers/json.js";
-import { readTypeScriptConfig } from "./readers/typescript.js";
+import { isModuleNotFoundError } from "../../utils/type-guards/is-module-not-found-error.js";
+import type { DepscopConfig } from "../model/index.js";
+import { readJavaScriptConfig } from "./read-javascript-config.js";
+import { readJsonConfig } from "./read-json-config.js";
+import { readTypeScriptConfig } from "./read-typescript-config.js";
 import { resolveDepscopConfig } from "./resolve-depscop-config.js";
 
 const CONFIG_BASENAME = "depscop.config";

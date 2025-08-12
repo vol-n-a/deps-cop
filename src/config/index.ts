@@ -10,3 +10,4 @@ export type {
   SemverRuleset,
 } from "./model/index.js";
 export { Severity } from "./model/index.js";
+export { readDepscopConfig } from "./utils/index.js";

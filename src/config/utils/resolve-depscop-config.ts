@@ -1,6 +1,6 @@
-import { isPromiseLike } from "../type-guards/is-promise-like.js";
-import { isRecord } from "../type-guards/is-record.js";
-import type { DepscopConfig } from "./model/index.js";
+import { isPromiseLike } from "../../utils/type-guards/is-promise-like.js";
+import { isRecord } from "../../utils/type-guards/is-record.js";
+import type { DepscopConfig } from "../model/index.js";
 
 /**
  * Resolves a Depscop configuration.
