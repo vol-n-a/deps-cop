@@ -1,7 +1,7 @@
 import type { ForegroundColor } from "chalk";
 import chalk from "chalk";
 
-import { Severity } from "../../utils/config/index.js";
+import { Severity } from "../../config/index.js";
 
 export type RuleViolationOptions = {
   description?: string;

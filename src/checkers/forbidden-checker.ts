@@ -1,13 +1,13 @@
 import { satisfies } from "semver";
 
 import type { CliOptions } from "../command.js";
-import { ForbiddenRuleViolation, stats } from "../stats/index.js";
 import type {
   DependencyName,
   ForbiddenRule,
   ForbiddenRuleset,
-} from "../utils/config/index.js";
-import { Severity } from "../utils/config/index.js";
+} from "../config/index.js";
+import { Severity } from "../config/index.js";
+import { ForbiddenRuleViolation, stats } from "../stats/index.js";
 import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 

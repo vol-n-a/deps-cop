@@ -2,13 +2,13 @@ import type { SemVer } from "semver";
 import { parse } from "semver";
 
 import type { CliOptions } from "../command.js";
-import { RecentRuleViolation, stats } from "../stats/index.js";
 import type {
   DependencyName,
   RecentRule,
   RecentRuleset,
-} from "../utils/config/index.js";
-import { Severity } from "../utils/config/index.js";
+} from "../config/index.js";
+import { Severity } from "../config/index.js";
+import { RecentRuleViolation, stats } from "../stats/index.js";
 import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
 import { getRecentVersions } from "../utils/get-recent-versions.js";
 import { getPackageVersions } from "../utils/npm/get-package-versions.js";
