@@ -27,7 +27,7 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepublishOnly": "npm run build"
@@ -60,6 +60,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^15.14.0",
     "prettier": "^3.5.3",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.19.1"
   },
