@@ -1,11 +1,12 @@
 import { Listr } from "listr2";
 
+import { getDependeniesInstalled } from "src/shared/utils/get-dependencies-installed.js";
+import { getDependencyTree } from "src/shared/utils/npm/get-dependency-tree.js";
+import { isNonNullable } from "src/shared/utils/type-guards/is-non-nullable.js";
+
 import type { CliOptions } from "../command.js";
 import { readDepscopConfig } from "../config/index.js";
 import { stats } from "../stats/stats.js";
-import { getDependeniesInstalled } from "../utils/get-dependencies-installed.js";
-import { getDependencyTree } from "../utils/npm/get-dependency-tree.js";
-import { isNonNullable } from "../utils/type-guards/is-non-nullable.js";
 import { forbiddenChecker } from "./forbidden-checker.js";
 import { recentChecker } from "./recent-checker.js";
 import { semverChecker } from "./semver-checker.js";

@@ -1,6 +1,7 @@
 import path from "node:path";
 
-import { isModuleNotFoundError } from "../../utils/type-guards/is-module-not-found-error.js";
+import { isModuleNotFoundError } from "src/shared/utils/type-guards/is-module-not-found-error.js";
+
 import type { DepscopConfig } from "../model/index.js";
 import { readJavaScriptConfig } from "./read-javascript-config.js";
 import { readJsonConfig } from "./read-json-config.js";
