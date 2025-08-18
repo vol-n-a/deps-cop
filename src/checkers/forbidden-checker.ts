@@ -1,5 +1,8 @@
 import { satisfies } from "semver";
 
+import type { DependenciesInstalled } from "src/shared/utils/get-dependencies-installed.js";
+import { isArrayOfArrays } from "src/shared/utils/type-guards/is-array-of-arrays.js";
+
 import type { CliOptions } from "../command.js";
 import type {
   DependencyName,
@@ -8,8 +11,6 @@ import type {
 } from "../config/index.js";
 import { Severity } from "../config/index.js";
 import { ForbiddenRuleViolation, stats } from "../stats/index.js";
-import type { DependenciesInstalled } from "../utils/get-dependencies-installed.js";
-import { isArrayOfArrays } from "../utils/type-guards/is-array-of-arrays.js";
 
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,
