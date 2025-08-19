@@ -1,11 +1,13 @@
 import type { SemVer } from "semver";
 import { parse } from "semver";
 
-import type { DependenciesInstalled } from "src/shared/utils/get-dependencies-installed.js";
-import { getRecentVersions } from "src/shared/utils/get-recent-versions.js";
-import { getPackageVersions } from "src/shared/utils/npm/get-package-versions.js";
-import { parseRecentVersions } from "src/shared/utils/parse-recent-versions.js";
-import { isArrayOfArrays } from "src/shared/utils/type-guards/is-array-of-arrays.js";
+import type { DependenciesInstalled } from "src/shared/utils/index.js";
+import {
+  getPackageVersions,
+  getRecentVersions,
+  isArrayOfArrays,
+  parseRecentVersions,
+} from "src/shared/utils/index.js";
 
 import type { CliOptions } from "../command.js";
 import type {

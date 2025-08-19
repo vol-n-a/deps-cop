@@ -1,8 +1,10 @@
 import { Listr } from "listr2";
 
-import { getDependeniesInstalled } from "src/shared/utils/get-dependencies-installed.js";
-import { getDependencyTree } from "src/shared/utils/npm/get-dependency-tree.js";
-import { isNonNullable } from "src/shared/utils/type-guards/is-non-nullable.js";
+import {
+  getDependeniesInstalled,
+  getDependencyTree,
+  isNonNullable,
+} from "src/shared/utils/index.js";
 
 import type { CliOptions } from "../command.js";
 import { readDepscopConfig } from "../config/index.js";

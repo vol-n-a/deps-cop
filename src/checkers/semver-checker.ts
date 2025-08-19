@@ -1,7 +1,7 @@
 import { satisfies } from "semver";
 
-import type { DependenciesInstalled } from "src/shared/utils/get-dependencies-installed.js";
-import { isArrayOfArrays } from "src/shared/utils/type-guards/is-array-of-arrays.js";
+import type { DependenciesInstalled } from "src/shared/utils/index.js";
+import { isArrayOfArrays } from "src/shared/utils/index.js";
 
 import type { CliOptions } from "../command.js";
 import type {
