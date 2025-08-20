@@ -1,22 +1,22 @@
 import type { SemVer } from "semver";
 import { parse } from "semver";
 
-import type { DependenciesInstalled } from "src/shared/utils/index.js";
-import {
-  getPackageVersions,
-  getRecentVersions,
-  isArrayOfArrays,
-  parseRecentVersions,
-} from "src/shared/utils/index.js";
+import { isArrayOfArrays } from "src/shared/utils/index.js";
 
-import type { CliOptions } from "../command.js";
+import type { CliOptions } from "../../../command.js";
 import type {
   DependencyName,
   RecentRule,
   RecentRuleset,
-} from "../config/index.js";
-import { Severity } from "../config/index.js";
-import { RecentRuleViolation, stats } from "../stats/index.js";
+} from "../../../config/index.js";
+import { Severity } from "../../../config/index.js";
+import { RecentRuleViolation, stats } from "../../../stats/index.js";
+import type { DependenciesInstalled } from "../../utils/index.js";
+import {
+  getPackageVersions,
+  getRecentVersions,
+  parseRecentVersions,
+} from "./utils/index.js";
 
 const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,

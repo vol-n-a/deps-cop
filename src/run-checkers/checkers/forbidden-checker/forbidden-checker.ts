@@ -1,16 +1,16 @@
 import { satisfies } from "semver";
 
-import type { DependenciesInstalled } from "src/shared/utils/index.js";
 import { isArrayOfArrays } from "src/shared/utils/index.js";
 
-import type { CliOptions } from "../command.js";
+import type { CliOptions } from "../../../command.js";
 import type {
   DependencyName,
   ForbiddenRule,
   ForbiddenRuleset,
-} from "../config/index.js";
-import { Severity } from "../config/index.js";
-import { ForbiddenRuleViolation, stats } from "../stats/index.js";
+} from "../../../config/index.js";
+import { Severity } from "../../../config/index.js";
+import { ForbiddenRuleViolation, stats } from "../../../stats/index.js";
+import type { DependenciesInstalled } from "../../utils/index.js";
 
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,

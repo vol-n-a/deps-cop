@@ -1,4 +1,4 @@
-import type { DependencyNode, Project } from "./npm/get-dependency-tree.js";
+import type { DependencyNode, Project } from "./get-dependency-tree.js";
 
 const dependenciesInstalled = new Map<
   string,
