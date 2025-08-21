@@ -1,17 +1,17 @@
 import { Listr } from "listr2";
 
-import {
-  getDependeniesInstalled,
-  getDependencyTree,
-  isNonNullable,
-} from "src/shared/utils/index.js";
+import { isNonNullable } from "src/shared/utils/index.js";
 
 import type { CliOptions } from "../command.js";
 import { readDepscopConfig } from "../config/index.js";
 import { stats } from "../stats/stats.js";
-import { forbiddenChecker } from "./forbidden-checker.js";
-import { recentChecker } from "./recent-checker.js";
-import { semverChecker } from "./semver-checker.js";
+import {
+  forbiddenChecker,
+  recentChecker,
+  semverChecker,
+} from "./checkers/index.js";
+import { getDependeniesInstalled } from "./utils/get-dependencies-installed.js";
+import { getDependencyTree } from "./utils/get-dependency-tree.js";
 
 export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
   const { forbidden, recent, semver } = await readDepscopConfig();

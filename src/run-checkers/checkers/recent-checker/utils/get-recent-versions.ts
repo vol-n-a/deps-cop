@@ -1,6 +1,7 @@
 import type { SemVer } from "semver";
 
-import { groupBy } from "./group-by.js";
+import { groupBy } from "src/shared/utils/index.js";
+
 import type { RecentVersionSegments } from "./parse-recent-versions.js";
 
 type SemVerIteratee = (
