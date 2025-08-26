@@ -21,9 +21,9 @@
     "build"
   ],
   "bin": {
-    "depscop": "./build/command.js"
+    "depscop": "./build/cli/command.js"
   },
-  "main": "./build/command.js",
+  "main": "./build/cli/command.js",
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {

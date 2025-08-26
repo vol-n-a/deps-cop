@@ -3,13 +3,13 @@ import { parse } from "semver";
 
 import { isArrayOfArrays } from "src/shared/utils/index.js";
 
-import type { CliOptions } from "../../../command.js";
 import type {
   DependencyName,
   RecentRule,
   RecentRuleset,
-} from "../../../config/index.js";
-import { Severity } from "../../../config/index.js";
+} from "../../../../config/index.js";
+import { Severity } from "../../../../config/index.js";
+import type { CliOptions } from "../../../command.js";
 import { RecentRuleViolation, stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
 import {
