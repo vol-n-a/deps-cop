@@ -2,14 +2,9 @@
 
 import { program } from "commander";
 
+import type { CliOptions } from "./model/types.js";
 import { runCheckers } from "./run-checkers/index.js";
 import { stats } from "./stats/stats.js";
-
-export type CliOptions = {
-  allowPrerelease: boolean;
-  prod: boolean;
-  quiet: boolean;
-};
 
 program
   .name("deps-cop")

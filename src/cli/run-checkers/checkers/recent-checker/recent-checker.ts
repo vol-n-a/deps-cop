@@ -9,7 +9,7 @@ import type {
   RecentRuleset,
 } from "../../../../config/index.js";
 import { Severity } from "../../../../config/index.js";
-import type { CliOptions } from "../../../command.js";
+import type { CliOptions } from "../../../model/types.js";
 import { RecentRuleViolation, stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
 import {

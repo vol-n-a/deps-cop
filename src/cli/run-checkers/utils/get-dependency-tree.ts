@@ -1,7 +1,7 @@
 import type { ExecException } from "node:child_process";
 import { exec } from "node:child_process";
 
-import type { CliOptions } from "../../command.js";
+import type { CliOptions } from "../../model/index.js";
 
 export type Project = {
   version: string;
