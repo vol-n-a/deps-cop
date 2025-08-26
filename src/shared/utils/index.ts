@@ -1,8 +1,2 @@
 export { groupBy } from "./group-by.js";
-export {
-  isArrayOfArrays,
-  isModuleNotFoundError,
-  isNonNullable,
-  isPromiseLike,
-  isRecord,
-} from "./type-guards/index.js";
+export { isArrayOfArrays, isNonNullable } from "./type-guards/index.js";

@@ -1,1 +1,1 @@
-export { readDepscopConfig } from "./read-depscop-config.js";
+export { readDepscopConfig } from "./read-depscop-config/index.js";
