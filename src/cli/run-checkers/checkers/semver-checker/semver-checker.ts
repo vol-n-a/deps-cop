@@ -6,11 +6,11 @@ import type {
   SemverRuleset,
 } from "src/config/index.js";
 import { Severity } from "src/config/index.js";
-import { isArrayOfArrays } from "src/shared/utils/index.js";
 
 import type { CliOptions } from "../../../model/index.js";
 import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
+import { isArrayOfArrays } from "../utils/index.js";
 import { SemverRuleViolation } from "./model/index.js";
 
 const checkSemverRule = (
