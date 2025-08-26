@@ -2,13 +2,13 @@ import { satisfies } from "semver";
 
 import { isArrayOfArrays } from "src/shared/utils/index.js";
 
-import type { CliOptions } from "../../../command.js";
 import type {
   DependencyName,
   SemverRule,
   SemverRuleset,
-} from "../../../config/index.js";
-import { Severity } from "../../../config/index.js";
+} from "../../../../config/index.js";
+import { Severity } from "../../../../config/index.js";
+import type { CliOptions } from "../../../command.js";
 import { SemverRuleViolation, stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
 

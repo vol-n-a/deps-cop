@@ -2,8 +2,8 @@ import { Listr } from "listr2";
 
 import { isNonNullable } from "src/shared/utils/index.js";
 
+import { readDepscopConfig } from "../../config/index.js";
 import type { CliOptions } from "../command.js";
-import { readDepscopConfig } from "../config/index.js";
 import { stats } from "../stats/stats.js";
 import {
   forbiddenChecker,
