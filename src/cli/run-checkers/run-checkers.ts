@@ -10,14 +10,14 @@ import {
   recentChecker,
   semverChecker,
 } from "./checkers/index.js";
-import { getDependeniesInstalled } from "./utils/get-dependencies-installed.js";
+import { getDependenciesInstalled } from "./utils/get-dependencies-installed.js";
 import { getDependencyTree } from "./utils/get-dependency-tree.js";
 
 export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
   const { forbidden, recent, semver } = await readDepscopConfig();
 
   const dependencyTree = await getDependencyTree(cliOptions);
-  const dependenciesInstalled = getDependeniesInstalled(dependencyTree);
+  const dependenciesInstalled = getDependenciesInstalled(dependencyTree);
 
   const rootDependenciesInstalled = new Map(
     Array.from(dependenciesInstalled.entries()).filter(

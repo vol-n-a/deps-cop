@@ -23,7 +23,7 @@ export type DependenciesInstalled = typeof dependenciesInstalled;
  * @param path Path to the current node of the project's dependency tree
  * @returns Map of installed dependencies
  */
-export const getDependeniesInstalled = (
+export const getDependenciesInstalled = (
   tree: Project | DependencyNode,
   path: Array<string> = []
 ): DependenciesInstalled => {
@@ -56,7 +56,7 @@ export const getDependeniesInstalled = (
     dependencyValue.versions[dependencyTree.version] = dependencyPath;
 
     // Traverse dependencies of a current dependency
-    getDependeniesInstalled(dependencyTree, dependencyPath);
+    getDependenciesInstalled(dependencyTree, dependencyPath);
   }
 
   return dependenciesInstalled;
