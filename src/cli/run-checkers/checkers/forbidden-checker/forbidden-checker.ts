@@ -9,8 +9,9 @@ import type {
 } from "../../../../config/index.js";
 import { Severity } from "../../../../config/index.js";
 import type { CliOptions } from "../../../model/types.js";
-import { ForbiddenRuleViolation, stats } from "../../../stats/index.js";
+import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
+import { ForbiddenRuleViolation } from "./model/index.js";
 
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,

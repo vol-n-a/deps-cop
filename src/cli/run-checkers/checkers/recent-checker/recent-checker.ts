@@ -10,8 +10,9 @@ import type {
 } from "../../../../config/index.js";
 import { Severity } from "../../../../config/index.js";
 import type { CliOptions } from "../../../model/types.js";
-import { RecentRuleViolation, stats } from "../../../stats/index.js";
+import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
+import { RecentRuleViolation } from "./model/recent-rule-violation.js";
 import {
   getPackageVersions,
   getRecentVersions,

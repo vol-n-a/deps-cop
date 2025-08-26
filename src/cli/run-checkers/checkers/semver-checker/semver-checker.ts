@@ -9,8 +9,9 @@ import type {
 } from "../../../../config/index.js";
 import { Severity } from "../../../../config/index.js";
 import type { CliOptions } from "../../../model/index.js";
-import { SemverRuleViolation, stats } from "../../../stats/index.js";
+import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
+import { SemverRuleViolation } from "./model/index.js";
 
 const checkSemverRule = (
   dependenciesInstalled: DependenciesInstalled,
