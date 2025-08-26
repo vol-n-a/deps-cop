@@ -1,16 +1,17 @@
 import { satisfies } from "semver";
 
-import { isArrayOfArrays } from "src/shared/utils/index.js";
-
 import type {
   DependencyName,
   ForbiddenRule,
   ForbiddenRuleset,
-} from "../../../../config/index.js";
-import { Severity } from "../../../../config/index.js";
-import type { CliOptions } from "../../../model/types.js";
-import { ForbiddenRuleViolation, stats } from "../../../stats/index.js";
+} from "src/config/index.js";
+import { Severity } from "src/config/index.js";
+import { isArrayOfArrays } from "src/shared/utils/index.js";
+
+import type { CliOptions } from "../../../model/index.js";
+import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
+import { ForbiddenRuleViolation } from "./model/index.js";
 
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,
