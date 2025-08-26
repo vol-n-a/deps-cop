@@ -1,8 +1,9 @@
 import chalk from "chalk";
 
-import { Severity } from "../../config/index.js";
+import { Severity } from "src/config/index.js";
+
 import type { CliOptions } from "../model/index.js";
-import type { RuleViolation } from "./rule-violation.js";
+import type { RuleViolation } from "./model/index.js";
 
 class Stats {
   #cliOptions: CliOptions | null = null;

@@ -1,3 +1,3 @@
-export type { RuleViolationOptions } from "./rule-violation.js";
-export { RuleViolation } from "./rule-violation.js";
+export type { RuleViolationOptions } from "./model/index.js";
+export { RuleViolation } from "./model/index.js";
 export { stats } from "./stats.js";
