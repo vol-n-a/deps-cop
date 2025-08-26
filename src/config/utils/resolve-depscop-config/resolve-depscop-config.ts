@@ -1,6 +1,6 @@
-import { isPromiseLike, isRecord } from "src/shared/utils/index.js";
-
-import type { DepscopConfig } from "../model/index.js";
+import type { DepscopConfig } from "../../model/index.js";
+import { isPromiseLike } from "./is-promise-like.js";
+import { isRecord } from "./is-record.js";
 
 /**
  * Resolves a Depscop configuration.
