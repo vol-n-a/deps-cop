@@ -1,7 +1,5 @@
 import { Listr } from "listr2";
 
-import { isNonNullable } from "src/shared/utils/index.js";
-
 import { readDepscopConfig } from "../../config/index.js";
 import type { CliOptions } from "../model/types.js";
 import { stats } from "../stats/stats.js";
@@ -12,6 +10,7 @@ import {
 } from "./checkers/index.js";
 import { getDependenciesInstalled } from "./utils/get-dependencies-installed.js";
 import { getDependencyTree } from "./utils/get-dependency-tree.js";
+import { isNonNullable } from "./utils/index.js";
 
 export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
   const { forbidden, recent, semver } = await readDepscopConfig();

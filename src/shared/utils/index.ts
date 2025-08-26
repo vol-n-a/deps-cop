@@ -1,1 +1,1 @@
-export { isArrayOfArrays, isNonNullable } from "./type-guards/index.js";
+export { isArrayOfArrays } from "./type-guards/index.js";
