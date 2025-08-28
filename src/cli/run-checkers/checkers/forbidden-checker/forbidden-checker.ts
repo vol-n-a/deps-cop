@@ -15,11 +15,11 @@ import { ForbiddenRuleViolation } from "./model/index.js";
 
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,
-  dependency: DependencyName,
+  dependencyName: DependencyName,
   [version, reason, ruleOptions]: ForbiddenRule,
   cliOptions: CliOptions
 ): void => {
-  const dependencyValue = dependenciesInstalled.get(dependency);
+  const dependencyVersion = dependenciesInstalled.get(dependencyName);
 
   // Skip rule check if severity is WARNING and quiet mode is enabled
   if (ruleOptions?.severity === Severity.WARNING && cliOptions.quiet) {
@@ -27,14 +27,14 @@ const checkForbiddenRule = (
   }
 
   // If the dependency from config is not installed, skip it
-  if (!dependencyValue) {
+  if (!dependencyVersion) {
     return;
   }
 
   // If any version of the dependency from config is forbidden, report the error
   if (version === "any") {
     stats.addRuleViolation(
-      new ForbiddenRuleViolation(`${dependency} is not allowed`, {
+      new ForbiddenRuleViolation(`${dependencyName} is not allowed`, {
         reason,
         severity: ruleOptions?.severity,
       })
@@ -44,17 +44,14 @@ const checkForbiddenRule = (
   }
 
   // If the dependency from config does not satisfy the rule, skip
-  if (
-    dependencyValue.rootVersion &&
-    !satisfies(dependencyValue.rootVersion, version)
-  ) {
+  if (dependencyVersion && !satisfies(dependencyVersion, version)) {
     return;
   }
 
   // Report the error
   stats.addRuleViolation(
     new ForbiddenRuleViolation(
-      `${dependency}@${dependencyValue.rootVersion} is forbidden`,
+      `${dependencyName}@${dependencyVersion} is forbidden`,
       {
         reason,
         severity: ruleOptions?.severity,

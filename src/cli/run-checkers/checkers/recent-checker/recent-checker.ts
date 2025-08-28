@@ -21,11 +21,11 @@ import {
 
 const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,
-  dependency: DependencyName,
+  dependencyName: DependencyName,
   [version, reason, ruleOptions]: RecentRule,
   cliOptions: CliOptions
 ): Promise<void> => {
-  const dependencyValue = dependenciesInstalled.get(dependency);
+  const dependencyVersion = dependenciesInstalled.get(dependencyName);
 
   // Skip rule check if severity is WARNING and quiet mode is enabled
   if (ruleOptions?.severity === Severity.WARNING && cliOptions.quiet) {
@@ -33,7 +33,7 @@ const checkRecentRule = async (
   }
 
   // If the dependency from config is not installed, skip it
-  if (!dependencyValue) {
+  if (!dependencyVersion) {
     return;
   }
 
@@ -46,7 +46,7 @@ const checkRecentRule = async (
 
   const shouldIncludePrerelease =
     ruleOptions?.prerelease || cliOptions.allowPrerelease;
-  const versions = (await getPackageVersions(dependency))
+  const versions = (await getPackageVersions(dependencyName))
     .map((ver) => parse(ver))
     .filter(
       (semver) =>
@@ -62,7 +62,7 @@ const checkRecentRule = async (
   if (!versionsAllowed.length) {
     stats.addRuleViolation(
       new RecentRuleViolation(
-        `No versions of ${dependency} satisfy the recency version rule "${version}"`,
+        `No versions of ${dependencyName} satisfy the recency version rule "${version}"`,
         {
           severity: ruleOptions?.severity,
         }
@@ -71,8 +71,8 @@ const checkRecentRule = async (
     return;
   }
 
-  const indexOfRootVersion = dependencyValue.rootVersion
-    ? versionsAllowed.indexOf(dependencyValue.rootVersion)
+  const indexOfRootVersion = dependencyVersion
+    ? versionsAllowed.indexOf(dependencyVersion)
     : -1;
   const isVersionAllowed = indexOfRootVersion !== -1;
   const isVersionLatest = indexOfRootVersion === versionsAllowed.length - 1;
@@ -88,7 +88,7 @@ const checkRecentRule = async (
   if (!cliOptions.quiet && isVersionAllowed && !isVersionLatest) {
     stats.addRuleViolation(
       new RecentRuleViolation(
-        `${dependency}@${dependencyValue.rootVersion} may be outdated soon`,
+        `${dependencyName}@${dependencyVersion} may be outdated soon`,
         {
           description: `Available allowed versions: ${versionsAllowed.join(", ")}`,
           severity: Severity.WARNING,
@@ -102,7 +102,7 @@ const checkRecentRule = async (
   // Report the error
   stats.addRuleViolation(
     new RecentRuleViolation(
-      `${dependency}@${dependencyValue.rootVersion} does not satisfy the recency version rule "${version}"`,
+      `${dependencyName}@${dependencyVersion} does not satisfy the recency version rule "${version}"`,
       {
         description: `Available allowed versions: ${versionsAllowed.join(", ")}`,
         reason,

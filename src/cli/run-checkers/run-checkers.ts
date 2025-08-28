@@ -21,12 +21,6 @@ export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
   const dependencyTree = await getDependencyTree(cliOptions);
   const dependenciesInstalled = getDependenciesInstalled(dependencyTree);
 
-  const rootDependenciesInstalled = new Map(
-    Array.from(dependenciesInstalled.entries()).filter(
-      ([, entry]) => entry.rootVersion
-    )
-  );
-
   // TODO: Remove this once depscop config resolver is implemented
   if (!forbidden && !recent && !semver) {
     throw new Error("No rulesets found in DepsCop configuration");
@@ -38,17 +32,16 @@ export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
       forbidden && {
         title: "Forbidden rules check",
         task: () =>
-          forbiddenChecker(rootDependenciesInstalled, forbidden, cliOptions),
+          forbiddenChecker(dependenciesInstalled, forbidden, cliOptions),
       },
       recent && {
         title: "Recent rules check",
         task: async () =>
-          recentChecker(rootDependenciesInstalled, recent, cliOptions),
+          recentChecker(dependenciesInstalled, recent, cliOptions),
       },
       semver && {
         title: "Semver rules check",
-        task: () =>
-          semverChecker(rootDependenciesInstalled, semver, cliOptions),
+        task: () => semverChecker(dependenciesInstalled, semver, cliOptions),
       },
     ].filter(isNonNullable),
     {
