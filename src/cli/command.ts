@@ -2,7 +2,7 @@
 
 import { program } from "commander";
 
-import type { CliOptions } from "./model/types.js";
+import type { CliOptions } from "./model/index.js";
 import { runCheckers } from "./run-checkers/index.js";
 import { stats } from "./stats/stats.js";
 
