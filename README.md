@@ -72,6 +72,12 @@ Rules that prevent the use of specific package versions or entire packages. Pack
 
 Rules that enforce using recent versions of packages using a custom version syntax.
 
+> [!NOTE]
+> The recent version pattern uses a custom regular expression that extends the standard semver format to allow negative numbers in version segments. The minor and patch segments are optional.
+>
+> - You can see the regex here: https://regex101.com/r/lweqjQ/1
+> - It is based on the official semver regex: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+
 ```json
 {
   "recent": {
