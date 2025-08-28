@@ -14,8 +14,6 @@ export type DependencyNode = {
   dependencies?: Record<string, DependencyNode>;
 };
 
-export type Node = Project | DependencyNode;
-
 /**
  * Reads project's dependency tree and parses it to the js object
  *

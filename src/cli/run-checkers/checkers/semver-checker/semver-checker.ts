@@ -15,11 +15,11 @@ import { SemverRuleViolation } from "./model/index.js";
 
 const checkSemverRule = (
   dependenciesInstalled: DependenciesInstalled,
-  dependency: DependencyName,
+  dependencyName: DependencyName,
   [version, reason, ruleOptions]: SemverRule,
   cliOptions: CliOptions
 ): void => {
-  const dependencyValue = dependenciesInstalled.get(dependency);
+  const dependencyVersion = dependenciesInstalled.get(dependencyName);
 
   // Skip rule check if severity is WARNING and quiet mode is enabled
   if (ruleOptions?.severity === Severity.WARNING && cliOptions.quiet) {
@@ -27,22 +27,19 @@ const checkSemverRule = (
   }
 
   // If the dependency from config is not installed, skip it
-  if (!dependencyValue) {
+  if (!dependencyVersion) {
     return;
   }
 
   // If the installed dependency satisfies the rule, skip
-  if (
-    dependencyValue.rootVersion &&
-    satisfies(dependencyValue.rootVersion, version)
-  ) {
+  if (dependencyVersion && satisfies(dependencyVersion, version)) {
     return;
   }
 
   // Report the error
   stats.addRuleViolation(
     new SemverRuleViolation(
-      `${dependency}@${dependencyValue.rootVersion} does not satisfy ${dependency}@${version}`,
+      `${dependencyName}@${dependencyVersion} does not satisfy ${dependencyName}@${version}`,
       {
         reason,
         severity: ruleOptions?.severity,
