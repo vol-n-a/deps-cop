@@ -2,14 +2,18 @@
 
 import { program } from "commander";
 
-import type { CliOptions } from "./model/types.js";
+import type { CliOptions } from "./model/index.js";
 import { runCheckers } from "./run-checkers/index.js";
 import { stats } from "./stats/stats.js";
 
 program
   .name("deps-cop")
   .description("DepsCop - whitelist for package.json dependencies")
-  .option("--allow-prerelease", "enables including", false)
+  .option(
+    "--allow-prerelease",
+    "enables including prerelease versions in the calculation of recent versions",
+    false
+  )
   .option("--prod", "disables dev dependencies checking", false)
   .option("--quiet", "disable reporting on warnings", false);
 
