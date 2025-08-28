@@ -9,7 +9,11 @@ import { stats } from "./stats/stats.js";
 program
   .name("deps-cop")
   .description("DepsCop - whitelist for package.json dependencies")
-  .option("--allow-prerelease", "enables including", false)
+  .option(
+    "--allow-prerelease",
+    "enables including prerelease versions in the calculation of recent versions",
+    false
+  )
   .option("--prod", "disables dev dependencies checking", false)
   .option("--quiet", "disable reporting on warnings", false);
 
