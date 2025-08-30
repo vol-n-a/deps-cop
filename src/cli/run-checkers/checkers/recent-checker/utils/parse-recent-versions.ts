@@ -1,5 +1,9 @@
-// TODO: Support * along with numbers (?)
-const recentRegex = /^(-?\d+)(?:\.(-?\d+))?(?:\.(-?\d+))?$/;
+// The recent version pattern uses a custom regular expression that extends the standard
+// semver format to allow negative numbers in version segments. The minor and patch segments are optional.
+// - You can see the regex here: https://regex101.com/r/lweqjQ/1
+// - It is based on the official semver regex: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+const recentRegex =
+  /^(-?(?:0|[1-9]\d*))(?:\.(-?(?:0|[1-9]\d*)))?(?:\.(-?(?:0|[1-9]\d*)))?(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
 
 const parseInt = (value: string): number | undefined => {
   const res = Number.parseInt(value);
