@@ -10,3 +10,6 @@ build/
 
 # OS
 .DS_Store
+
+# Test coverage reports
+coverage/
