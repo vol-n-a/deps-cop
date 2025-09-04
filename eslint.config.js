@@ -12,7 +12,7 @@ const baseConfig = tsEslint.config({
 const jsConfig = tsEslint.config({
   extends: [...baseConfig, eslint.configs.recommended],
   files: ["**/*.js"],
-  ignores: ["build/**", "node_modules/**"],
+  ignores: ["build/**", "node_modules/**", "coverage/**"],
   plugins: {
     "simple-import-sort": pluginSimpleImportSort,
     import: pluginImport,
@@ -45,7 +45,7 @@ const jsConfig = tsEslint.config({
 const tsConfig = tsEslint.config({
   extends: [...jsConfig, ...tsEslint.configs.strict],
   files: ["**/*.ts"],
-  ignores: ["build/**", "node_modules/**"],
+  ignores: ["build/**", "node_modules/**", "coverage/**"],
   languageOptions: {
     parserOptions: {
       projectService: true,
