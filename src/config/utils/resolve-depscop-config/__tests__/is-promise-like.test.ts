@@ -22,5 +22,7 @@ describe("isPromiseLike", () => {
     expect(isPromiseLike("x")).toBe(false);
     expect(isPromiseLike({})).toBe(false);
     expect(isPromiseLike({ then: 123 })).toBe(false);
+    expect(isPromiseLike(Symbol("sym"))).toBe(false);
+    expect(isPromiseLike(() => {})).toBe(false);
   });
 });
