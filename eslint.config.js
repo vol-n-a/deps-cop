@@ -38,7 +38,7 @@ const jsConfig = tsEslint.config({
         ],
       },
     ],
-    quotes: ["error", "double"],
+    quotes: ["error", "double", { avoidEscape: true }],
   },
 });
 
