@@ -39,11 +39,6 @@ const checkRecentRule = async (
 
   const recentVersionSegments = parseRecentVersions(version);
 
-  // If the dependency version does not satisfy the recent version pattern, skip it
-  if (!recentVersionSegments) {
-    return;
-  }
-
   const shouldIncludePrerelease =
     ruleOptions?.prerelease || cliOptions.allowPrerelease;
   const versions = (await getPackageVersions(dependencyName))
