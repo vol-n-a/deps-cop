@@ -5,7 +5,13 @@
 const recentRegex =
   /^(-?(?:0|[1-9]\d*))(?:\.(-?(?:0|[1-9]\d*)))?(?:\.(-?(?:0|[1-9]\d*)))?(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
 
-const parseInt = (value: string): number | undefined => {
+/**
+ * Converts a string into an integer, or returns `undefined` if the string is not a valid integer.
+ *
+ * @param value - The string to parse as an integer.
+ * @returns The parsed integer, or `undefined` if parsing fails.
+ */
+const parseIntOrUndefined = (value: string): number | undefined => {
   const res = Number.parseInt(value);
 
   if (isNaN(res)) {
@@ -41,32 +47,34 @@ export type RecentVersionSegments = {
  * parseRecentVersions("1.2.3-alpha") // Output: { recentMajors: 1, recentMinors: 2, recentPatches: 3 }
  *
  * @example
- * // The string does not match the expected "recent version pattern", so null is returned
- * parseRecentVersions("invalid-version") // Output: null
+ * // The string does not match the expected "recent version pattern", so an error is thrown
+ * parseRecentVersions("invalid-version") // Throws Error
  *
  * @param value The "recent version pattern" string in the format `(major)(.minor)?(.patch)?(-prerelease)?`
  * @returns An object containing the `recentMajors`, `recentMinors` and `recentPatches` version numbers, or null if `value` does not match the expected "recent version pattern"
  */
-export const parseRecentVersions = (
-  value: string
-): RecentVersionSegments | null => {
+export const parseRecentVersions = (value: string): RecentVersionSegments => {
+  if (value === "") {
+    throw new Error(
+      "Empty string is not allowed as a recent version pattern.\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern."
+    );
+  }
+
   const res = value.match(recentRegex);
 
   if (!res) {
-    return null;
+    throw new Error(
+      `Invalid recent version pattern: "${value}".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.`
+    );
   }
 
   const [, recentMajorsRaw, recentMinorsRaw, recentPatchesRaw] = res;
   const [recentMajors, recentMinors, recentPatches] = [
-    parseInt(recentMajorsRaw),
-    parseInt(recentMinorsRaw),
-    parseInt(recentPatchesRaw),
+    // The major version segment is always defined because recentRegex requires the first numeric version segment to be present.
+    Number.parseInt(recentMajorsRaw),
+    parseIntOrUndefined(recentMinorsRaw),
+    parseIntOrUndefined(recentPatchesRaw),
   ];
-
-  // If the major version is undefined, then minor and patch versions are also undefined (according to recentRegex)
-  if (recentMajors === undefined) {
-    return null;
-  }
 
   return { recentMajors, recentMinors, recentPatches };
 };

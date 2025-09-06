@@ -160,52 +160,112 @@ describe("parseRecentVersions", () => {
 
   describe("Invalid Semantic Versions", () => {
     it("rejects versions with leading zeros", () => {
-      expect(parseRecentVersions("01.1.1")).toBeNull();
-      expect(parseRecentVersions("1.01.1")).toBeNull();
-      expect(parseRecentVersions("1.1.01")).toBeNull();
+      expect(() => parseRecentVersions("01.1.1")).toThrowError(
+        'Invalid recent version pattern: "01.1.1".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("1.01.1")).toThrowError(
+        'Invalid recent version pattern: "1.01.1".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("1.1.01")).toThrowError(
+        'Invalid recent version pattern: "1.1.01".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
     });
 
     it("rejects versions with invalid prerelease format", () => {
-      expect(parseRecentVersions("1.2.3-0123")).toBeNull();
-      expect(parseRecentVersions("1.2.3-0123.0123")).toBeNull();
-      expect(parseRecentVersions("1.0.0-alpha_beta")).toBeNull();
+      expect(() => parseRecentVersions("1.2.3-0123")).toThrowError(
+        'Invalid recent version pattern: "1.2.3-0123".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("1.2.3-0123.0123")).toThrowError(
+        'Invalid recent version pattern: "1.2.3-0123.0123".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("1.0.0-alpha_beta")).toThrowError(
+        'Invalid recent version pattern: "1.0.0-alpha_beta".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
     });
 
     it("rejects versions with invalid build metadata", () => {
-      expect(parseRecentVersions("1.1.2+.123")).toBeNull();
-      expect(parseRecentVersions("9.8.7+meta+meta")).toBeNull();
+      expect(() => parseRecentVersions("1.1.2+.123")).toThrowError(
+        'Invalid recent version pattern: "1.1.2+.123".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("9.8.7+meta+meta")).toThrowError(
+        'Invalid recent version pattern: "9.8.7+meta+meta".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
     });
 
     it("rejects malformed version strings", () => {
-      expect(parseRecentVersions("+invalid")).toBeNull();
-      expect(parseRecentVersions("-invalid")).toBeNull();
-      expect(parseRecentVersions("-invalid+invalid")).toBeNull();
-      expect(parseRecentVersions("-invalid.01")).toBeNull();
+      expect(() => parseRecentVersions("+invalid")).toThrowError(
+        'Invalid recent version pattern: "+invalid".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("-invalid")).toThrowError(
+        'Invalid recent version pattern: "-invalid".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("-invalid+invalid")).toThrowError(
+        'Invalid recent version pattern: "-invalid+invalid".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("-invalid.01")).toThrowError(
+        'Invalid recent version pattern: "-invalid.01".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
     });
 
     it("rejects non-version strings", () => {
-      expect(parseRecentVersions("alpha")).toBeNull();
-      expect(parseRecentVersions("alpha.beta")).toBeNull();
-      expect(parseRecentVersions("alpha.beta.1")).toBeNull();
-      expect(parseRecentVersions("alpha+beta")).toBeNull();
-      expect(parseRecentVersions("alpha_beta")).toBeNull();
+      expect(() => parseRecentVersions("alpha")).toThrowError(
+        'Invalid recent version pattern: "alpha".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("alpha.beta")).toThrowError(
+        'Invalid recent version pattern: "alpha.beta".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("alpha.beta.1")).toThrowError(
+        'Invalid recent version pattern: "alpha.beta.1".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("alpha+beta")).toThrowError(
+        'Invalid recent version pattern: "alpha+beta".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("alpha_beta")).toThrowError(
+        'Invalid recent version pattern: "alpha_beta".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
     });
 
     it("rejects incomplete version strings", () => {
-      expect(parseRecentVersions("alpha.")).toBeNull();
-      expect(parseRecentVersions("alpha..")).toBeNull();
-      expect(parseRecentVersions("1.0.0-alpha.")).toBeNull();
-      expect(parseRecentVersions("1.0.0-alpha..")).toBeNull();
-      expect(parseRecentVersions("1.0.0-alpha..1")).toBeNull();
+      expect(() => parseRecentVersions("alpha.")).toThrowError(
+        'Invalid recent version pattern: "alpha.".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("alpha..")).toThrowError(
+        'Invalid recent version pattern: "alpha..".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("1.0.0-alpha.")).toThrowError(
+        'Invalid recent version pattern: "1.0.0-alpha.".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("1.0.0-alpha..")).toThrowError(
+        'Invalid recent version pattern: "1.0.0-alpha..".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("1.0.0-alpha..1")).toThrowError(
+        'Invalid recent version pattern: "1.0.0-alpha..1".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
     });
 
     it("rejects edge case invalid versions", () => {
-      expect(parseRecentVersions("1.2.3.DEV")).toBeNull();
-      expect(
+      expect(() => parseRecentVersions("1.2.3.DEV")).toThrowError(
+        'Invalid recent version pattern: "1.2.3.DEV".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() =>
         parseRecentVersions("1.2.31.2.3----RC-SNAPSHOT.12.09.1--..12+788")
-      ).toBeNull();
-      expect(parseRecentVersions("+justmeta")).toBeNull();
-      expect(parseRecentVersions("9.8.7-whatever+meta+meta")).toBeNull();
+      ).toThrowError(
+        'Invalid recent version pattern: "1.2.31.2.3----RC-SNAPSHOT.12.09.1--..12+788".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() => parseRecentVersions("+justmeta")).toThrowError(
+        'Invalid recent version pattern: "+justmeta".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+      expect(() =>
+        parseRecentVersions("9.8.7-whatever+meta+meta")
+      ).toThrowError(
+        'Invalid recent version pattern: "9.8.7-whatever+meta+meta".\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern.'
+      );
+    });
+
+    it("rejects empty string", () => {
+      expect(() => parseRecentVersions("")).toThrowError(
+        "Empty string is not allowed as a recent version pattern.\nSee https://regex101.com/r/lweqjQ/1 for more info about the accepted pattern."
+      );
     });
   });
 });
