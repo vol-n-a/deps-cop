@@ -21,7 +21,7 @@ const parseIntOrUndefined = (value: string): number | undefined => {
   return res;
 };
 
-export type RecentVersionSegments = {
+type RecentVersionSegments = {
   recentMajors: number;
   recentMinors?: number;
   recentPatches?: number;
