@@ -49,7 +49,7 @@ const tsConfig = tsEslint.config({
   languageOptions: {
     parserOptions: {
       projectService: true,
-      tsconfigRootDir: import.meta.url,
+      tsconfigRootDir: process.cwd(),
     },
   },
   rules: {
