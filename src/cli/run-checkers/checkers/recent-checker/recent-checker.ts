@@ -13,11 +13,7 @@ import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
 import { isArrayOfArrays } from "../utils/index.js";
 import { RecentRuleViolation } from "./model/recent-rule-violation.js";
-import {
-  getPackageVersions,
-  getRecentVersions,
-  parseRecentVersions,
-} from "./utils/index.js";
+import { getPackageVersions, getRecentVersions } from "./utils/index.js";
 
 const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,
@@ -37,8 +33,6 @@ const checkRecentRule = async (
     return;
   }
 
-  const recentVersionSegments = parseRecentVersions(version);
-
   const shouldIncludePrerelease =
     ruleOptions?.prerelease || cliOptions.allowPrerelease;
   const versions = (await getPackageVersions(dependencyName))
@@ -48,10 +42,9 @@ const checkRecentRule = async (
         semver && (shouldIncludePrerelease || !semver.prerelease.length)
     ) as Array<SemVer>;
 
-  const versionsAllowed = getRecentVersions(
-    versions,
-    recentVersionSegments
-  ).map((semver) => semver.raw);
+  const versionsAllowed = getRecentVersions(versions, version).map(
+    (semver) => semver.raw
+  );
 
   // If there are no versions satisfying the recent version pattern, report the error
   if (!versionsAllowed.length) {

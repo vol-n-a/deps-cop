@@ -1,7 +1,7 @@
 import type { SemVer } from "semver";
 
 import { groupBy } from "./group-by.js";
-import type { RecentVersionSegments } from "./parse-recent-versions.js";
+import { parseRecentVersions } from "./parse-recent-versions.js";
 
 type SemVerIteratee = (
   value: SemVer
@@ -49,7 +49,7 @@ const groupVersions = (
 };
 
 /**
- * Generates a subset of versions from the given array based on the `recentMajors`, `recentMinors` and `recentPatches` version segments specified
+ * Generates a subset of versions from the given array based on the `recentVersion` argument, which specifies `recentMajors`, `recentMinors`, and `recentPatches` segments.
  * - If the `recentMajors`, `recentMinors` or `recentPatches` version segment is negative, the function picks the most recent versions of the corresponding segment
  * - If the `recentMajors`, `recentMinors` or `recentPatches` version segment is non-negative, the function picks versions that match that segment
  *
@@ -57,28 +57,27 @@ const groupVersions = (
  *
  * @example
  * const versions = ["1.1.0", "1.1.1", "1.2.0", "1.2.1", "1.2.2", "1.2.3"];
- * const recentVersions = { recentMajors: -1, recentMinors: -1, recentPatches: -1 };
- * console.log(pickRecentVersions(versions, recentVersions)); // Output: ["1.2.3"]
+ * console.log(pickRecentVersions(versions, "-1.-1.-1")); // Output: ["1.2.3"]
  *
  * @example
  * const versions = ["1.1.0", "1.1.1", "1.2.0", "1.2.1", "1.2.2", "1.2.3"];
- * const recentVersions = { recentMajors: -1, recentMinors: -2, recentPatches: -2 };
- * console.log(pickRecentVersions(versions, recentVersions)); // Output: ["1.1.0", "1.1.1", "1.2.2", "1.2.3"]
+ * console.log(pickRecentVersions(versions, "-1.-2.-2")); // Output: ["1.1.0", "1.1.1", "1.2.2", "1.2.3"]
  *
  * @example
  * const versions = ["1.1.0", "1.1.1", "1.2.0", "1.2.1", "1.2.2", "1.2.3"];
- * const recentVersions = { recentMajors: -1, recentMinors: 1, recentPatches: -2 };
- * console.log(pickRecentVersions(versions, recentVersions)); // Output: ["1.1.0", "1.1.1"]
+ * console.log(pickRecentVersions(versions, "-1.1.-2")); // Output: ["1.1.0", "1.1.1"]
  *
  * @param versions An array of version strings in the format major.minor.patch (e.g., `1.2.3`).
  * @param recentVersions An object containing the `recentMajors`, `recentMinors` and `recentPatches` version numbers
  * @returns An array of version strings that meet the criteria based on the recentVersions input.
- *
  */
 export const getRecentVersions = (
   versions: Array<SemVer>,
-  { recentMajors, recentMinors, recentPatches }: RecentVersionSegments
+  recentVersion: string
 ): Array<SemVer> => {
+  const { recentMajors, recentMinors, recentPatches } =
+    parseRecentVersions(recentVersion);
+
   const recentMajorVersions = groupVersions(
     versions,
     recentMajors,
