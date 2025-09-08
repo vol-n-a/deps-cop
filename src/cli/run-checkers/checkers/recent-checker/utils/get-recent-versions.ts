@@ -89,13 +89,7 @@ export const getRecentVersions = (
   }
 
   const res: Array<Array<Array<SemVer>>> = [];
-  for (const key in recentMajorVersions) {
-    if (!Object.prototype.hasOwnProperty.call(recentMajorVersions, key)) {
-      continue;
-    }
-
-    const majors = recentMajorVersions[key];
-
+  for (const majors of Object.values(recentMajorVersions)) {
     const recentMinorVersions = groupVersions(
       majors,
       recentMinors,
@@ -107,15 +101,7 @@ export const getRecentVersions = (
       continue;
     }
 
-    for (const innerKey in recentMinorVersions) {
-      if (
-        !Object.prototype.hasOwnProperty.call(recentMinorVersions, innerKey)
-      ) {
-        continue;
-      }
-
-      const minors = recentMinorVersions[innerKey];
-
+    for (const minors of Object.values(recentMinorVersions)) {
       const recentPatchVersions = groupVersions(
         minors,
         recentPatches,
