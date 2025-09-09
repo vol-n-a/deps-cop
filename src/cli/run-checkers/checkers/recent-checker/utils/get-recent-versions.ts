@@ -30,11 +30,11 @@ const groupVersions = (
   versions: Array<SemVer>,
   recentValue: number,
   iteratee: SemVerIteratee
-): Record<string, Array<SemVer>> => {
+): Map<string, Array<SemVer>> => {
   const versionsGrouped = groupBy(versions, iteratee);
 
   if (recentValue < 0) {
-    return Object.fromEntries(
+    return new Map(
       Object.entries(versionsGrouped)
         .sort(([keyA], [keyB]) => Number(keyA) - Number(keyB))
         .slice(recentValue)
@@ -42,10 +42,10 @@ const groupVersions = (
   }
 
   if (!versionsGrouped[recentValue]) {
-    return {};
+    return new Map();
   }
 
-  return { [recentValue]: versionsGrouped[recentValue] };
+  return new Map([[String(recentValue), versionsGrouped[recentValue]]]);
 };
 
 /**
@@ -85,11 +85,11 @@ export const getRecentVersions = (
   );
 
   if (recentMinors === undefined) {
-    return Object.values(recentMajorVersions).flat();
+    return Array.from(recentMajorVersions.values()).flat();
   }
 
-  const res: Array<Array<Array<SemVer>>> = [];
-  for (const majors of Object.values(recentMajorVersions)) {
+  const res: Array<Array<SemVer>> = [];
+  for (const majors of recentMajorVersions.values()) {
     const recentMinorVersions = groupVersions(
       majors,
       recentMinors,
@@ -97,20 +97,20 @@ export const getRecentVersions = (
     );
 
     if (recentPatches === undefined) {
-      res.push(Object.values(recentMinorVersions));
+      res.push(...recentMinorVersions.values());
       continue;
     }
 
-    for (const minors of Object.values(recentMinorVersions)) {
+    for (const minors of recentMinorVersions.values()) {
       const recentPatchVersions = groupVersions(
         minors,
         recentPatches,
         patchVersionPredicate
       );
 
-      res.push(Object.values(recentPatchVersions));
+      res.push(...recentPatchVersions.values());
     }
   }
 
-  return res.flat().flat();
+  return res.flat();
 };
