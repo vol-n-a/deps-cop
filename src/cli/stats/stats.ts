@@ -1,5 +1,6 @@
 import chalk from "chalk";
 
+// TODO: Должен ли Severity быть взят из config? Одна и та же ли это сущность?
 import { Severity } from "src/config/index.js";
 
 import type { RuleViolation } from "./model/index.js";
