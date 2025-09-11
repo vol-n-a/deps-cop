@@ -10,7 +10,7 @@ class Stats {
   #errors: Array<RuleViolation> = [];
   #warnings: Array<RuleViolation> = [];
 
-  init(options: Options) {
+  init(options: Options): void {
     this.#options = options;
   }
 
