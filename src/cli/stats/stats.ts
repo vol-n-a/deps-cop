@@ -90,4 +90,6 @@ class Stats {
   };
 }
 
-export const stats = new Stats();
+const stats = new Stats();
+
+export { Stats, stats };
