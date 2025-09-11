@@ -21,6 +21,6 @@ program.parse();
 
 const cliOptions = program.opts<CliOptions>();
 
-stats.init(cliOptions);
+stats.init({ quiet: cliOptions.quiet });
 
 void runCheckers(cliOptions);
