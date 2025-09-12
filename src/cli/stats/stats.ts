@@ -55,10 +55,13 @@ class Stats {
   printProblems = (): { hasProblems: boolean } => {
     this.#assertIsOptionsInitialized(this.#options);
 
-    const shouldShowErrors = Boolean(this.#errors.length);
+    const errorsCount = this.#errors.length;
+    const warningsCount = this.#options.quiet ? 0 : this.#warnings.length;
+    const problemsCount = errorsCount + warningsCount;
+
+    const shouldShowErrors = Boolean(errorsCount);
     const shouldShowWarnings =
       !this.#options.quiet && Boolean(this.#warnings.length);
-    const totalProblems = this.#errors.length + this.#warnings.length;
 
     if (!shouldShowErrors && !shouldShowWarnings) {
       console.log(`\n${chalk.green("✅ All dependencies are valid")}\n`);
@@ -79,7 +82,7 @@ class Stats {
 
     console.error(
       `\n👮 ${chalk[shouldShowErrors ? "red" : "yellow"](
-        `${totalProblems} problems (${this.#errors.length} errors, ${this.#warnings.length} warnings)`
+        `${problemsCount} problems (${errorsCount} errors, ${warningsCount} warnings)`
       )}\n`
     );
 
