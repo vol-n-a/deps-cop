@@ -1,20 +1,18 @@
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, describe, expect, it, vi } from "vitest";
 
 import { Severity } from "src/config/index.js";
 
 import { RuleViolation } from "../rule-violation.js";
 
-describe("RuleViolation", () => {
-  beforeAll(() => {
-    vi.mock("chalk", () => ({
-      default: {
-        italic: vi.fn((text: unknown) => `italic: ${text}`),
-        red: vi.fn((text: unknown) => `red: ${text}`),
-        yellow: vi.fn((text: unknown) => `yellow: ${text}`),
-      },
-    }));
-  });
+vi.mock("chalk", () => ({
+  default: {
+    italic: vi.fn((text: unknown) => `<italic>${text}</italic>`),
+    red: vi.fn((text: unknown) => `<red>${text}</red>`),
+    yellow: vi.fn((text: unknown) => `<yellow>${text}</yellow>`),
+  },
+}));
 
+describe("RuleViolation", () => {
   afterAll(() => {
     vi.resetAllMocks();
   });
@@ -22,7 +20,9 @@ describe("RuleViolation", () => {
   it("can be stringified", () => {
     const ruleViolation = new RuleViolation("checkName", "errorMessage");
 
-    expect(ruleViolation.toString()).toEqual("red: checkName: errorMessage");
+    expect(ruleViolation.toString()).toEqual(
+      "<red>checkName: errorMessage</red>"
+    );
   });
 
   it("is an error by default", () => {
@@ -36,7 +36,9 @@ describe("RuleViolation", () => {
       severity: Severity.ERROR,
     });
 
-    expect(ruleViolation.toString()).toEqual("red: checkName: errorMessage");
+    expect(ruleViolation.toString()).toEqual(
+      "<red>checkName: errorMessage</red>"
+    );
     expect(ruleViolation.severity).toBe(Severity.ERROR);
   });
 
@@ -45,7 +47,9 @@ describe("RuleViolation", () => {
       severity: Severity.WARNING,
     });
 
-    expect(ruleViolation.toString()).toEqual("yellow: checkName: errorMessage");
+    expect(ruleViolation.toString()).toEqual(
+      "<yellow>checkName: errorMessage</yellow>"
+    );
     expect(ruleViolation.severity).toBe(Severity.WARNING);
   });
 
@@ -57,7 +61,7 @@ describe("RuleViolation", () => {
     });
 
     expect(ruleViolation.toString()).toEqual(
-      "yellow: checkName: errorMessage\n\tdescription\n\tReason: italic: reason"
+      "<yellow>checkName: errorMessage\n\tdescription\n\tReason: <italic>reason</italic></yellow>"
     );
   });
 });
