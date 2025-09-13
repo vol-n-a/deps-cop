@@ -1,20 +1,18 @@
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, describe, expect, it, vi } from "vitest";
 
 import { Severity } from "src/config/index.js";
 
 import { RuleViolation } from "../rule-violation.js";
 
-describe("RuleViolation", () => {
-  beforeAll(() => {
-    vi.mock("chalk", () => ({
-      default: {
-        italic: vi.fn((text: unknown) => `<italic>${text}</italic>`),
-        red: vi.fn((text: unknown) => `<red>${text}</red>`),
-        yellow: vi.fn((text: unknown) => `<yellow>${text}</yellow>`),
-      },
-    }));
-  });
+vi.mock("chalk", () => ({
+  default: {
+    italic: vi.fn((text: unknown) => `<italic>${text}</italic>`),
+    red: vi.fn((text: unknown) => `<red>${text}</red>`),
+    yellow: vi.fn((text: unknown) => `<yellow>${text}</yellow>`),
+  },
+}));
 
+describe("RuleViolation", () => {
   afterAll(() => {
     vi.resetAllMocks();
   });
