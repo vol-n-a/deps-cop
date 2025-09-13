@@ -20,13 +20,19 @@ describe("RuleViolation", () => {
   });
 
   it("can be stringified", () => {
-    const ruleViolation = new RuleViolation("checkName", "errorMessage");
+    const ruleViolation = new RuleViolation("checkName", "errorMessage", {
+      reason: "reason",
+    });
 
-    expect(ruleViolation.toString()).toEqual("red: checkName: errorMessage");
+    expect(ruleViolation.toString()).toEqual(
+      "red: checkName: errorMessage\n\tReason: italic: reason"
+    );
   });
 
   it("is an error by default", () => {
-    const ruleViolation = new RuleViolation("checkName", "errorMessage");
+    const ruleViolation = new RuleViolation("checkName", "errorMessage", {
+      reason: "reason",
+    });
 
     expect(ruleViolation.severity).toBe(Severity.ERROR);
   });
@@ -34,18 +40,24 @@ describe("RuleViolation", () => {
   it("colors the output red when severity is set to error", () => {
     const ruleViolation = new RuleViolation("checkName", "errorMessage", {
       severity: Severity.ERROR,
+      reason: "reason",
     });
 
-    expect(ruleViolation.toString()).toEqual("red: checkName: errorMessage");
+    expect(ruleViolation.toString()).toEqual(
+      "red: checkName: errorMessage\n\tReason: italic: reason"
+    );
     expect(ruleViolation.severity).toBe(Severity.ERROR);
   });
 
   it("colors the output yellow when severity is set to warning", () => {
     const ruleViolation = new RuleViolation("checkName", "errorMessage", {
       severity: Severity.WARNING,
+      reason: "reason",
     });
 
-    expect(ruleViolation.toString()).toEqual("yellow: checkName: errorMessage");
+    expect(ruleViolation.toString()).toEqual(
+      "yellow: checkName: errorMessage\n\tReason: italic: reason"
+    );
     expect(ruleViolation.severity).toBe(Severity.WARNING);
   });
 

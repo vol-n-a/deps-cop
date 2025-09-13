@@ -6,7 +6,7 @@ import { Severity } from "src/config/index.js";
 export type RuleViolationOptions = {
   description?: string;
   severity?: Severity;
-  reason?: string;
+  reason: string;
 };
 
 const mapLevelToColor: Record<Severity, typeof ForegroundColor> = {
@@ -18,19 +18,19 @@ export class RuleViolation {
   #checkName: string;
   #description?: string;
   #message: string;
-  #reason?: string;
+  #reason: string;
   #severity: Severity;
 
   constructor(
     checkName: string,
     message: string,
-    options?: RuleViolationOptions
+    options: RuleViolationOptions
   ) {
     this.#checkName = checkName;
     this.#description = options?.description;
     this.#message = message;
-    this.#reason = options?.reason;
-    this.#severity = options?.severity ?? Severity.ERROR;
+    this.#reason = options.reason;
+    this.#severity = options.severity ?? Severity.ERROR;
   }
 
   get severity(): Severity {
