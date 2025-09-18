@@ -1,20 +1,21 @@
 import crypto from "node:crypto";
 import { readFile, unlink, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 /**
- * Reads a TypeScript configuration file
+ * Imports the default export from a TypeScript module.
  *
  * Transpiles the TypeScript file to JavaScript at runtime,
  * writes it to a temporary .mjs file in the current working directory
  * and dynamically imports the result to access its default export
  *
  * @param configPath - Path to the TypeScript configuration file
- * @returns The default export from the TypeScript file
- * @throws {Error} If TypeScript is not installed
+ * @returns The default export from the TypeScript module
+ * @throws {Error} If TypeScript is not installed or there is no default export
  */
-export const readTypeScriptConfig = async (
+export const importTSModuleDefaultExport = async (
   configPath: string
 ): Promise<unknown> => {
   let typescript;
@@ -49,15 +50,22 @@ export const readTypeScriptConfig = async (
 
   // Create a unique temp file path
   const tempFileName = `depscop-config-${crypto.randomUUID()}.mjs`;
-  const tempFilePath = path.resolve(process.cwd(), tempFileName);
+  const tempFilePath = path.resolve(tmpdir(), tempFileName);
   const tempFileUrl = pathToFileURL(tempFilePath).href;
 
   // Write the code to the temp file
   await writeFile(tempFilePath, jsContent, "utf8");
 
   try {
-    // Import the module using a file URL
-    return (await import(tempFileUrl)).default;
+    const module = await import(tempFileUrl);
+
+    if (!("default" in module)) {
+      throw new Error(
+        `No default export found in TypeScript config file at ${configPath}`
+      );
+    }
+
+    return module.default;
   } finally {
     // Clean up the temp file
     await unlink(tempFilePath);
