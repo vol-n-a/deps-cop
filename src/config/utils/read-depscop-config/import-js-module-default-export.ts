@@ -11,5 +11,13 @@ export const importJSModuleDefaultExport = async (
   path: string
 ): Promise<unknown> => {
   const url = pathToFileURL(path).href;
-  return (await import(url)).default;
+  const module = await import(url);
+
+  if (!("default" in module)) {
+    throw new Error(
+      `No default export found in JavaScript config file at ${path}`
+    );
+  }
+
+  return module.default;
 };
