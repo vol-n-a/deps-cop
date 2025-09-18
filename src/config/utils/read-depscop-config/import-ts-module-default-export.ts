@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { readFile, unlink, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -49,7 +50,7 @@ export const importTSModuleDefaultExport = async (
 
   // Create a unique temp file path
   const tempFileName = `depscop-config-${crypto.randomUUID()}.mjs`;
-  const tempFilePath = path.resolve(process.cwd(), tempFileName);
+  const tempFilePath = path.resolve(tmpdir(), tempFileName);
   const tempFileUrl = pathToFileURL(tempFilePath).href;
 
   // Write the code to the temp file
