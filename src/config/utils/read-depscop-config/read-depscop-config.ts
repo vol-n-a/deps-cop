@@ -2,9 +2,9 @@ import path from "node:path";
 
 import type { DepscopConfig } from "../../model/index.js";
 import { resolveDepscopConfig } from "../resolve-depscop-config/resolve-depscop-config.js";
+import { importJSModuleDefaultExport } from "./import-js-module-default-export.js";
 import { importJSONModule } from "./import-json-module.js";
 import { isModuleNotFoundError } from "./is-module-not-found-error.js";
-import { readJavaScriptConfig } from "./read-javascript-config.js";
 import { readTypeScriptConfig } from "./read-typescript-config.js";
 
 const CONFIG_BASENAME = "depscop.config";
@@ -34,7 +34,7 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
       } else if (extension === ".ts" || extension === ".mts") {
         defaultExport = await readTypeScriptConfig(possibleConfigPath);
       } else {
-        defaultExport = await readJavaScriptConfig(possibleConfigPath);
+        defaultExport = await importJSModuleDefaultExport(possibleConfigPath);
       }
     } catch (error) {
       // If module not found, continue to the next file
