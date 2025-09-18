@@ -57,8 +57,15 @@ export const importTSModuleDefaultExport = async (
   await writeFile(tempFilePath, jsContent, "utf8");
 
   try {
-    // Import the module using a file URL
-    return (await import(tempFileUrl)).default;
+    const module = await import(tempFileUrl);
+
+    if (!("default" in module)) {
+      throw new Error(
+        `No default export found in TypeScript config file at ${configPath}`
+      );
+    }
+
+    return module.default;
   } finally {
     // Clean up the temp file
     await unlink(tempFilePath);
