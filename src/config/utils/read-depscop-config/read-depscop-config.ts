@@ -4,8 +4,8 @@ import type { DepscopConfig } from "../../model/index.js";
 import { resolveDepscopConfig } from "../resolve-depscop-config/resolve-depscop-config.js";
 import { importJSModuleDefaultExport } from "./import-js-module-default-export.js";
 import { importJSONModule } from "./import-json-module.js";
+import { importTSModuleDefaultExport } from "./import-ts-module-default-export.js";
 import { isModuleNotFoundError } from "./is-module-not-found-error.js";
-import { readTypeScriptConfig } from "./read-typescript-config.js";
 
 const CONFIG_BASENAME = "depscop.config";
 const EXTENSIONS_PRIORITY = [".json", ".ts", ".mts", ".js", ".mjs"] as const;
@@ -32,7 +32,7 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
       if (extension === ".json") {
         defaultExport = await importJSONModule(possibleConfigPath);
       } else if (extension === ".ts" || extension === ".mts") {
-        defaultExport = await readTypeScriptConfig(possibleConfigPath);
+        defaultExport = await importTSModuleDefaultExport(possibleConfigPath);
       } else {
         defaultExport = await importJSModuleDefaultExport(possibleConfigPath);
       }

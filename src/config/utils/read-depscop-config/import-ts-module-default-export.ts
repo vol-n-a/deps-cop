@@ -4,17 +4,17 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 /**
- * Reads a TypeScript configuration file
+ * Imports the default export from a TypeScript module.
  *
  * Transpiles the TypeScript file to JavaScript at runtime,
  * writes it to a temporary .mjs file in the current working directory
  * and dynamically imports the result to access its default export
  *
  * @param configPath - Path to the TypeScript configuration file
- * @returns The default export from the TypeScript file
- * @throws {Error} If TypeScript is not installed
+ * @returns The default export from the TypeScript module
+ * @throws {Error} If TypeScript is not installed or there is no default export
  */
-export const readTypeScriptConfig = async (
+export const importTSModuleDefaultExport = async (
   configPath: string
 ): Promise<unknown> => {
   let typescript;
