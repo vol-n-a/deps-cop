@@ -86,6 +86,6 @@ describe("importTSModuleDefaultExport", () => {
       "TypeScript is required to process .ts configuration files. Please install it as a dependency."
     );
 
-    vi.unmock("typescript");
+    vi.doUnmock("typescript");
   });
 });
