@@ -4,45 +4,35 @@ import { describe, expect, it } from "vitest";
 
 import { resolveDepscopConfig } from "../resolve-depscop-config.js";
 
-const validConfig = { a: 1 };
-const nonObjectValues = [null, undefined, 123, "string", false, Symbol("sym")];
-
 describe("resolveDepscopConfig", () => {
   it("passes through object", async () => {
-    expect(await resolveDepscopConfig(validConfig)).toEqual(validConfig);
-  });
-
-  it("passes through function returning object", async () => {
-    expect(await resolveDepscopConfig(() => validConfig)).toEqual(validConfig);
-  });
-
-  it("passes through promise-returning function resolving to object", async () => {
-    expect(
-      await resolveDepscopConfig(() => Promise.resolve(validConfig))
-    ).toEqual(validConfig);
+    expect(await resolveDepscopConfig({ a: 1 })).toEqual({ a: 1 });
   });
 
   it("throws on non-object", async () => {
-    for (const nonObjectValue of nonObjectValues) {
-      await expect(resolveDepscopConfig(nonObjectValue)).rejects.toThrow(
-        "DepsCop configuration must be a JavaScript object"
-      );
-    }
-  });
-
-  it("throws on function returning non-object", async () => {
-    for (const nonObjectValue of nonObjectValues) {
-      await expect(resolveDepscopConfig(() => nonObjectValue)).rejects.toThrow(
-        "DepsCop configuration must be a JavaScript object"
-      );
-    }
-  });
-
-  it("throws on promise-returning function resolving to non-object", async () => {
-    for (const nonObjectValue of nonObjectValues) {
-      await expect(
-        resolveDepscopConfig(() => Promise.resolve(nonObjectValue))
-      ).rejects.toThrow("DepsCop configuration must be a JavaScript object");
-    }
+    await expect(resolveDepscopConfig(null)).rejects.toThrow(
+      "DepsCop configuration must be a JavaScript object"
+    );
+    await expect(resolveDepscopConfig(undefined)).rejects.toThrow(
+      "DepsCop configuration must be a JavaScript object"
+    );
+    await expect(resolveDepscopConfig(123)).rejects.toThrow(
+      "DepsCop configuration must be a JavaScript object"
+    );
+    await expect(resolveDepscopConfig("string")).rejects.toThrow(
+      "DepsCop configuration must be a JavaScript object"
+    );
+    await expect(resolveDepscopConfig(false)).rejects.toThrow(
+      "DepsCop configuration must be a JavaScript object"
+    );
+    await expect(resolveDepscopConfig(Symbol("sym"))).rejects.toThrow(
+      "DepsCop configuration must be a JavaScript object"
+    );
+    await expect(resolveDepscopConfig(() => ({ a: 1 }))).rejects.toThrow(
+      "DepsCop configuration must be a JavaScript object"
+    );
+    await expect(
+      resolveDepscopConfig(() => Promise.resolve({ a: 1 }))
+    ).rejects.toThrow("DepsCop configuration must be a JavaScript object");
   });
 });
