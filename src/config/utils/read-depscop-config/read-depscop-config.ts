@@ -8,7 +8,13 @@ import { importTSModuleDefaultExport } from "./import-ts-module-default-export.j
 import { isModuleNotFoundError } from "./is-module-not-found-error.js";
 
 const CONFIG_BASENAME = "depscop.config";
-const EXTENSIONS_PRIORITY = [".json", ".ts", ".mts", ".js", ".mjs"] as const;
+const CONFIGS_INFO = [
+  { extension: ".json", importFn: importJSONModule },
+  { extension: ".ts", importFn: importTSModuleDefaultExport },
+  { extension: ".mts", importFn: importTSModuleDefaultExport },
+  { extension: ".js", importFn: importJSModuleDefaultExport },
+  { extension: ".mjs", importFn: importJSModuleDefaultExport },
+];
 
 /**
  * Loads and returns the contents of the depscop configuration file
@@ -22,24 +28,14 @@ const EXTENSIONS_PRIORITY = [".json", ".ts", ".mts", ".js", ".mjs"] as const;
 export const readDepscopConfig = async (): Promise<DepscopConfig> => {
   // Calculate config paths at function execution time
   // (not at module load) to always use the current working directory
-  const possibleConfigPaths = EXTENSIONS_PRIORITY.map((extension) => ({
-    path: path.resolve(process.cwd(), `${CONFIG_BASENAME}${extension}`),
-    extension,
-  }));
+  const cwd = process.cwd();
 
   // Try each file according to extension priority until a valid config file is found
-  for (const { path: possibleConfigPath, extension } of possibleConfigPaths) {
-    let rawConfig: unknown;
+  for (const { extension, importFn } of CONFIGS_INFO) {
+    const configPath = path.join(cwd, `${CONFIG_BASENAME}${extension}`);
 
     try {
-      if (extension === ".json") {
-        rawConfig = await importJSONModule(possibleConfigPath);
-      } else if (extension === ".ts" || extension === ".mts") {
-        rawConfig = await importTSModuleDefaultExport(possibleConfigPath);
-      } else {
-        rawConfig = await importJSModuleDefaultExport(possibleConfigPath);
-      }
-
+      const rawConfig = await importFn(configPath);
       const config =
         typeof rawConfig === "function" ? await rawConfig() : rawConfig;
 
@@ -50,15 +46,13 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
         continue;
       }
 
-      throw new Error(
-        `Error processing ${possibleConfigPath}: ${getMessage(error)}`
-      );
+      throw new Error(`Error processing ${configPath}: ${getMessage(error)}`);
     }
   }
 
   // None of the files worked
   throw new Error(
-    `No configuration file found. Please create one of the following files in your project root: ${EXTENSIONS_PRIORITY.map((ext) => `${CONFIG_BASENAME}${ext}`).join(", ")}.`
+    `No configuration file found. Please create one of the following files in your project root: ${CONFIGS_INFO.map(({ extension }) => `${CONFIG_BASENAME}${extension}`).join(", ")}.`
   );
 };
 
