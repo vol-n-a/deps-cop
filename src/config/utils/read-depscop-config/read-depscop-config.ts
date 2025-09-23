@@ -45,7 +45,9 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
         continue;
       }
 
-      throw new Error(`Error reading ${possibleConfigPath}: ${error}`);
+      throw new Error(
+        `Error reading ${possibleConfigPath}: ${getMessage(error)}`
+      );
     }
 
     return await resolveDepscopConfig(defaultExport);
@@ -56,3 +58,8 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
     `No configuration file found. Please create one of the following files in your project root: ${EXTENSIONS_PRIORITY.map((ext) => `${CONFIG_BASENAME}${ext}`).join(", ")}.`
   );
 };
+
+const getMessage = (error: unknown): string =>
+  typeof error === "object" && error !== null && "message" in error
+    ? String(error.message)
+    : String(error);
