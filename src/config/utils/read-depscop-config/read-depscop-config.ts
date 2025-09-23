@@ -39,6 +39,8 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
       } else {
         defaultExport = await importJSModuleDefaultExport(possibleConfigPath);
       }
+
+      return await resolveDepscopConfig(defaultExport);
     } catch (error) {
       // If module not found, continue to the next file
       if (isModuleNotFoundError(error)) {
@@ -46,11 +48,9 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
       }
 
       throw new Error(
-        `Error reading ${possibleConfigPath}: ${getMessage(error)}`
+        `Error processing ${possibleConfigPath}: ${getMessage(error)}`
       );
     }
-
-    return await resolveDepscopConfig(defaultExport);
   }
 
   // None of the files worked
