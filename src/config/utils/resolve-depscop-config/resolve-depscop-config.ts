@@ -1,5 +1,4 @@
 import type { DepscopConfig } from "../../model/index.js";
-import { isPromiseLike } from "./is-promise-like.js";
 import { isRecord } from "./is-record.js";
 
 /**
@@ -15,17 +14,8 @@ import { isRecord } from "./is-record.js";
  * @throws {Error} If the configuration is not a valid JavaScript object
  */
 export const resolveDepscopConfig = async (
-  defaultExport: unknown
+  config: unknown
 ): Promise<DepscopConfig> => {
-  let config: unknown;
-
-  if (typeof defaultExport === "function") {
-    const result = defaultExport();
-    config = isPromiseLike(result) ? await result : result;
-  } else {
-    config = defaultExport;
-  }
-
   if (!isRecord(config)) {
     throw new Error("DepsCop configuration must be a JavaScript object");
   }

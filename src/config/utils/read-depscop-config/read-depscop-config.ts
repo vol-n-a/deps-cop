@@ -29,18 +29,21 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
 
   // Try each file according to extension priority until a valid config file is found
   for (const { path: possibleConfigPath, extension } of possibleConfigPaths) {
-    let defaultExport: unknown;
+    let rawConfig: unknown;
 
     try {
       if (extension === ".json") {
-        defaultExport = await importJSONModule(possibleConfigPath);
+        rawConfig = await importJSONModule(possibleConfigPath);
       } else if (extension === ".ts" || extension === ".mts") {
-        defaultExport = await importTSModuleDefaultExport(possibleConfigPath);
+        rawConfig = await importTSModuleDefaultExport(possibleConfigPath);
       } else {
-        defaultExport = await importJSModuleDefaultExport(possibleConfigPath);
+        rawConfig = await importJSModuleDefaultExport(possibleConfigPath);
       }
 
-      return await resolveDepscopConfig(defaultExport);
+      const config =
+        typeof rawConfig === "function" ? await rawConfig() : rawConfig;
+
+      return await resolveDepscopConfig(config);
     } catch (error) {
       // If module not found, continue to the next file
       if (isModuleNotFoundError(error)) {
