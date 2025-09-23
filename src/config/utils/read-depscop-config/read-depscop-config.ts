@@ -9,10 +9,6 @@ import { isModuleNotFoundError } from "./is-module-not-found-error.js";
 
 const CONFIG_BASENAME = "depscop.config";
 const EXTENSIONS_PRIORITY = [".json", ".ts", ".mts", ".js", ".mjs"] as const;
-const possibleConfigPaths = EXTENSIONS_PRIORITY.map((extension) => ({
-  path: path.resolve(process.cwd(), `${CONFIG_BASENAME}${extension}`),
-  extension,
-}));
 
 /**
  * Loads and returns the contents of the depscop configuration file
@@ -24,6 +20,13 @@ const possibleConfigPaths = EXTENSIONS_PRIORITY.map((extension) => ({
  * @throws {Error} If the configuration file does not exist, can not be read or is invalid
  */
 export const readDepscopConfig = async (): Promise<DepscopConfig> => {
+  // Calculate config paths at function execution time
+  // (not at module load) to always use the current working directory
+  const possibleConfigPaths = EXTENSIONS_PRIORITY.map((extension) => ({
+    path: path.resolve(process.cwd(), `${CONFIG_BASENAME}${extension}`),
+    extension,
+  }));
+
   // Try each file according to extension priority until a valid config file is found
   for (const { path: possibleConfigPath, extension } of possibleConfigPaths) {
     let defaultExport: unknown;
@@ -36,16 +39,18 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
       } else {
         defaultExport = await importJSModuleDefaultExport(possibleConfigPath);
       }
+
+      return await resolveDepscopConfig(defaultExport);
     } catch (error) {
       // If module not found, continue to the next file
       if (isModuleNotFoundError(error)) {
         continue;
       }
 
-      throw new Error(`Error reading ${possibleConfigPath}: ${error}`);
+      throw new Error(
+        `Error processing ${possibleConfigPath}: ${getMessage(error)}`
+      );
     }
-
-    return await resolveDepscopConfig(defaultExport);
   }
 
   // None of the files worked
@@ -53,3 +58,8 @@ export const readDepscopConfig = async (): Promise<DepscopConfig> => {
     `No configuration file found. Please create one of the following files in your project root: ${EXTENSIONS_PRIORITY.map((ext) => `${CONFIG_BASENAME}${ext}`).join(", ")}.`
   );
 };
+
+const getMessage = (error: unknown): string =>
+  typeof error === "object" && error !== null && "message" in error
+    ? String(error.message)
+    : String(error);
