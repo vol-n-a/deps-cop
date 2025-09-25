@@ -32,7 +32,9 @@ export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
       forbidden && {
         title: "Forbidden rules check",
         task: () =>
-          forbiddenChecker(dependenciesInstalled, forbidden, cliOptions),
+          forbiddenChecker(dependenciesInstalled, forbidden, {
+            quiet: cliOptions.quiet,
+          }),
       },
       recent && {
         title: "Recent rules check",
