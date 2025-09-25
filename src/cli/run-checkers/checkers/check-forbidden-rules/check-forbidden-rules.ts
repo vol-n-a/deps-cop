@@ -60,7 +60,7 @@ const checkForbiddenRule = (
   );
 };
 
-export const forbiddenChecker = (
+export const checkForbiddenRules = (
   dependenciesInstalled: DependenciesInstalled,
   forbiddenRuleset: ForbiddenRuleset,
   options: CheckForbiddenRuleOptions
