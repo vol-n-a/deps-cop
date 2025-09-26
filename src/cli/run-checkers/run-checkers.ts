@@ -5,7 +5,7 @@ import { readDepscopConfig } from "src/config/index.js";
 import type { CliOptions } from "../model/index.js";
 import { stats } from "../stats/index.js";
 import {
-  forbiddenChecker,
+  checkForbiddenRules,
   recentChecker,
   semverChecker,
 } from "./checkers/index.js";
@@ -32,7 +32,9 @@ export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
       forbidden && {
         title: "Forbidden rules check",
         task: () =>
-          forbiddenChecker(dependenciesInstalled, forbidden, cliOptions),
+          checkForbiddenRules(dependenciesInstalled, forbidden, {
+            quiet: cliOptions.quiet,
+          }),
       },
       recent && {
         title: "Recent rules check",

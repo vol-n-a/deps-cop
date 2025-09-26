@@ -7,22 +7,22 @@ import type {
 } from "src/config/index.js";
 import { Severity } from "src/config/index.js";
 
-import type { CliOptions } from "../../../model/index.js";
 import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
 import { isArrayOfArrays } from "../utils/index.js";
+import type { CheckForbiddenRuleOptions } from "./model/index.js";
 import { ForbiddenRuleViolation } from "./model/index.js";
 
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,
   dependencyName: DependencyName,
   [version, reason, ruleOptions]: ForbiddenRule,
-  cliOptions: CliOptions
+  options: CheckForbiddenRuleOptions
 ): void => {
   const dependencyVersion = dependenciesInstalled.get(dependencyName);
 
   // Skip rule check if severity is WARNING and quiet mode is enabled
-  if (ruleOptions?.severity === Severity.WARNING && cliOptions.quiet) {
+  if (ruleOptions?.severity === Severity.WARNING && options.quiet) {
     return;
   }
 
@@ -60,22 +60,22 @@ const checkForbiddenRule = (
   );
 };
 
-export const forbiddenChecker = (
+export const checkForbiddenRules = (
   dependenciesInstalled: DependenciesInstalled,
   forbiddenRuleset: ForbiddenRuleset,
-  cliOptions: CliOptions
+  options: CheckForbiddenRuleOptions
 ): void => {
   Object.entries(forbiddenRuleset).forEach((forbiddenRulesEntry) => {
     const [dependency, ruleSet] = forbiddenRulesEntry;
 
     if (isArrayOfArrays(ruleSet)) {
       ruleSet.forEach((rule) => {
-        checkForbiddenRule(dependenciesInstalled, dependency, rule, cliOptions);
+        checkForbiddenRule(dependenciesInstalled, dependency, rule, options);
       });
 
       return;
     }
 
-    checkForbiddenRule(dependenciesInstalled, dependency, ruleSet, cliOptions);
+    checkForbiddenRule(dependenciesInstalled, dependency, ruleSet, options);
   });
 };
