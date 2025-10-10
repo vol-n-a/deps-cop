@@ -100,7 +100,7 @@ const checkRecentRule = async (
   );
 };
 
-export const recentChecker = async (
+export const checkRecentRules = async (
   dependenciesInstalled: DependenciesInstalled,
   recentRuleset: RecentRuleset,
   cliOptions: CliOptions

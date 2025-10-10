@@ -7,7 +7,7 @@ import { stats } from "../stats/index.js";
 import {
   checkAllowedRules,
   checkForbiddenRules,
-  recentChecker,
+  checkRecentRules,
 } from "./checkers/index.js";
 import {
   getDependenciesInstalled,
@@ -46,7 +46,7 @@ export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
       recent && {
         title: "Recent rules check",
         task: async () =>
-          recentChecker(dependenciesInstalled, recent, cliOptions),
+          checkRecentRules(dependenciesInstalled, recent, cliOptions),
       },
     ].filter(isNonNullable),
     {
