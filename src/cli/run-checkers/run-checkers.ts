@@ -32,7 +32,9 @@ export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
       allowed && {
         title: "Allowed rules check",
         task: () =>
-          checkAllowedRules(dependenciesInstalled, allowed, cliOptions),
+          checkAllowedRules(dependenciesInstalled, allowed, {
+            quiet: cliOptions.quiet,
+          }),
       },
       forbidden && {
         title: "Forbidden rules check",

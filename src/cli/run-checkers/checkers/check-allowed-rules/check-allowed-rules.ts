@@ -7,22 +7,22 @@ import type {
 } from "src/config/index.js";
 import { Severity } from "src/config/index.js";
 
-import type { CliOptions } from "../../../model/index.js";
 import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
 import { isArrayOfArrays } from "../utils/index.js";
+import type { CheckAllowedRuleOptions } from "./model/index.js";
 import { AllowedRuleViolation } from "./model/index.js";
 
 const checkAllowedRule = (
   dependenciesInstalled: DependenciesInstalled,
   dependencyName: DependencyName,
   [version, reason, ruleOptions]: AllowedRule,
-  cliOptions: CliOptions
+  options: CheckAllowedRuleOptions
 ): void => {
   const dependencyVersion = dependenciesInstalled.get(dependencyName);
 
   // Skip rule check if severity is WARNING and quiet mode is enabled
-  if (ruleOptions?.severity === Severity.WARNING && cliOptions.quiet) {
+  if (ruleOptions?.severity === Severity.WARNING && options.quiet) {
     return;
   }
 
@@ -51,17 +51,17 @@ const checkAllowedRule = (
 export const checkAllowedRules = (
   dependenciesInstalled: DependenciesInstalled,
   allowedRuleset: AllowedRuleset,
-  cliOptions: CliOptions
+  options: CheckAllowedRuleOptions
 ): void => {
   Object.entries(allowedRuleset).forEach(([dependency, ruleSet]) => {
     if (isArrayOfArrays(ruleSet)) {
       ruleSet.forEach((rule) => {
-        checkAllowedRule(dependenciesInstalled, dependency, rule, cliOptions);
+        checkAllowedRule(dependenciesInstalled, dependency, rule, options);
       });
 
       return;
     }
 
-    checkAllowedRule(dependenciesInstalled, dependency, ruleSet, cliOptions);
+    checkAllowedRule(dependenciesInstalled, dependency, ruleSet, options);
   });
 };
