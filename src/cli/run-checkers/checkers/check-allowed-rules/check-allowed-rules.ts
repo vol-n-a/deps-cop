@@ -1,9 +1,9 @@
 import { satisfies } from "semver";
 
 import type {
+  AllowedRule,
+  AllowedRuleset,
   DependencyName,
-  SemverRule,
-  SemverRuleset,
 } from "src/config/index.js";
 import { Severity } from "src/config/index.js";
 
@@ -11,12 +11,12 @@ import type { CliOptions } from "../../../model/index.js";
 import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
 import { isArrayOfArrays } from "../utils/index.js";
-import { SemverRuleViolation } from "./model/index.js";
+import { AllowedRuleViolation } from "./model/index.js";
 
-const checkSemverRule = (
+const checkAllowedRule = (
   dependenciesInstalled: DependenciesInstalled,
   dependencyName: DependencyName,
-  [version, reason, ruleOptions]: SemverRule,
+  [version, reason, ruleOptions]: AllowedRule,
   cliOptions: CliOptions
 ): void => {
   const dependencyVersion = dependenciesInstalled.get(dependencyName);
@@ -38,7 +38,7 @@ const checkSemverRule = (
 
   // Report the error
   stats.addRuleViolation(
-    new SemverRuleViolation(
+    new AllowedRuleViolation(
       `${dependencyName}@${dependencyVersion} does not satisfy ${dependencyName}@${version}`,
       {
         reason,
@@ -48,20 +48,20 @@ const checkSemverRule = (
   );
 };
 
-export const semverChecker = (
+export const checkAllowedRules = (
   dependenciesInstalled: DependenciesInstalled,
-  semverRuleset: SemverRuleset,
+  allowedRuleset: AllowedRuleset,
   cliOptions: CliOptions
 ): void => {
-  Object.entries(semverRuleset).forEach(([dependency, ruleSet]) => {
+  Object.entries(allowedRuleset).forEach(([dependency, ruleSet]) => {
     if (isArrayOfArrays(ruleSet)) {
       ruleSet.forEach((rule) => {
-        checkSemverRule(dependenciesInstalled, dependency, rule, cliOptions);
+        checkAllowedRule(dependenciesInstalled, dependency, rule, cliOptions);
       });
 
       return;
     }
 
-    checkSemverRule(dependenciesInstalled, dependency, ruleSet, cliOptions);
+    checkAllowedRule(dependenciesInstalled, dependency, ruleSet, cliOptions);
   });
 };

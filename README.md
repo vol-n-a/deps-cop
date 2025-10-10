@@ -21,9 +21,9 @@ DepsCop is a dependency management tool that helps enforce rules and restriction
 
 ## Features
 
+- **Version Range**: Enforce specific semver patterns ([`allowed` ruleset](#allowed))
 - **Package Blocking**: Block specific versions or all versions of packages ([`forbidden` ruleset](#forbidden))
 - **Version Recency**: Enforce using recent versions of packages ([`recent` ruleset](#recent))
-- **Version Range**: Enforce specific semver patterns ([`semver` ruleset](#semver))
 
 ## Installation
 
@@ -42,6 +42,29 @@ npx depscop
 DepsCop provides three types of rulesets that help you control and manage your project's dependencies. A dependency can be specified in one or multiple rulesets.
 
 A dependency can be specified in multiple rulesets and can have multiple rules within each ruleset. Each rule must include a custom message that explains why the rule exists, helping your team understand the reasoning behind dependency restrictions.
+
+### Allowed
+
+Rules that enforce specific version ranges using standard semver syntax. Package versions that satisfy the specified semver patterns are considered **valid**.
+
+```json
+{
+  "allowed": {
+    "next": ["^15", "Our codebase infrastructure is built for next@15"],
+    "react": [
+      ["^18", "Our codebase infrastructure is built for react@18"],
+      [
+        "<19",
+        "Our codebase does not yet support react@19 due to migration requirements - please use react@18"
+      ]
+    ]
+  }
+}
+```
+
+- Uses standard semver syntax (e.g., `^`, `~`, `>`, `<`, `>=`, `<=`)
+- Multiple rules per package are supported
+- Rules are evaluated in order
 
 ### Forbidden
 
@@ -111,29 +134,6 @@ Version syntax:
 - Multiple rules per package are supported
 - Rules are evaluated in order
 
-### Semver
-
-Rules that enforce specific version ranges using standard semver syntax. Package versions that satisfy the specified semver patterns are considered **valid**.
-
-```json
-{
-  "semver": {
-    "next": ["^15", "Our codebase infrastructure is built for next@15"],
-    "react": [
-      ["^18", "Our codebase infrastructure is built for react@18"],
-      [
-        "<19",
-        "Our codebase does not yet support react@19 due to migration requirements - please use react@18"
-      ]
-    ]
-  }
-}
-```
-
-- Uses standard semver syntax (e.g., `^`, `~`, `>`, `<`, `>=`, `<=`)
-- Multiple rules per package are supported
-- Rules are evaluated in order
-
 ## Rule Options
 
 Each rule within any ruleset may include optional configurations to control how rule checks are performed, which can be passed as the third element of a rule array (after the version pattern and reason).
@@ -152,10 +152,10 @@ Each rule within any ruleset may include optional configurations to control how 
 }
 ```
 
-| Option       | Type                   | Description                                                                                                                                                                                                                                                                                                                        | Default Value | Ruleset(s)                |
-| ------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------------------- |
-| `severity`   | `"error" \| "warning"` | Controls how rule violations are handled. `"error"` violations cause the `depscop` command to exit with code 1, while `"warning"` violations are reported but don't cause failure.                                                                                                                                                 | `"error"`     | forbidden, recent, semver |
-| `prerelease` | `boolean`              | Controls whether prerelease versions (e.g., alpha, beta, rc) are included when determining recent versions. If `true`, prerelease versions are considered when evaluating the most recent versions for the rule. If `false`, prerelease versions are excluded from the calculation. This option only affects the `recent` ruleset. | `false`       | recent                    |
+| Option       | Type                   | Description                                                                                                                                                                                                                                                                                                                        | Default Value | Ruleset(s)                 |
+| ------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------------- |
+| `severity`   | `"error" \| "warning"` | Controls how rule violations are handled. `"error"` violations cause the `depscop` command to exit with code 1, while `"warning"` violations are reported but don't cause failure.                                                                                                                                                 | `"error"`     | forbidden, recent, allowed |
+| `prerelease` | `boolean`              | Controls whether prerelease versions (e.g., alpha, beta, rc) are included when determining recent versions. If `true`, prerelease versions are considered when evaluating the most recent versions for the rule. If `false`, prerelease versions are excluded from the calculation. This option only affects the `recent` ruleset. | `false`       | recent                     |
 
 ## Configuration
 
@@ -211,7 +211,7 @@ This is the most straightforward way to configure DepsCop. Simply provide a stat
   "recent": {
     "eslint": ["9.-3", "Keep ESLint within last 3 minor versions"]
   },
-  "semver": {
+  "allowed": {
     "react": ["^18", "Our codebase infrastructure is built for react@18"]
   }
 }
@@ -341,7 +341,7 @@ npx depscop --quiet
       ]
     ]
   },
-  "semver": {
+  "allowed": {
     "next": ["^15", "Our codebase infrastructure is built for next@15"],
     "react": [
       ["^18", "Our codebase infrastructure is built for react@18"],

@@ -1,4 +1,6 @@
 export type {
+  AllowedRule,
+  AllowedRuleset,
   DependencyName,
   DepscopConfig,
   ForbiddenRule,
@@ -6,8 +8,6 @@ export type {
   RecentRule,
   RecentRuleset,
   RuleOptions,
-  SemverRule,
-  SemverRuleset,
 } from "./model/index.js";
 export { Severity } from "./model/index.js";
 export { readDepscopConfig } from "./utils/index.js";

@@ -19,6 +19,17 @@ type RuleOptions = {
   severity?: Severity;
 };
 
+// --- ALLOWED RULESET ---
+
+type AllowedRule = [Version, Reason, RuleOptions?];
+
+type AllowedRuleset = Record<
+  DependencyName,
+  AllowedRule | Array<AllowedRule>
+> & {
+  [__brand]?: "allowed";
+};
+
 // --- FORBIDDEN RULESET ---
 
 type ForbiddenRule = [Version, Reason, RuleOptions?];
@@ -50,23 +61,17 @@ type RecentRuleset = Record<DependencyName, RecentRule | Array<RecentRule>> & {
   [__brand]?: "recent";
 };
 
-// --- SEMVER RULESET ---
-
-type SemverRule = [Version, Reason, RuleOptions?];
-
-type SemverRuleset = Record<DependencyName, SemverRule | Array<SemverRule>> & {
-  [__brand]?: "semver";
-};
-
 // --- DEPSCOP CONFIG ---
 
 type DepscopConfig = {
+  allowed?: AllowedRuleset;
   forbidden?: ForbiddenRuleset;
   recent?: RecentRuleset;
-  semver?: SemverRuleset;
 };
 
 export type {
+  AllowedRule,
+  AllowedRuleset,
   DependencyName,
   DepscopConfig,
   ForbiddenRule,
@@ -75,8 +80,6 @@ export type {
   RecentRule,
   RecentRuleset,
   RuleOptions,
-  SemverRule,
-  SemverRuleset,
   Version,
 };
 export { Severity };
