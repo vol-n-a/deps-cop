@@ -1,5 +1,5 @@
 import type { SemVer } from "semver";
-import { parse } from "semver";
+import { parse, validRange } from "semver";
 
 import type {
   DependencyName,
@@ -21,6 +21,13 @@ const checkRecentRule = async (
   [version, reason, ruleOptions]: RecentRule,
   options: CheckRecentRuleOptions
 ): Promise<void> => {
+  // If required version is a valid semver range, throw an error
+  if (validRange(version)) {
+    throw new Error(
+      `Semver ranges like "${version}" are not supported in Recent ruleset. Use Allowed ruleset ("allowed" field in depscop config) instead for semver range constraints.`
+    );
+  }
+
   const dependencyVersion = dependenciesInstalled.get(dependencyName);
 
   // Skip rule check if severity is WARNING and quiet mode is enabled
