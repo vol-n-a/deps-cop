@@ -24,7 +24,7 @@ describe("checkAllowedRules", () => {
     addRuleViolationSpy.mockClear();
   });
 
-  it("adds violation when installed version does not match allowed semver range", () => {
+  it("adds error when installed version does not match allowed semver range", () => {
     const rules: AllowedRuleset = {
       dependency: ["^3.0.0", "reason"],
     };
