@@ -66,9 +66,7 @@ const checkRecentRule = async (
     return;
   }
 
-  const indexOfRootVersion = dependencyVersion
-    ? versionsAllowed.indexOf(dependencyVersion)
-    : -1;
+  const indexOfRootVersion = versionsAllowed.indexOf(dependencyVersion);
   const isVersionAllowed = indexOfRootVersion !== -1;
   const isVersionLatest = indexOfRootVersion === versionsAllowed.length - 1;
 
