@@ -8,23 +8,23 @@ import type {
 } from "src/config/index.js";
 import { Severity } from "src/config/index.js";
 
-import type { CliOptions } from "../../../model/index.js";
 import { stats } from "../../../stats/index.js";
 import type { DependenciesInstalled } from "../../utils/index.js";
 import { isArrayOfArrays } from "../utils/index.js";
-import { RecentRuleViolation } from "./model/recent-rule-violation.js";
+import type { CheckRecentRuleOptions } from "./model/index.js";
+import { RecentRuleViolation } from "./model/index.js";
 import { getPackageVersions, getRecentVersions } from "./utils/index.js";
 
 const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,
   dependencyName: DependencyName,
   [version, reason, ruleOptions]: RecentRule,
-  cliOptions: CliOptions
+  options: CheckRecentRuleOptions
 ): Promise<void> => {
   const dependencyVersion = dependenciesInstalled.get(dependencyName);
 
   // Skip rule check if severity is WARNING and quiet mode is enabled
-  if (ruleOptions?.severity === Severity.WARNING && cliOptions.quiet) {
+  if (ruleOptions?.severity === Severity.WARNING && options.quiet) {
     return;
   }
 
@@ -34,7 +34,7 @@ const checkRecentRule = async (
   }
 
   const shouldIncludePrerelease =
-    ruleOptions?.prerelease || cliOptions.allowPrerelease;
+    ruleOptions?.prerelease || options.allowPrerelease;
   const versions = (await getPackageVersions(dependencyName))
     .map((ver) => parse(ver))
     .filter(
@@ -73,7 +73,7 @@ const checkRecentRule = async (
   // If the installed dependency satisfies the rule, but not the latest allowed version is installed, report the warning
   // This is always a warning because the rules are still satisfied, but a newer allowed version is available
   // The severity of this check can not be overridden by rule option "severity"
-  if (!cliOptions.quiet && isVersionAllowed && !isVersionLatest) {
+  if (!options.quiet && isVersionAllowed && !isVersionLatest) {
     stats.addRuleViolation(
       new RecentRuleViolation(
         `${dependencyName}@${dependencyVersion} may be outdated soon`,
@@ -103,7 +103,7 @@ const checkRecentRule = async (
 export const checkRecentRules = async (
   dependenciesInstalled: DependenciesInstalled,
   recentRuleset: RecentRuleset,
-  cliOptions: CliOptions
+  options: CheckRecentRuleOptions
 ): Promise<void> => {
   await Promise.all(
     Object.entries(recentRuleset).flatMap((recentRulesEntry) => {
@@ -111,7 +111,7 @@ export const checkRecentRules = async (
 
       if (isArrayOfArrays(ruleSet)) {
         return ruleSet.map((rule) =>
-          checkRecentRule(dependenciesInstalled, dependency, rule, cliOptions)
+          checkRecentRule(dependenciesInstalled, dependency, rule, options)
         );
       }
 
@@ -119,7 +119,7 @@ export const checkRecentRules = async (
         dependenciesInstalled,
         dependency,
         ruleSet,
-        cliOptions
+        options
       );
     })
   );
