@@ -24,7 +24,7 @@ describe("checkAllowedRules", () => {
     addRuleViolationSpy.mockClear();
   });
 
-  it("adds violation when installed version does not match allowed semver range", () => {
+  it("adds error when installed version does not match allowed semver range", () => {
     const rules: AllowedRuleset = {
       dependency: ["^3.0.0", "reason"],
     };
@@ -71,6 +71,18 @@ describe("checkAllowedRules", () => {
     expect(addRuleViolationSpy).toHaveBeenCalledTimes(2);
     expect(firstCallArg.toString()).toContain("reason 1");
     expect(secondCallArg.toString()).toContain("reason 2");
+  });
+
+  it("throws error when invalid semver range is provided", () => {
+    const rules: AllowedRuleset = {
+      dependency: ["-1.2.-3", "reason"],
+    };
+
+    expect(() => {
+      checkAllowedRules(dependenciesInstalled, rules, { quiet: false });
+    }).toThrow(
+      'Invalid semver range "-1.2.-3" in Allowed ruleset. Only valid semver ranges are allowed.'
+    );
   });
 
   describe("rule severity override", () => {
