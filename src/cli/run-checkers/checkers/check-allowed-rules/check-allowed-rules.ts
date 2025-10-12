@@ -1,4 +1,4 @@
-import { satisfies } from "semver";
+import { satisfies, validRange } from "semver";
 
 import type {
   AllowedRule,
@@ -19,6 +19,13 @@ const checkAllowedRule = (
   [version, reason, ruleOptions]: AllowedRule,
   options: CheckAllowedRuleOptions
 ): void => {
+  // If required version is not a valid semver range, throw an error
+  if (!validRange(version)) {
+    throw new Error(
+      `Invalid semver range "${version}" in Allowed ruleset. Only valid semver ranges are allowed.`
+    );
+  }
+
   const dependencyVersion = dependenciesInstalled.get(dependencyName);
 
   // Skip rule check if severity is WARNING and quiet mode is enabled
