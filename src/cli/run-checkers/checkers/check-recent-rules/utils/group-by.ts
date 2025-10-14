@@ -5,7 +5,7 @@ export const groupBy = <T, K extends string | number | symbol>(
   array.reduce(
     (acc, curr) => {
       const key = iteratee(curr);
-      return (acc[key] || (acc[key] = [])).push(curr), acc;
+      return ((acc[key] || (acc[key] = [])).push(curr), acc);
     },
     {} as Record<K, Array<T>>
   );
