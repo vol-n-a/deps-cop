@@ -46,7 +46,10 @@ export const runCheckers = async (cliOptions: CliOptions): Promise<void> => {
       recent && {
         title: "Recent rules check",
         task: async () =>
-          checkRecentRules(dependenciesInstalled, recent, cliOptions),
+          checkRecentRules(dependenciesInstalled, recent, {
+            allowPrerelease: cliOptions.allowPrerelease,
+            quiet: cliOptions.quiet,
+          }),
       },
     ].filter(isNonNullable),
     {
