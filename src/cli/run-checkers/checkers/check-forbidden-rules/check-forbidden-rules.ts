@@ -16,7 +16,7 @@ import { ForbiddenRuleViolation } from "./model/index.js";
 const checkForbiddenRule = (
   dependenciesInstalled: DependenciesInstalled,
   dependencyName: DependencyName,
-  [version, reason, ruleOptions]: ForbiddenRule,
+  [versionRequired, reason, ruleOptions]: ForbiddenRule,
   options: CheckForbiddenRuleOptions
 ): void => {
   const dependencyVersion = dependenciesInstalled.get(dependencyName);
@@ -32,7 +32,7 @@ const checkForbiddenRule = (
   }
 
   // If any version of the dependency from config is forbidden, report the error
-  if (version === "any") {
+  if (versionRequired === "any") {
     stats.addRuleViolation(
       new ForbiddenRuleViolation(`${dependencyName} is not allowed`, {
         reason,
@@ -44,7 +44,7 @@ const checkForbiddenRule = (
   }
 
   // If the dependency from config does not satisfy the rule, skip
-  if (dependencyVersion && !satisfies(dependencyVersion, version)) {
+  if (dependencyVersion && !satisfies(dependencyVersion, versionRequired)) {
     return;
   }
 

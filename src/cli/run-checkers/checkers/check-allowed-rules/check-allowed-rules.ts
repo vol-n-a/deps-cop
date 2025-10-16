@@ -16,13 +16,13 @@ import { AllowedRuleViolation } from "./model/index.js";
 const checkAllowedRule = (
   dependenciesInstalled: DependenciesInstalled,
   dependencyName: DependencyName,
-  [version, reason, ruleOptions]: AllowedRule,
+  [versionRequired, reason, ruleOptions]: AllowedRule,
   options: CheckAllowedRuleOptions
 ): void => {
   // If required version is not a valid semver range, throw an error
-  if (!validRange(version)) {
+  if (!validRange(versionRequired)) {
     throw new Error(
-      `Invalid semver range "${version}" in Allowed ruleset. Only valid semver ranges are allowed.`
+      `Invalid semver range "${versionRequired}" in Allowed ruleset. Only valid semver ranges are allowed.`
     );
   }
 
@@ -39,14 +39,14 @@ const checkAllowedRule = (
   }
 
   // If the installed dependency satisfies the rule, skip
-  if (dependencyVersion && satisfies(dependencyVersion, version)) {
+  if (dependencyVersion && satisfies(dependencyVersion, versionRequired)) {
     return;
   }
 
   // Report the error
   stats.addRuleViolation(
     new AllowedRuleViolation(
-      `${dependencyName}@${dependencyVersion} does not satisfy ${dependencyName}@${version}`,
+      `${dependencyName}@${dependencyVersion} does not satisfy ${dependencyName}@${versionRequired}`,
       {
         reason,
         severity: ruleOptions?.severity,
