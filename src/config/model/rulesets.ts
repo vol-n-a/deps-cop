@@ -76,10 +76,8 @@ export type {
   DepscopConfig,
   ForbiddenRule,
   ForbiddenRuleset,
-  Reason,
   RecentRule,
   RecentRuleset,
   RuleOptions,
-  Version,
 };
 export { Severity };
