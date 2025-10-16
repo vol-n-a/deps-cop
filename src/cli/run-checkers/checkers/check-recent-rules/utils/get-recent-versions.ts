@@ -33,6 +33,7 @@ const groupVersions = (
 ): Map<string, Array<SemVer>> => {
   const versionsGrouped = groupBy(versions, iteratee);
 
+  // If recentValue is less than 0, return last recentValue versions
   if (recentValue < 0) {
     return new Map(
       Object.entries(versionsGrouped)
@@ -41,11 +42,12 @@ const groupVersions = (
     );
   }
 
-  if (!versionsGrouped[recentValue]) {
-    return new Map();
+  // If recentValue exists in versionsGroupped object, return recentValue versions
+  if (versionsGrouped[recentValue]) {
+    return new Map([[String(recentValue), versionsGrouped[recentValue]]]);
   }
 
-  return new Map([[String(recentValue), versionsGrouped[recentValue]]]);
+  return new Map();
 };
 
 /**
