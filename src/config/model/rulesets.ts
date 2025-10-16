@@ -1,6 +1,6 @@
 declare const __brand: unique symbol;
 
-type Version = string;
+type VersionRequired = string;
 type Reason = string;
 type DependencyName = string;
 
@@ -21,7 +21,7 @@ type RuleOptions = {
 
 // --- ALLOWED RULESET ---
 
-type AllowedRule = [Version, Reason, RuleOptions?];
+type AllowedRule = [VersionRequired, Reason, RuleOptions?];
 
 type AllowedRuleset = Record<
   DependencyName,
@@ -32,7 +32,7 @@ type AllowedRuleset = Record<
 
 // --- FORBIDDEN RULESET ---
 
-type ForbiddenRule = [Version, Reason, RuleOptions?];
+type ForbiddenRule = [VersionRequired, Reason, RuleOptions?];
 
 type ForbiddenRuleset = Record<
   DependencyName,
@@ -55,7 +55,7 @@ type RecentRuleOptions = RuleOptions & {
   prerelease?: boolean;
 };
 
-type RecentRule = [Version, Reason, RecentRuleOptions?];
+type RecentRule = [VersionRequired, Reason, RecentRuleOptions?];
 
 type RecentRuleset = Record<DependencyName, RecentRule | Array<RecentRule>> & {
   [__brand]?: "recent";

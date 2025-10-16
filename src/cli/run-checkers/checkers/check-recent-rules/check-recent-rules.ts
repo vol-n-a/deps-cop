@@ -18,13 +18,13 @@ import { getPackageVersions, getRecentVersions } from "./utils/index.js";
 const checkRecentRule = async (
   dependenciesInstalled: DependenciesInstalled,
   dependencyName: DependencyName,
-  [version, reason, ruleOptions]: RecentRule,
+  [versionRequired, reason, ruleOptions]: RecentRule,
   options: CheckRecentRuleOptions
 ): Promise<void> => {
   // If required version is a valid semver range, throw an error
-  if (validRange(version)) {
+  if (validRange(versionRequired)) {
     throw new Error(
-      `Semver ranges like "${version}" are not supported in Recent ruleset. Use Allowed ruleset ("allowed" field in depscop config) instead for semver range constraints.`
+      `Semver ranges like "${versionRequired}" are not supported in Recent ruleset. Use Allowed ruleset ("allowed" field in depscop config) instead for semver range constraints.`
     );
   }
 
@@ -43,13 +43,13 @@ const checkRecentRule = async (
   const shouldIncludePrerelease =
     ruleOptions?.prerelease || options.allowPrerelease;
   const versions = (await getPackageVersions(dependencyName))
-    .map((ver) => parse(ver))
+    .map((version) => parse(version))
     .filter(
       (semver) =>
         semver && (shouldIncludePrerelease || !semver.prerelease.length)
     ) as Array<SemVer>;
 
-  const versionsAllowed = getRecentVersions(versions, version).map(
+  const versionsAllowed = getRecentVersions(versions, versionRequired).map(
     (semver) => semver.raw
   );
 
@@ -57,7 +57,7 @@ const checkRecentRule = async (
   if (!versionsAllowed.length) {
     stats.addRuleViolation(
       new RecentRuleViolation(
-        `No versions of ${dependencyName} satisfy the recency version rule "${version}"`,
+        `No versions of ${dependencyName} satisfy the recency version rule "${versionRequired}"`,
         {
           severity: ruleOptions?.severity,
         }
@@ -95,7 +95,7 @@ const checkRecentRule = async (
   // Report the error
   stats.addRuleViolation(
     new RecentRuleViolation(
-      `${dependencyName}@${dependencyVersion} does not satisfy the recency version rule "${version}"`,
+      `${dependencyName}@${dependencyVersion} does not satisfy the recency version rule "${versionRequired}"`,
       {
         description: `Available allowed versions: ${versionsAllowed.join(", ")}`,
         reason,
